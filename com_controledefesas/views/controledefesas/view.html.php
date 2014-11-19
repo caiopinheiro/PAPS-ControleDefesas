@@ -14,9 +14,42 @@ class ControleDefesasViewControleDefesas extends JViewLegacy
         function display($tpl = null) 
         {
                 // Assign data to the view
-                $this->msg = 'eu to escrevendo direto na classe da view, o html que poderá ser inserido deve ser colocado na classe default';
-				$this->msg2 = 'eu to escrevendo direto na classe da view, o html que poderá ser inserido deve ser colocado na classe default';
+                $this->msg = 'Controle de Defesas';
+                
                 // Display the view
                 parent::display($tpl);
         }
+        
+        function solicitarBanca(){
+			$this->msg = 'Solicitar Banca';
+		}
+		
+		function aprovarBanca(){
+			echo 'Aprovar Banca';
+		}
+		
+		function confirmarBanca(){
+			echo 'Confirmar Banca';
+		}
+		
+		function lancarConceito(){
+			echo 'Lançar Conceito';
+		}
+		
+		function consultarDefesas(){
+			echo 'Consultar Defesas';
+		}
+		
+		function gerenciarMembrosBanca(){
+			echo 'Gerenciar Membros Banca';
+		}
+		
+		function enviarEmails(){
+			echo 'Enviar Emails';
+		}
+		
+		function gerarRelatorio(){
+			echo 'Gerar Relatorio';
+		}
+		
 }
