@@ -31,24 +31,26 @@ class ControledefesasController extends JController {
         return $this;
     }
     
-    function confirmarbanca(){
-		echo "<p>confirmarbanca</p>";
+    //funcoes abaixo inseridas por thiago, às 10:30, do dia 21/11/2014
+    
+    	function confirmarbanca(){
+		echo "<p>confirmar banca</p>";
 	}
 	
 	    function consultardefesas(){
-		echo "<p>consultardefesas</p>";
+		echo "<p>consultar defesas</p>";
 	}
 	
 	    function gerenciarmembros(){
-		echo "<p>gerenciarmembros</p>";
+		echo "<p>gerenciar membros</p>";
 	}
 	
 	    function enviaremail(){
-		echo "<p>enviaremail</p>";
+		echo "<p>enviar email</p>";
 	}
 	
 	    function gerarrelatorios(){
-		echo "<p>gerarrelatorios</p>";
+		echo "<p>gerar relatorios</p>";
 	}
 
 }
