@@ -25,10 +25,19 @@ class DefesascoordenadorController extends JController {
      */
     public function display($cachable = false, $urlparams = false) {
         require_once JPATH_COMPONENT . '/helpers/defesascoordenador.php';
-
+				
         parent::display($cachable, $urlparams);
-
+			
         return $this;
     }
+    
+    function avaliarBanca(){
+//		$idBanca = JRequest::getCmd('idBancaSelec', false);
+		$idBanca = JRequest::getVar('idBanca');		
+//		echo '<p>'.$idBanca.'</p>';
+		header('Location: index.php?option=com_defesascoordenador&view=avaliarbanca&idBanca='.$idBanca);
+	}
 
+	
+	
 }

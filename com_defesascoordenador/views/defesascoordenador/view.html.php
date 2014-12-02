@@ -1,4 +1,8 @@
 <?php
+
+$user =& JFactory::getUser();
+if(!$user->username) die( 'Acesso Restrito.' );
+
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
  
