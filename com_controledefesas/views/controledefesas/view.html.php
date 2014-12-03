@@ -20,36 +20,10 @@ class ControleDefesasViewControleDefesas extends JViewLegacy
                 parent::display($tpl);
         }
         
-        function solicitarBanca(){
+        function solicitarBanca($tpl = null){
 			$this->msg = 'Solicitar Banca';
+			parent::display($tpl);
 		}
 		
-		function aprovarBanca(){
-			echo 'Aprovar Banca';
-		}
-		
-		function confirmarBanca(){
-			echo 'Confirmar Banca';
-		}
-		
-		function lancarConceito(){
-			echo 'Lançar Conceito';
-		}
-		
-		function consultarDefesas(){
-			echo 'Consultar Defesas';
-		}
-		
-		function gerenciarMembrosBanca(){
-			echo 'Gerenciar Membros Banca';
-		}
-		
-		function enviarEmails(){
-			echo 'Enviar Emails';
-		}
-		
-		function gerarRelatorio(){
-			echo 'Gerar Relatorio';
-		}
 		
 }

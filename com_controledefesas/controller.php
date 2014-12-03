@@ -31,26 +31,9 @@ class ControledefesasController extends JController {
         return $this;
     }
     
-    //funcoes abaixo inseridas por thiago, às 10:30, do dia 21/11/2014
-    
-    	function confirmarbanca(){
-		echo "<p>confirmar banca</p>";
-	}
-	
-	    function consultardefesas(){
-		echo "<p>consultar defesas</p>";
-	}
-	
-	    function gerenciarmembros(){
-		echo "<p>gerenciar membros</p>";
-	}
-	
-	    function enviaremail(){
-		echo "<p>enviar email</p>";
-	}
-	
-	    function gerarrelatorios(){
-		echo "<p>gerar relatorios</p>";
+    function shout(){
+		echo "<h1>THIS IS ME SHOUTING!</h1>";
 	}
 
+	
 }

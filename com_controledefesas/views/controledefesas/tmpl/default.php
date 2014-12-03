@@ -15,44 +15,44 @@ defined('_JEXEC') or die('Restricted access');
 <div class="cpanel">
 	
 		<link rel="stylesheet" type="text/css" href="components/com_controledefesas/assets/css/template.css">
-	
-	
+		
+		
+		
 		
 		<div class="icon-wrapper">
 			<div class="icon">
-				<a href="index.php?option=com_controledefesas&Itemid=<?php echo $Itemid;?>&task=confirmarbanca">
+				<a href="index.php?option=com_portalsecretaria&Itemid=<?php echo $Itemid;?>&task=funcionarios">
 				<img width="32" height="32" border="0" src="components/com_controledefesas/assets/images/aprovarcandidatos.png"><span><?php echo JText::_( 'Confirmar Banca' ); ?></span></a>
 			</div>
 		</div>
-	
+		
 		
 		<div class="icon-wrapper">
 			<div class="icon">
-				<a href="index.php?option=com_controledefesas&Itemid=<?php echo $Itemid;?>&task=consultardefesas">
+				<a href="index.php?option=com_portalsecretaria&Itemid=<?php echo $Itemid;?>&task=funcionarios">
 				<img width="32" height="32" border="0" src="components/com_controledefesas/assets/images/consultar.gif"><span><?php echo JText::_( 'Consultar Defesas' ); ?></span></a>
 			</div>
 		</div>
 	
 		<div class="icon-wrapper">
 			<div class="icon">
-				<a href="index.php?option=com_controledefesas&Itemid=<?php echo $Itemid;?>&task=gerenciarmembros">
+				<a href="index.php?option=com_portalsecretaria&Itemid=<?php echo $Itemid;?>&task=funcionarios">
 				<img width="32" height="32" border="0" src="components/com_controledefesas/assets/images/alunos.png"><span><?php echo JText::_( 'Gerenciar Membros da Banca' ); ?></span></a>
 			</div>
 		</div>
 		
 		<div class="icon-wrapper">
 			<div class="icon">
-				<a href="index.php?option=com_controledefesas&Itemid=<?php echo $Itemid;?>&task=enviaremail">
+				<a href="index.php?option=com_portalsecretaria&Itemid=<?php echo $Itemid;?>&task=funcionarios">
 				<img width="32" height="32" border="0" src="components/com_controledefesas/assets/images/enviar.gif"><span><?php echo JText::_( 'Enviar Emails de aviso' ); ?></span></a>
 			</div>
 		</div>
 		
 		<div class="icon-wrapper">
 			<div class="icon">
-				<a href="index.php?option=com_controledefesas&Itemid=<?php echo $Itemid;?>&task=gerarrelatorios">
+				<a href="index.php?option=com_portalsecretaria&Itemid=<?php echo $Itemid;?>&task=avaliarcandidatos">
 				<img width="32" height="32" border="0" src="components/com_controledefesas/assets/images/relatorio.png"><span><?php echo JText::_( 'Gerar Relatórios' ); ?></span></a>
 			</div>
 		</div>
 </div>
-
 
