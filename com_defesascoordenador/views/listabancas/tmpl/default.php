@@ -12,12 +12,23 @@ $document->addScript("includes/js/joomla.javascript.js");
 
 
 $bancas = $this->bancas;
-$nome_orientador = $this->nome_orientador;
-$status_bancas = $this->status_bancas;
 
-if(($this->nome_orientador == null) AND ($this->status_bancas == null)){
-	$nome_orientador = '';
+$status_bancas = $this->status_bancas;
+$nome_aluno = $this->nome_aluno;
+$tipo_banca = $this->tipo_banca;
+$nome_orientador = $this->nome_orientador;
+$linha_pesquisa = $this->linha_pesquisa;
+
+if(($this->status_bancas == null) AND 
+   ($this->nome_aluno == null) AND
+   ($this->tipo_banca == null) AND 
+   ($this->nome_orientador == null) AND
+   ($this->linha_pesquisa == null)){
 	$status_bancas = 3;
+	$nome_aluno = '';
+	$tipo_banca = 3;
+	$nome_orientador = '';
+	$linha_pesquisa = 0;
 }
 
 ?>
@@ -52,7 +63,7 @@ if(($this->nome_orientador == null) AND ($this->status_bancas == null)){
     
 	<link rel="stylesheet" href="components/com_portalsecretaria/assets/css/estilo.css" type="text/css" />
 
-    <form method="post" name="form" enctype="multipart/form-data" action="index.php?option=com_defesascoordenador&view=listabancas&task=banca">
+    <form method="post" name="form" enctype="multipart/form-data" action="index.php?option=com_defesascoordenador&view=listabancas">
     
 		<div id="toolbar-box"><div class="m"><div class="toolbar-list" id="toolbar">
             <div class="cpanel2">
@@ -76,48 +87,62 @@ if(($this->nome_orientador == null) AND ($this->status_bancas == null)){
 		<!-- FILTRO DA BUSCA -->
 		<fieldset>
         	<legend>Filtros para consulta</legend>
+            </br>
             <table width="100%">
                 <tr>
-                    <td>Nome Orientador</td>
                     <td>Status Banca</td>
+					<td>Nome Aluno</td>
+					<td>Tipo de Banca</td>
+					<td>Nome Orientador</td>
+					<td>Linha de Pesquisa</td>
                 </tr>
                 <tr>
-	                <td><input id="buscaNomeOrientador" name="buscaNomeOrientador" type="text" value="<?php echo $nome_orientador;?>"/></td>
                     <td>
                     <select name="buscaStatusBanca">	
 						<option value="3" <?php if($status_bancas == 3) echo 'SELECTED';?>>Todos</option>
-                        <option value="0" <?php if($status_bancas == 0) echo 'SELECTED';?>>Banca Deferidas</option>
-                        <option value="1" <?php if($status_bancas == 1) echo 'SELECTED';?>>Bancas Indeferidas</option>
-                        <option value="2" <?php if($status_bancas == 2) echo 'SELECTED';?>>Bancas Não Avaliadas</option>
+                        <option value="0" <?php if($status_bancas == 0) echo 'SELECTED';?>>Deferidas</option>
+                        <option value="1" <?php if($status_bancas == 1) echo 'SELECTED';?>>Indeferidas</option>
+                        <option value="2" <?php if($status_bancas == 2) echo 'SELECTED';?>>Não Avaliadas</option>
                     </select>
                     </td>
-                    <!--td>
-                    	<select name="buscaAnoIngresso">
-            				<option value="">Todos</option>
-	        				</?php
-			                 $database->setQuery("SELECT DISTINCT anoingresso from #__aluno WHERE orientador = ".$professor->id." ORDER BY anoingresso");
-	        			     $anos = $database->loadObjectList();
-
-				             foreach($anos as $ano) { ?>
-                             	<option value="</?php echo $ano->anoingresso;?>" </?php if($anoingresso == $ano->anoingresso) echo 'SELECTED'; ?>> </?php echo $ano->anoingresso;?></option>
-	          				</?php } ?>
-			            </select>
-                    </td-->
-                    <!--td><select name="buscaStatus">
-                            <option value="0" </?php if($status == 0) echo 'SELECTED';?>>Alunos Correntes</option>
-                            <option value="1" </?php if($status == 1) echo 'SELECTED';?>>Alunos Egressos</option>
-                            <option value="2" </?php if($status == 2) echo 'SELECTED';?>>Alunos Desistentes</option>
-                            <option value="3" </?php if($status == 3) echo 'SELECTED';?>>Alunos Desligados</option>
-                            <option value="4" </?php if($status == 4) echo 'SELECTED';?>>Alunos Jubilados</option>
-                            <option value="5" </?php if($status == 5) echo 'SELECTED';?>>Alunos com Matr&#237;cula Trancada</option>
-                            <option value="6" </?php if($status == 6) echo 'SELECTED';?>>Todos</option>
-                        </select>
-            		</td-->
-                    <td><button type="submit" value="Buscar" class="btn btn-primary">
-                    		<i class="icone-search icone-white"></i> Buscar
-                        </button>
+                    
+                    <td ><input id="buscaNomeAluno" name="buscaNomeAluno" type="text" value="<?php echo $nome_aluno;?>"/></td>
+                    
+                    <td>
+                    <select name="tipoBanca">	
+						<option value="3" <?php if($tipo_banca == 3) echo 'SELECTED';?>>Todos</option>
+                        <option value="0" <?php if($tipo_banca == 0) echo 'SELECTED';?>>Mestrado</option>
+                        <option value="1" <?php if($tipo_banca == 1) echo 'SELECTED';?>>Doutorado</option>
+                    </select>
                     </td>
+                    
+                    
+                    <td><input id="buscaNomeOrientador" name="buscaNomeOrientador" type="text" value="<?php echo $nome_orientador;?>"/></td>
+					
+					
+					<td>
+                    <select name="linhaPesquisa">	
+						<option value="3" <?php if($linha_pesquisa == 0) echo 'SELECTED';?>>Todos</option>
+                        <option value="0" <?php if($linha_pesquisa == 1) echo 'SELECTED';?>>BD e RI</option>
+                        <option value="1" <?php if($linha_pesquisa == 2) echo 'SELECTED';?>>SistEmb & EngSW</option>
+                        <option value="3" <?php if($linha_pesquisa == 3) echo 'SELECTED';?>>Int. Art.</option>
+                        <option value="0" <?php if($linha_pesquisa == 4) echo 'SELECTED';?>>Visão Comp. e Rob.</option>
+                        <option value="1" <?php if($linha_pesquisa == 5) echo 'SELECTED';?>>Redes e Telec.</option>
+                        <option value="3" <?php if($linha_pesquisa == 6) echo 'SELECTED';?>>Ot., Alg. e Complex.</option>
+                    </select>
+                    </td>
+                    
+                    <td align="right">
+						<button type="submit" value="Buscar" class="btn btn-primary">
+							<i class="icone-search icone-white"></i> Buscar
+						</button>
+					</td>	
                 </tr>
+				
+				<tr>
+							
+				</tr>
+                
 			</table>
 		</fieldset>
     
@@ -125,8 +150,11 @@ if(($this->nome_orientador == null) AND ($this->status_bancas == null)){
             <thead>
               <tr>
                 <th></th>
-                <th>Status</th>
+                <th>Status Banca</th>
+                <th>Nome Aluno</th>
+                <th>Tipo de Banca</th>
                 <th>Nome Orientador</th>
+                <th>Linha de Pesquisa</th>
               </tr>
             </thead>
              
@@ -142,8 +170,10 @@ if(($this->nome_orientador == null) AND ($this->status_bancas == null)){
                 <td width='16'><input type="radio" name="idBancaSelec" value="<?php echo $banca->id;?>"></td>
                 <td><img border='0' src='components/com_defesascoordenador/assets/images/<?php echo $statusImg[$banca->status_banca];?>' width='16' height='16' title='<?php echo $status[$banca->status_banca];?>'></td>
                 <td><?php echo $banca->nome;?></td>
+                <td><?php echo $banca->nome;?></td>
+                <td><?php echo $banca->nome;?></td>
+                <td><?php echo $banca->nome;?></td>
             </tr>
-
 			<?php } ?>
 		</tbody>
      </table>     
