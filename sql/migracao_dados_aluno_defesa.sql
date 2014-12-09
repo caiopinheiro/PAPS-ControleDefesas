@@ -1,7 +1,7 @@
--- migração de dados para tabela de defesas 
+-- migração de dados para tabela de defesas
 
 
-
+-- antes de executar script no banco de dados, colocar j17_defesa.idDefesa com autoincrement
 insert into j17_defesa (aluno_id, conceito, tipoDefesa, data, titulo, local, horario, resumo)
 select matricula, conceitoQual2, 'Q1',  str_to_date(dataQual2, '%d/%m/%Y'), tituloQual2,
 localQual2, horarioQual2, resumoQual2
