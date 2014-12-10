@@ -16,6 +16,8 @@ class DefesasOrientadorViewDefesasOrientador extends JViewLegacy
                 // Assign data to the view
                 $this->msg = 'Módulo de defesas do Orientador';
                 
+                $this->aluno = $this->get('aluno');
+                
                 // Display the view
                 parent::display($tpl);
         }

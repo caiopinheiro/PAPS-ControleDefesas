@@ -108,10 +108,8 @@ $document->addStyleSheet('//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-u
 
 			var table = $ ("#tablebanca");
 
-			console.debug(table);
 
 			var trs = table.find('tr');
-			console.debug(trs);	
 
 			var resultado = false;
 			
@@ -123,11 +121,6 @@ $document->addStyleSheet('//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-u
 				var option = select.options[select.selectedIndex];
 				var professoresInst = option.text.split(' - ');
 
-				//console.debug($(row));
-				//console.debug(professoresInst);
-				
-				//console.debug($(row[1]).text());
-				
 				if ($(row[1]).text() == professoresInst[0])
 					resultado = true;
 					
@@ -142,7 +135,6 @@ $document->addStyleSheet('//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-u
 	  verificaPresidente = function () {
 
 			var table = $("#tablebanca");
-
 
 			var trs = table.find('tr');
 			console.debug(trs);	
@@ -177,13 +169,10 @@ $document->addStyleSheet('//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-u
 			return resultado;
 	  };
 	})(jQuery);
-	  
-	  
 
   (function($) {
 	  AddTableRow = function() {
 		  
-			  
 	    var newRow = $("<tr>");
 	    var cols = "";
 
@@ -192,8 +181,6 @@ $document->addStyleSheet('//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-u
 
 		var professoresInst = option.text.split(' - ');
 		var vMembroBanca = option.value;
-
-
 		
 		var tipoMembroBanca;
 
@@ -210,13 +197,9 @@ $document->addStyleSheet('//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-u
 			default: break;
 		}	
 		
-
-		
 	    cols += '<td>';
 	    cols += '<button onclick="RemoveTableRow(this)" type="button">Remover</button>';
 	    cols += '</td>';
-
-	 	   
 		
 		cols += '<td>' + professoresInst[0] + '</td>' ; 		
 		cols += '<td>' + professoresInst[1] + '</td>' ; 
@@ -327,7 +310,6 @@ $document->addStyleSheet('//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-u
 		foreach ($this->membrosbanca as $membrobanca) 
 		{
 			echo '<option value="' . $membrobanca->id . '">' . $membrobanca->nome . ' - ' . $membrobanca->filiacao . '</option>';
-			
 		}
 		?>
 		

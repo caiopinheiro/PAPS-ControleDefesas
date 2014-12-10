@@ -31,4 +31,12 @@ class DefesasorientadorController extends JController {
         return $this;
     }
 
+    public function solicitarbanca() {
+    	
+    	$this->default_view = 'solicitarbanca';
+    	
+    	$this->display();
+    		
+    }
+    
 }
