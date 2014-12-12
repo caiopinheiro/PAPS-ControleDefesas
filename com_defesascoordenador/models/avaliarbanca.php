@@ -12,35 +12,44 @@ class DefesasCoordenadorModelAvaliarBanca extends JModelItem
 {             
 	    
 	    public function visualizarBanca($idBanca) {
-			
-			
-		//	echo '<p>'.$idBanca.' Estou dentro da model</p>';
 			$database =& JFactory::getDBO();
-			
-			//Consulta por nome orientador e status da banca
-			$sql1 =  ("SELECT status_banca, nome FROM #__banca_controledefesas AS CD JOIN #__banca_has_membrosbanca AS MB ON CD.id = MB.banca_id JOIN #__membrosbanca AS M ON MB.membrosbanca_id = M.id WHERE MB.funcao LIKE 'presidente' and CD.id = ".$idBanca);		
-
-			//Consulta por status_banca
-//			SELECT sql1.id, sql1.status_banca, sql1.nome from (SELECT CD.id, status_banca, nome FROM j17_banca_controledefesas AS CD JOIN j17_banca_has_membrosbanca AS MB ON CD.id = MB.banca_id JOIN j17_membrosbanca AS M ON MB.membrosbanca_id = M.id WHERE MB.funcao LIKE 'presidente') as sql1 where sql1.status_banca = 1
-
-
-			$database->setQuery($sql1);
-			
-		//	echo '<p>'.var_dump($database->loadObjectList()).'</p>';
-						
+			$sql = "SELECT status_banca FROM #__banca_controledefesas WHERE id = ".$idBanca;
+			$database->setQuery($sql);
 			return $database->loadObjectList();
 		}
 
-		public function vizualizarAluno($idBanca){
+		public function visualizarAluno($idAluno){
 			$database =& JFactory::getDBO();
-		//id, nome e linha de pesquisa do aluno e id da banca desse aluno
-			$sql1 = "SELECT a.id, a.nome,a.area d.banca_id from j17_defesa as d join j17_aluno as a where a.id = d.aluno_id and d.banca_id = ".$idBanca;
-			$database->setQuery($sql1);
+			$sql = "SELECT nome as nome_aluno,area,anoingresso FROM #__aluno WHERE id= ".$idAluno;
+			$database->setQuery($sql);
 			return $database->loadObjectList();
 		}
-
-//id banca, titulo e resumo da defesa
-//(select b.id, d.titulo, d.resumo from j17_banca_controledefesas as b join j_17defesa as d where b.id = d.banca_id) as sql3
+		
+		public function visualizarDefesa($idDefesa){
+			$database =& JFactory::getDBO();
+			$sql = "SELECT titulo, resumo, tipoDefesa FROM #__defesa WHERE idDefesa = ".$idDefesa;
+			$database->setQuery($sql);
+			return $database->loadObjectList();
+		}
+		
+		public function visualizarMembrosBanca($idBanca){
+			$database =& JFactory::getDBO();
+			$sql = "SELECT mb.nome, bhmb.funcao, mb.filiacao FROM  #__banca_has_membrosbanca AS bhmb JOIN #__membrosbanca AS mb ON mb.id = bhmb.membrosbanca_id WHERE bhmb.banca_id = ".$idBanca;
+			$database->setQuery($sql);
+			return $database->loadObjectList();
+		}
+		
+		public function updateStatusBanca($idBanca,$avaliacao){
+			$database =& JFactory::getDBO();
+			$sql = "UPDATE #__banca_controledefesas SET status_banca = ".$avaliacao." WHERE id = ".$idBanca;
+			
+			$database->setQuery($sql);
+			
+			$sucesso = $database->Query();
+			
+			return $sucesso;
+				
+		}
 
         
 }

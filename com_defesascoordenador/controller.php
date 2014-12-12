@@ -31,11 +31,37 @@ class DefesascoordenadorController extends JController {
         return $this;
     }
     
-    function avaliarBanca(){
+    public function avaliarBanca(){
 //		$idBanca = JRequest::getCmd('idBancaSelec', false);
-		$idBanca = JRequest::getVar('idBanca');		
-//		echo '<p>'.$idBanca.'</p>';
-		header('Location: index.php?option=com_defesascoordenador&view=avaliarbanca&idBanca='.$idBanca);
+		$idBanca = JRequest::getVar('idBanca');
+		$idDefesa = JRequest::getVar('idDefesa');
+		$idAluno = JRequest::getVar('idAluno');		
+		//echo '<p>'.$idAluno.'</p>';
+		header('Location: index.php?option=com_defesascoordenador&view=avaliarbanca&idBanca='.$idBanca.'&idDefesa='.$idDefesa.'&idAluno='.$idAluno);
+	}
+	
+	public function deferirBanca(){
+		$idBanca = JRequest::getVar('idBanca');
+		$idDefesa = JRequest::getVar('idDefesa');
+		$idAluno = JRequest::getVar('idAluno');
+		$avaliacao = JRequest::getVar('avaliacao');
+		$model = $this->getModel('avaliarbanca');		
+		$sucesso = $model->updateStatusBanca($idBanca,$avaliacao);	
+		
+		header('Location: index.php?option=com_defesascoordenador&view=avaliarbanca&idBanca='.$idBanca.'&idDefesa='.$idDefesa.'&idAluno='.$idAluno.'&idAvaliacao='.$sucesso);
+	}
+	
+	public function indeferirBanca(){
+		$idBanca = JRequest::getVar('idBanca');
+		$idDefesa = JRequest::getVar('idDefesa');
+		$idAluno = JRequest::getVar('idAluno');
+		$avaliacao = JRequest::getVar('avaliacao');
+		//echo '<p>'.$avaliacao.'</p>';
+		$model = $this->getModel('avaliarbanca');		
+		$sucesso = $model->updateStatusBanca($idBanca,$avaliacao);	
+		
+		header('Location: index.php?option=com_defesascoordenador&view=avaliarbanca&idBanca='.$idBanca.'&idDefesa='.$idDefesa.'&idAluno='.$idAluno.'&idAvaliacao='.$sucesso);
+			
 	}
 
 	
