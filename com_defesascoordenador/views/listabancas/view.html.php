@@ -16,18 +16,34 @@ class DefesasCoordenadorViewListaBancas extends JViewLegacy
 {
         // Overwriting JView display method
         function display($tpl = null) {              
-			$nome_orientador = JRequest::getCmd('buscaNomeOrientador', false);
-			$status_bancas = JRequest::getCmd('buscaStatusBanca', false);
-			$this->nome_orientador = $nome_orientador;
-			$this->status_bancas = $status_bancas;
 			
-			if(($this->nome_orientador == null) AND ($this->status_bancas == null)){
+			$status_bancas = JRequest::getCmd('buscaStatusBanca', false);
+			$nome_aluno = JRequest::getCmd('buscaNomeAluno', false);
+			$tipo_banca = JRequest::getCmd('tipoBanca', false);
+			$nome_orientador = JRequest::getCmd('buscaNomeOrientador', false);
+			$linha_pesquisa = JRequest::getCmd('linhaPesquisa',false);
+			
+			$this->status_bancas = $status_bancas;
+			$this->nome_aluno = $nome_aluno;
+			$this->tipo_banca = $tipo_banca;
+			$this->nome_orientador  = $nome_orientador;;
+			$this->linha_pesquisa = $linha_pesquisa;
+			
+			
+			if(($this->status_bancas == NULL) AND 
+			   ($this->nome_aluno == NULL) AND
+			   ($this->tipo_banca == NULL) AND 
+			   ($this->nome_orientador == NULL) AND
+			   ($this->linha_pesquisa == NULL)){
+				$status_bancas = 2;
+				$nome_aluno = '';
+				$tipo_banca = 2;
 				$nome_orientador = '';
-				$status_bancas = 3;
+				$linha_pesquisa = 0;
 			}
-						
+			
 			$model = $this->getModel();
-			$this->bancas = $model->filtroBanca($nome_orientador,$status_bancas);
+			$this->bancas = $model->filtroBanca($status_bancas,$nome_aluno,$nome_orientador,$tipo_banca,$linha_pesquisa);
 							
 			// Display the view
 			parent::display($tpl);

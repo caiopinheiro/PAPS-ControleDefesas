@@ -13,20 +13,21 @@ $document->addScript("includes/js/joomla.javascript.js");
 
 $bancas = $this->bancas;
 
+
 $status_bancas = $this->status_bancas;
 $nome_aluno = $this->nome_aluno;
 $tipo_banca = $this->tipo_banca;
 $nome_orientador = $this->nome_orientador;
 $linha_pesquisa = $this->linha_pesquisa;
 
-if(($this->status_bancas == null) AND 
-   ($this->nome_aluno == null) AND
-   ($this->tipo_banca == null) AND 
-   ($this->nome_orientador == null) AND
-   ($this->linha_pesquisa == null)){
-	$status_bancas = 3;
+if(($this->status_bancas == NULL) AND 
+   ($this->nome_aluno == NULL) AND
+   ($this->tipo_banca == NULL) AND 
+   ($this->nome_orientador == NULL) AND
+   ($this->linha_pesquisa == NULL)){
+	$status_bancas = 2;
 	$nome_aluno = '';
-	$tipo_banca = 3;
+	$tipo_banca = 2;
 	$nome_orientador = '';
 	$linha_pesquisa = 0;
 }
@@ -35,14 +36,21 @@ if(($this->status_bancas == null) AND
 
 <script language="JavaScript">
         function avaliarBanca(form){        
-           var idSelecionado = 0;
-		   
+           var idBancaSelecionado = 0;
+           var idDefesaSelecionado = 0;
+           var idAlunoSelecionado = 0;
+           
            for(i = 0;i < form.idBancaSelec.length ;i++)
-                if(form.idBancaSelec[i].checked) idSelecionado = form.idBancaSelec[i].value;
-        
-           if(idSelecionado > 0){
+                if(form.idBancaSelec[i].checked){
+					idBancaSelecionado = form.idBancaSelec[i].value;
+					idDefesaSelecionado = form.idDefesaSelec[i].value;
+					idAlunoSelecionado = form.idAlunoSelec[i].value;	
+				}
+           if(idBancaSelecionado > 0){
 				form.task.value = 'avaliarBanca';
-				form.idBanca.value = idSelecionado;
+				form.idBanca.value = idBancaSelecionado;
+				form.idDefesa.value = idDefesaSelecionado;
+				form.idAluno.value = idAlunoSelecionado;
 				form.submit();
            } else {
            	alert('Ao menos 1 item deve ser selecionado para visualiza\xE7\xE3o.')
@@ -60,7 +68,7 @@ if(($this->status_bancas == null) AND
 			$("#tablesorter-imasters").tablesorter();
 		});
 	</script>
-    
+	    
 	<link rel="stylesheet" href="components/com_portalsecretaria/assets/css/estilo.css" type="text/css" />
 
     <form method="post" name="form" enctype="multipart/form-data" action="index.php?option=com_defesascoordenador&view=listabancas">
@@ -100,8 +108,8 @@ if(($this->status_bancas == null) AND
                     <td>
                     <select name="buscaStatusBanca">	
 						<option value="3" <?php if($status_bancas == 3) echo 'SELECTED';?>>Todos</option>
-                        <option value="0" <?php if($status_bancas == 0) echo 'SELECTED';?>>Deferidas</option>
-                        <option value="1" <?php if($status_bancas == 1) echo 'SELECTED';?>>Indeferidas</option>
+                        <option value="0" <?php if($status_bancas == 0) echo 'SELECTED';?>>Indeferidas</option>
+                        <option value="1" <?php if($status_bancas == 1) echo 'SELECTED';?>>Deferidas</option>
                         <option value="2" <?php if($status_bancas == 2) echo 'SELECTED';?>>Não Avaliadas</option>
                     </select>
                     </td>
@@ -110,7 +118,7 @@ if(($this->status_bancas == null) AND
                     
                     <td>
                     <select name="tipoBanca">	
-						<option value="3" <?php if($tipo_banca == 3) echo 'SELECTED';?>>Todos</option>
+						<option value="2" <?php if($tipo_banca == 2) echo 'SELECTED';?>>Todos</option>
                         <option value="0" <?php if($tipo_banca == 0) echo 'SELECTED';?>>Mestrado</option>
                         <option value="1" <?php if($tipo_banca == 1) echo 'SELECTED';?>>Doutorado</option>
                     </select>
@@ -118,29 +126,28 @@ if(($this->status_bancas == null) AND
                     
                     
                     <td><input id="buscaNomeOrientador" name="buscaNomeOrientador" type="text" value="<?php echo $nome_orientador;?>"/></td>
-					
-					
+		
 					<td>
                     <select name="linhaPesquisa">	
-						<option value="3" <?php if($linha_pesquisa == 0) echo 'SELECTED';?>>Todos</option>
-                        <option value="0" <?php if($linha_pesquisa == 1) echo 'SELECTED';?>>BD e RI</option>
-                        <option value="1" <?php if($linha_pesquisa == 2) echo 'SELECTED';?>>SistEmb & EngSW</option>
+						<option value="0" <?php if($linha_pesquisa == 0) echo 'SELECTED';?>>Todos</option>
+                        <option value="1" <?php if($linha_pesquisa == 1) echo 'SELECTED';?>>BD e RI</option>
+                        <option value="2" <?php if($linha_pesquisa == 2) echo 'SELECTED';?>>SistEmb & EngSW</option>
                         <option value="3" <?php if($linha_pesquisa == 3) echo 'SELECTED';?>>Int. Art.</option>
-                        <option value="0" <?php if($linha_pesquisa == 4) echo 'SELECTED';?>>Visão Comp. e Rob.</option>
-                        <option value="1" <?php if($linha_pesquisa == 5) echo 'SELECTED';?>>Redes e Telec.</option>
-                        <option value="3" <?php if($linha_pesquisa == 6) echo 'SELECTED';?>>Ot., Alg. e Complex.</option>
+                        <option value="4" <?php if($linha_pesquisa == 4) echo 'SELECTED';?>>Visão Comp. e Rob.</option>
+                        <option value="5" <?php if($linha_pesquisa == 5) echo 'SELECTED';?>>Redes e Telec.</option>
+                        <option value="6" <?php if($linha_pesquisa == 6) echo 'SELECTED';?>>Ot., Alg. e Complex.</option>
                     </select>
                     </td>
                     
-                    <td align="right">
-						<button type="submit" value="Buscar" class="btn btn-primary">
-							<i class="icone-search icone-white"></i> Buscar
-						</button>
-					</td>	
+                    	
                 </tr>
 				
 				<tr>
-							
+					<td align="right">
+						<button type="submit" value="Buscar" class="btn btn-primary">
+							<i class="icone-search icone-white"></i> Buscar
+						</button>
+					</td>		
 				</tr>
                 
 			</table>
@@ -152,29 +159,38 @@ if(($this->status_bancas == null) AND
                 <th></th>
                 <th>Status Banca</th>
                 <th>Nome Aluno</th>
-                <th>Tipo de Banca</th>
-                <th>Nome Orientador</th>
+                <th>Tipo Banca</th>
+                <th>Orientador</th>
                 <th>Linha de Pesquisa</th>
               </tr>
             </thead>
              
      		<tbody>
 			<?php
-            $status = array (0 => "Banca Deferida",1 => "Banca Indeferida", NULL => "Banca Não Avaliada");
+            $status = array (0 => "Banca Indeferida",1 => "Banca Deferida", NULL => "Banca Não Avaliada");
 			
-            $statusImg = array (0 => "sim.gif",1 => "excluir.png",NULL => "editar.gif");
-
-			foreach($bancas as $banca ) { ?>
-
-            <tr>
-                <td width='16'><input type="radio" name="idBancaSelec" value="<?php echo $banca->id;?>"></td>
-                <td><img border='0' src='components/com_defesascoordenador/assets/images/<?php echo $statusImg[$banca->status_banca];?>' width='16' height='16' title='<?php echo $status[$banca->status_banca];?>'></td>
-                <td><?php echo $banca->nome;?></td>
-                <td><?php echo $banca->nome;?></td>
-                <td><?php echo $banca->nome;?></td>
-                <td><?php echo $banca->nome;?></td>
-            </tr>
-			<?php } ?>
+            $statusImg = array (0 => "excluir.png"  ,1 => "sim.gif" , NULL => "editar.gif");
+			
+			$linhaPesquisa = array (1 => "bd_ri",2 => "se_es",3 => "ia",4 => "visao",5 => "redes",6 => "otimizacao");
+			
+			$arrayTipoBanca = array('T' => "Mestrado", 'D' => "Doutorado");
+			
+			if(isset ($bancas)){
+				foreach($bancas as $banca ) { ?>
+	
+				<tr>
+					<td width='15'><input type="radio" name="idBancaSelec" value="<?php echo $banca->idBanca;?>">
+								   <input type="hidden" name="idDefesaSelec" value="<?php echo $banca->idDefesa;?>">
+								   <input type="hidden" name="idAlunoSelec" value="<?php echo $banca->idAluno;?>"></td>
+					<td><img border='0' src='components/com_defesascoordenador/assets/images/<?php echo $statusImg[$banca->status_banca];?>' width='15' height='16' title='<?php echo $status[$banca->status_banca];?>'></td>
+					<td><?php echo $banca->nome_aluno;?></td>
+					<td><?php echo $arrayTipoBanca[$banca->tipo_banca];?></td>
+					<td><?php echo $banca->nome_orientador;?></td>
+					<td><img border='0' src='components/com_portalsecretaria/images/<?php echo $linhaPesquisa[$banca->linha_pesquisa];?>.gif'></td>
+					
+				</tr>
+			<?php } 
+			}?>
 		</tbody>
      </table>     
      <br />
@@ -183,5 +199,8 @@ if(($this->status_bancas == null) AND
      
      <input name='task' type='hidden' value='display' />
      <input name='idBancaSelec' type='hidden' value='0' />
-     <input name='idBanca' type='hidden' value='' /-->
+     <input name='idBanca' type='hidden' value='' />
+     <input name='idDefesa' type='hidden' value='' />
+     <input name='idAluno' type='hidden' value='' />
+     
 </form>

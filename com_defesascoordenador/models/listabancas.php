@@ -29,34 +29,50 @@ class DefesasCoordenadorModelListaBancas extends JModelItem
         }
         
       	    
-	    public function filtroBanca($nome_orientador, $status_bancas) {
-			//Consulta por nome		
-//			SELECT sql1.id, sql1.status_banca, sql1.nome from (SELECT CD.id, status_banca, nome FROM j17_banca_controledefesas AS CD JOIN j17_banca_has_membrosbanca AS MB ON CD.id = MB.banca_id JOIN j17_membrosbanca AS M ON MB.membrosbanca_id = M.id WHERE MB.funcao LIKE 'presidente') as sql1 where nome LIKE '%bruno%'
-
-			//Consulta por status_banca
-//			SELECT sql1.id, sql1.status_banca, sql1.nome from (SELECT CD.id, status_banca, nome FROM j17_banca_controledefesas AS CD JOIN j17_banca_has_membrosbanca AS MB ON CD.id = MB.banca_id JOIN j17_membrosbanca AS M ON MB.membrosbanca_id = M.id WHERE MB.funcao LIKE 'presidente') as sql1 where sql1.status_banca = 1
-
+	    public function filtroBanca($status_banca, $nome_aluno, $nome_orientador, $tipo_banca, $linha_pesquisa) {
 			$database =& JFactory::getDBO();
-			$sql = "(SELECT CD.id, status_banca, nome FROM #__banca_controledefesas AS CD JOIN #__banca_has_membrosbanca AS MB ON CD.id = MB.banca_id JOIN #__membrosbanca AS M ON MB.membrosbanca_id = M.id WHERE MB.funcao LIKE 'presidente')";
+			$sql_standard = "SELECT d.idDefesa, bcd.id as idBanca, a.id as idAluno, bcd.status_banca, a.nome as nome_aluno, M.nome as nome_orientador, d.tipoDefesa as tipo_banca, a.area as linha_pesquisa
+					FROM ((((j17_aluno as a JOIN j17_defesa as d ON d.aluno_id = a.id) JOIN j17_banca_controledefesas as bcd ON d.banca_id = bcd.id) JOIN j17_banca_has_membrosbanca AS MB ON bcd.id = MB.banca_id) JOIN j17_membrosbanca AS M ON MB.membrosbanca_id = M.id) 
+					WHERE MB.funcao LIKE 'P'";
+
+
+//			 AND (d.tipoDefesa LIKE 'T' OR d.tipoDefesa LIKE 'D')
+			
+			$sql_status_banca = '';
+			$sql_nome_aluno = '';	
+			$sql_nome_orientador = '';
+			$sql_tipo_banca = '';
+			$sql_linha_pesquisa = '';
+			
 				
-			if(($status_bancas < 3) AND ($nome_orientador != ''))
-				if($status_bancas ==2){
-					$database->setQuery("SELECT sql1.id, sql1.status_banca, sql1.nome FROM ".$sql." as sql1 WHERE sql1.status_banca IS NULL and sql1.nome LIKE '%".$nome_orientador.'%\'');
-				}else
-					$database->setQuery("SELECT sql1.id, sql1.status_banca, sql1.nome FROM ".$sql." as sql1 WHERE sql1.status_banca = ".$status_bancas." and sql1.nome LIKE '%".$nome_orientador.'%\'' );
-			if(($status_bancas < 3) AND ($nome_orientador == ''))
-				if($status_bancas ==2){
-					$database->setQuery("SELECT sql1.id, sql1.status_banca, sql1.nome FROM ".$sql." as sql1 WHERE sql1.status_banca IS NULL");
-				}else
-					$database->setQuery("SELECT sql1.id, sql1.status_banca, sql1.nome FROM ".$sql." as sql1 WHERE sql1.status_banca = ".$status_bancas);
-			if(($status_bancas == 3) AND ($nome_orientador != ''))
-				$database->setQuery("SELECT sql1.id, sql1.status_banca, sql1.nome FROM ".$sql." as sql1 WHERE sql1.nome LIKE '%".$nome_orientador.'%\'');
-			if(($status_bancas == 3) AND ($nome_orientador == ''))
-				$database->setQuery($sql);
-						
+			if($status_banca < 3){
+				if($status_banca ==2)
+					$sql_status_banca = ' AND bcd.status_banca IS NULL';
+				else
+					$sql_status_banca = ' AND bcd.status_banca = '.$status_banca;
+			}
+			
+			if($nome_aluno != '')
+				$sql_nome_aluno = " AND a.nome LIKE '%".$nome_aluno.'%\'';		
+			
+			if($nome_orientador != '')
+				$sql_nome_orientador = " AND M.nome LIKE '%".$nome_orientador.'%\'';
+			
+			if($tipo_banca < 2){
+				if($tipo_banca == 1)
+					$sql_tipo_banca = " AND d.tipoDefesa LIKE 'D'";
+				else
+					$sql_tipo_banca = " AND d.tipoDefesa LIKE 'T'";
+			}else
+				$sql_tipo_banca = " AND (d.tipoDefesa LIKE 'T' OR d.tipoDefesa LIKE 'D')";
+				
+			if($linha_pesquisa > 0)
+				$sql_linha_pesquisa = ' AND a.area = '.$linha_pesquisa;
+							
+			$sql = $sql_standard.$sql_status_banca.$sql_nome_aluno.$sql_nome_orientador.$sql_tipo_banca.$sql_linha_pesquisa;
+		
+			$database->setQuery($sql);		
 			return $database->loadObjectList();
 	    
-		}
-
-        
+		}        
 }
