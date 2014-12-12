@@ -31,7 +31,7 @@ and
 and curso = 2;
 
 insert into j17_defesa (aluno_id, data, titulo, tipoDefesa, conceito, resumo, local, horario)
-select id,  str_to_date(dataQual2, '%d/%m/%Y') dataq2, tituloQual2, 'Q1', conceitoQual2, resumoQual2, localQual2, horarioQual2
+select id,  str_to_date(dataQual2, '%d/%m/%Y') dataq2, tituloQual2, 'Q2', conceitoQual2, resumoQual2, localQual2, horarioQual2
 from j17_aluno 
 where 
 (str_to_date(dataQual2, '%d/%m/%Y')  <> '00-00-0000')
