@@ -17,7 +17,8 @@ class DefesasOrientadorViewSolicitarBanca extends JViewLegacy
                 $this->msg = '';
                 $this->aluno = $this->get('aluno');
                 $this->membrosbanca = $this->get('membrosbanca');
-                
+                $this->faseDefesa = $this->get('fasedefesa');
+                $this->mapaFases = $this->get('mapafases');
                 
                 // Display the view
                 parent::display($tpl);
