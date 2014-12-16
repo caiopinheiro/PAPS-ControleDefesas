@@ -22,7 +22,7 @@ $linha_pes = array(0 => "Todos", 1 => "Banco de Dados e Recuperação da Informa
 			
 $arrayTipoDefesa = array('M' => "Mestrado", 'D' => "Doutorado");
 
-$status_banc = array (0 => "Banca Deferida",1 => "Banca Indeferida", NULL => "Banca Não Avaliada");
+$status_banc = array (0 => "Banca Indeferida", 1 => "Banca Deferida", NULL => "Banca Não Avaliada");
 
 $array_funcao = array ('P' => "Presidente",'E' => "Membro Externo", 'I' => "Membro Interno");
 
@@ -47,7 +47,7 @@ if($this->idAvaliacao){
 <script language="JavaScript">
         function deferirBanca(form){        
            var confirmar;
-           var deferir = 0;
+           var deferir = 1;
            
            confirmar = window.confirm('Você tem certeza que deseja DEFERIR essa banca?');
        
@@ -60,7 +60,7 @@ if($this->idAvaliacao){
         
         function indeferirBanca(form){        
            var confirmar;
-           var indeferir = 1;
+           var indeferir = 0;
            confirmar = window.confirm('Você tem certeza que deseja INDEFERIR essa banca?');
 	
            if(confirmar == true){
