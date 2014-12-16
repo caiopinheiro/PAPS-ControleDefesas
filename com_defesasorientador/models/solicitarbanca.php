@@ -145,5 +145,4 @@ class DefesasOrientadorModelSolicitarBanca extends JModelItem
 		
 	}
 	
-	
 }

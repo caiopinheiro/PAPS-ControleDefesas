@@ -9,9 +9,49 @@ $document->addScript('components/com_portalsecretaria/jquery.tablesorter.js', 't
 $document->addScript('//code.jquery.com/jquery-1.10.2.js', 'text/javascript');
 $document->addScript('//code.jquery.com/ui/1.11.2/jquery-ui.js');
 $document->addStyleSheet('//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css');
+
+//echo $document->getCharset(); 
 ?>
 
-<div id="toolbar-box"><div class="m"><div class="toolbar-list" id="toolbar">
+<?php if ($this->semProeficiencia) {?>
+
+<script>
+
+alert ('Aluno sem exame de proeficiência cadastrado.');
+location('index.php?option=com_portalprofessor&task=alunos&Itemid=317');
+
+</script>
+
+
+
+
+<?php }?>
+<?php 
+
+if ($this->existeSemAprovacao) {	
+
+?>
+
+<script>
+
+alert ('Existe <?php echo $this->nomeFase[$this->faseDefesa[0]]?>cadastrada sem conceito');
+location('index.php?option=com_portalprofessor&task=alunos&Itemid=317');
+
+</script>
+
+	
+<?php } else if ($this->finalizouCurso) {?>
+
+<script>
+
+alert('Aluno já finalizou o seu curso');
+location('index.php?option=com_portalprofessor&task=alunos&Itemid=317'); 
+
+</script>
+
+<?php } ?>
+<div id="toolbar-box"><div class="m
+"><div class="toolbar-list" id="toolbar">
 <div class="cpanel2">
 
 <div class="icon" id="toolbar-listadefesas">
@@ -33,7 +73,7 @@ $document->addStyleSheet('//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-u
 <div class="clr"></div>
 </div>
 
-<div class="pagetitle icon-48-groups"><h2>Solicitar Banca</h2></div>
+<div class="pagetitle icon-48-groups"><h2>Solicitar Banca - <?php echo $this->nomeFase[$this->faseDefesa[0]]?></h2></div>
 </div></div>
 
 
@@ -50,6 +90,7 @@ $document->addStyleSheet('//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-u
         <label>Nome:</label> <input type="text" name="nomeAluno" value="<?php echo $this->aluno[0]->nome;?>" disabled="disabled"/>
         </td>
         <td>
+        <input type="hidden" name="idaluno" value="<?php echo $this->aluno[0]->id?>" />
         
         <?php 
         	switch ($this->aluno[0]->curso)
@@ -72,7 +113,6 @@ $document->addStyleSheet('//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-u
         	
   			<td> <label>Ingresso</label> <input type="text" name="ingresso" value="<?php echo  JHTML::_('date',$this->aluno[0]->anoingresso, JText::_('d/m/Y')); ?>" disabled="disabled" /></td>
         </tr>
-			
 			</tbody>
 			
 	</table>
@@ -232,7 +272,8 @@ $document->addStyleSheet('//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-u
         <hr />
         <tbody>
         
-        <tr ><td colspan="4"><label>Título: </label> <input name="titulodefesa" style="width:95%"></td></tr>
+        <tr ><td colspan="4"><label><</label>
+         <input name="titulodefesa" style="width:95%"></td></tr>
         <tr >
         <td>
         <label>Data da defesa:</label> <input type="text" name="datadefesa" id="datepicker" />
@@ -257,7 +298,7 @@ $document->addStyleSheet('//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-u
         	<td>
         		<label>Resumo: </label>
         		
-        		<textarea rows="6" cols="100" name="resumo"></textarea>
+        		<textarea rows="6" cols="100" name="resumodefesa"></textarea>
         	</td>
         	
         

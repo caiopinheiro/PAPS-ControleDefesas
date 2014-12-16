@@ -39,4 +39,51 @@ class DefesasorientadorController extends JController {
     		
     }
     
+    public function cadastrarbanca() {
+
+    	
+    	$idAluno = JRequest::getVar("idaluno");
+    	$nomeAluno = JRequest::getVar('nomeAluno');
+    	$defesa["titulo"] = JRequest::getVar("titulodefesa");
+    	$defesa['data'] = JRequest::getVar('datadefesa');
+    	$defesa['resumo'] = JRequest::getVar('resumodefesa');
+    	$defesa['tipoDefesa'] = JRequest::getVar('tipoDefesa');
+    	
+    	$membrosBanca["id"] = JRequest::getVar('idMembroBanca');
+    	$membrosBanca['tipoMembro'] = JRequest::getVar('tipoMembroBanca');
+    	
+    	$defesa['aluno'] = $idAluno;
+    	$defesa['membrosBanca'] = $membrosBanca;
+    	
+		$model = $this->getModel();
+		
+		$resultado = $model->insertDefesa($defesa);
+		
+		if (is_array($resultado)) {
+			
+			$this->set('mensagens', $resultado); 
+			
+			$this->default_view('solicitarbanca');
+			
+		
+		} else {
+			
+			// se não houver erros redireciona para view de confirmação			
+			
+			$this->default_view = 'confirmacao-banca';
+			
+			$this->set('idaluno', $idAluno);
+			
+			$this->set('aluno', $model->getAluno());
+			$this->set('tipoDefesa', $defesa['tipoDefesa']);
+			
+			// evitar de cadastrar duas vezes por atualização de página
+			unset($_POST);
+		
+		}
+		$this->display();
+		
+    	
+    }
+    
 }
