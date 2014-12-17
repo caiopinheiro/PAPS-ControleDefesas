@@ -8,7 +8,7 @@ jimport('joomla.application.component.modelitem');
 /**
  * HelloWorld Model
 */
-class DefesasOrientadorModelSolicitarBanca extends JModelItem
+class DefesasOrientadorModelCadastrarBanca extends JModelItem
 {
 	 
 
@@ -147,32 +147,51 @@ class DefesasOrientadorModelSolicitarBanca extends JModelItem
 
 	
 	/**
-	 * Função de que valida a defesa 
+	 * Função de que valida os dados do formulário defesa 
+	 * 
+	 * - true indica que falhou na validação, ou seja deve ser exibido a mensagem
 	 * 
 	 * @param unknown $defesa
 	 */
-	public function validaDefesa($defesa) {
+	private function validaDefesa($defesa) {
+		
+		// TODO validar defesa repetida
 		
 		$valido = true;
 		$mensagens = array();
-							
+		
 		$mensagens['titulo'] = (!strlen($defesa['titulo']) || is_null($defesa['titulo']));
 		$mensagens['resumo'] = (!strlen($defesa['resumo']) || is_null($defesa['resumo']));
-	 	$mensagens['data'] = !$this->validaData($defesa['data']);
+	 	$mensagens['dataInvalida'] = !$this->validaData($defesa['data']);
+	 	$dateDefesa = date_create_from_format('d/m/Y', $defesa['data']);
+	 	$dateNow = date_create();
+
+	 	
+	 	$diff = date_diff($dateNow, $dateDefesa);
+
+	 	// ver regra de negócio - sendo rejeitado apenas datas anteriores a data de hoje
+	 	$mensagens['dataAnterior'] = ($diff->invert);  
+	 	
+	 	$achouPresidente = true;
+	 	
+	 	if (count($defesa['membrosBanca']['id'])) {
 	 	
 	 	$achouPresidente = false;
-	 	for($count = 0; i < count($defesa['membrosBanca']['id']); $count++) {
-			if ($defesa['membrosBanca']['tipoMembro'][$count] == 'P'){
-				
-				$achouPresidente = true;
-				
-			}		 		
-	 	}
+	 	
+		 	for($count = 0; $count < count($defesa['membrosBanca']['id']); $count++) {
+				if ($defesa['membrosBanca']['tipoMembro'][$count] == 'P'){
+					
+					$achouPresidente = true;
+					
+				}		 		
+		 	}
+		 	$mensagens['membrobanca'] = false;
+	 	} else $mensagens['membrobanca'] = true;
 	 	
 	 	$mensagens['presidente'] = !$achouPresidente;
 	 	
-	 	$mensagens['previa'] = $this->validaArquivo($defesa['previa']);
-		
+	 	//$mensagens['previa'] = $this->validaArquivo($defesa['previa']);
+			 	
 	 	/**
 	 	 * verificar se professor informa o local
 	 	 */
@@ -182,15 +201,22 @@ class DefesasOrientadorModelSolicitarBanca extends JModelItem
 	}
 
 	public function insertDefesa($defesa) {
-
+	
+		var_dump($defesa);
+		
+		
 		$validacao = $this->validaDefesa($defesa);
+		
+		var_dump($validacao);
+		
 		
 		// usado para operação lógica com array de booleanos
 		$resultadoValidacao = false;
 
 		/**
 		 * se existir uma mensagem true, o resultado é true e é confirmado que a validação não foi aceita
-		 */
+		 */	
+		
 		foreach ($validacao as $msg) {
 			$resultadoValidacao = $resultadoValidacao || $msg;
 		}
@@ -208,34 +234,53 @@ class DefesasOrientadorModelSolicitarBanca extends JModelItem
 			$database->execute();
 				
 			$idBanca = $database->insertid();
-				
+			
 			$this->inserirMembroBanca($defesa['membrosBanca'], $idBanca);
 				
-			$sql = "insert into #__defesa (aluno_id, titulo, resumo, tipoDefesa, data, previa) values ($idAluno, '" . $defesa["titulo"] . "', '" . $defesa["resumo"] . "', " .
-					"'" . $defesa['tipoDefesa'] . "', " . "str_to_date('" . $defesa['data'] .  "', '%d/m%/Y'), '" . $defesa["previa"] . "')" ;
+			$sql = "insert into #__defesa (aluno_id, titulo, resumo, tipoDefesa, data, banca_id) values (" . $defesa['aluno'].  ", '" . $defesa["titulo"] . "', '" . $defesa["resumo"] . "', " .
+					"'" . $defesa['tipoDefesa'] . "', " . "str_to_date('" . $defesa['data'] .  "', '%d/%m/%Y'), $idBanca)";
 				
 			$database->setQuery($sql);
 				
+			var_dump($sql);
+			
 			$database->execute();
+			
+			$result = $database->insertid(); 					
 
-			return  $database->insertid();
+			return $result;
 			
 		} else return $validacao;
 
 	}
 
+	public function getMembroBanca($id) {
+
+		$database =& JFactory::getDBO();
+		
+		$sql = 'select nome, filiacao, id from #__membrosbanca where id=' . $id;
+		
+		$database->setQuery($sql);
+		
+		$membro = $database->loadObjectList();
+
+		return $membro[0];
+	}
+	
 	private function inserirMembroBanca($membroBanca, $idBanca) {
 		
 		$database =& JFactory::getDBO();
 		
 		for ($count = 0; $count < count($membroBanca['id']); $count++) {
 
-			$sql = "insert into #__banca_has_membrosbanca (banca_id, membrosbanca_id, funcao, situacao) " .
-					"values ($idBanca, " . $membroBanca['id'][$count] . ", '" . $membroBanca['tipoMembro'][$count] . "', 0)";
+			$sql = "insert into #__banca_has_membrosbanca (banca_id, membrosbanca_id, funcao) " .
+					"values ($idBanca, " . $membroBanca['id'][$count] . ", '" . $membroBanca['tipoMembro'][$count] . "')";
 			
+			var_dump($sql);
 			
 			$database->setQuery($sql);
 			
+			$database->execute();
 
 			// decidir o que fazer com isso
 			$result = $database->insertid();

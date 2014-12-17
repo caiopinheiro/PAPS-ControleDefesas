@@ -49,22 +49,28 @@ class DefesasorientadorController extends JController {
     	$defesa['resumo'] = JRequest::getVar('resumodefesa');
     	$defesa['tipoDefesa'] = JRequest::getVar('tipoDefesa');
     	
-    	$membrosBanca["id"] = JRequest::getVar('idMembroBanca');
-    	$membrosBanca['tipoMembro'] = JRequest::getVar('tipoMembroBanca');
+    	$membrosBanca["id"] = JRequest::getVar('idMembroBanca', array(), 'ARRAY');
+    	$membrosBanca['tipoMembro'] = JRequest::getVar('tipoMembroBanca', array(), 'ARRAY');
     	
     	$defesa['aluno'] = $idAluno;
     	$defesa['membrosBanca'] = $membrosBanca;
     	
-		$model = $this->getModel();
-		
+    	$model = $this->getModel('cadastrarbanca');
+    	 
+    	for ($count = 0; $count < count($membrosBanca['id']); $count++){
+    		$membrosBancaTabela[$count] = $model->getMembroBanca($membrosBanca['id'][$count]);
+    		$membrosBancaTabela[$count]->tipoMembro = $membrosBanca['tipoMembro'][$count];
+    	}
+    	
 		$resultado = $model->insertDefesa($defesa);
+		
+		//$this->set('membrosBancaTabela', $membrosBancaTabela);
 		
 		if (is_array($resultado)) {
 			
 			$this->set('mensagens', $resultado); 
 			
-			$this->default_view('solicitarbanca');
-			
+			$this->default_view = 'solicitarbanca';
 		
 		} else {
 			
@@ -76,6 +82,7 @@ class DefesasorientadorController extends JController {
 			
 			$this->set('aluno', $model->getAluno());
 			$this->set('tipoDefesa', $defesa['tipoDefesa']);
+			
 			
 			// evitar de cadastrar duas vezes por atualização de página
 			unset($_POST);

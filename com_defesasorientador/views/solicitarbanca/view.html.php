@@ -22,8 +22,8 @@ class DefesasOrientadorViewSolicitarBanca extends JViewLegacy
                 $this->finalizouCurso = false;
                 $this->existeSemAprovacao = false;
                 $this->semProeficiencia = false;
-                
-                $this->nomeFase = array("P" => "Proeficiência","Q1" => "Qualificação 1", 'Q2' => "Qualificação 2", 'D' => 'Dissertação', 'T' => 'Tese');
+ 				               
+                $this->nomeFase = array("P" => "Proeficiência","Q1" => "Qualificação 1", 'Q2' => "Qualificação 2", 'D' => 'Dissertação', 'T' => 'Tese', 'Q' => 'Qualificação');
                 
                 
                 if ($this->faseDefesa[0] == $this->mapaFases[0] && !$this->faseDefesa[1]) {
@@ -46,7 +46,10 @@ class DefesasOrientadorViewSolicitarBanca extends JViewLegacy
 	                	$this->faseDefesa[0] = $this->mapaFases[$count];
                 	}
                 
-                
+				                	
+                	
+               	$this->membrosBancaTabela = $this->get('membrosBancaTabela');
+               	
                 // Display the view
                 parent::display($tpl);
         }

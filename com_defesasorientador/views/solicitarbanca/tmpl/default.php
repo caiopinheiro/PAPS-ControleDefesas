@@ -10,19 +10,17 @@ $document->addScript('//code.jquery.com/jquery-1.10.2.js', 'text/javascript');
 $document->addScript('//code.jquery.com/ui/1.11.2/jquery-ui.js');
 $document->addStyleSheet('//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css');
 
-//echo $document->getCharset(); 
+
 ?>
 
 <?php if ($this->semProeficiencia) {?>
 
 <script>
 
-alert ('Aluno sem exame de proeficiência cadastrado.');
+alert ('Aluno sem exame de proeficiÃªncia cadastrado.');
 location('index.php?option=com_portalprofessor&task=alunos&Itemid=317');
 
 </script>
-
-
 
 
 <?php }?>
@@ -34,7 +32,7 @@ if ($this->existeSemAprovacao) {
 
 <script>
 
-alert ('Existe <?php echo $this->nomeFase[$this->faseDefesa[0]]?>cadastrada sem conceito');
+alert ('Existe <?php echo mb_convert_encoding($this->nomeFase[$this->faseDefesa[0]], 'UTF-8', 'ISO-8859-1');?>cadastrada sem conceito');
 location('index.php?option=com_portalprofessor&task=alunos&Itemid=317');
 
 </script>
@@ -44,12 +42,24 @@ location('index.php?option=com_portalprofessor&task=alunos&Itemid=317');
 
 <script>
 
-alert('Aluno já finalizou o seu curso');
+alert('Aluno jÃ¡ finalizou o seu curso');
 location('index.php?option=com_portalprofessor&task=alunos&Itemid=317'); 
 
 </script>
 
 <?php } ?>
+
+<script> 
+
+
+function enviarForm() {
+
+	var form1 = document.form1;
+	form1.submit();
+				
+}
+
+</script>
 <div id="toolbar-box"><div class="m
 "><div class="toolbar-list" id="toolbar">
 <div class="cpanel2">
@@ -60,7 +70,7 @@ location('index.php?option=com_portalprofessor&task=alunos&Itemid=317');
 </div>
 
 <div class="icon" id="toolbar-salvar">
-<a href="index.php?option=com_portalprofessor&Itemid=<?php echo $Itemid;?>">
+<a href="javascript:enviarForm()">
 <span class="icon-32-save-new"></span>Salvar</a>
 </div>
 
@@ -73,7 +83,7 @@ location('index.php?option=com_portalprofessor&task=alunos&Itemid=317');
 <div class="clr"></div>
 </div>
 
-<div class="pagetitle icon-48-groups"><h2>Solicitar Banca - <?php echo $this->nomeFase[$this->faseDefesa[0]]?></h2></div>
+<div class="pagetitle icon-48-groups"><h2>Solicitar Banca - <?php echo mb_convert_encoding($this->nomeFase[$this->faseDefesa[0]], 'UTF-8', 'ISO-8859-1');	?></h2></div>
 </div></div>
 
 
@@ -82,7 +92,8 @@ location('index.php?option=com_portalprofessor&task=alunos&Itemid=317');
 		<thead>
         	<h2>Aluno</h2>
         </thead>
-        
+		<input type="hidden" name="idAluno" value="<?php echo $this->aluno[0]->id?>"/>		
+        <input type="hidden" name="tipoDefesa" value="<?php echo $this->faseDefesa[0]?>" />
         <hr />
         <tbody>
         <tr >
@@ -125,7 +136,7 @@ location('index.php?option=com_portalprofessor&task=alunos&Itemid=317');
     	    dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
     	    dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
     	    dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
-    	    monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+    	    monthNames: ['Janeiro','Fevereiro','MarÃ§o','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
     	    monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
     	    nextText: 'Próximo',
     	    prevText: 'Anterior'});
@@ -137,9 +148,9 @@ location('index.php?option=com_portalprofessor&task=alunos&Itemid=317');
 		if (!verificaMembroBanca()) {
 			if (!verificaPresidente()) {	
 			AddTableRow();
-			} else alert('Já existe o Presidente da banca.');
+			} else alert('JÃ¡ existe o Presidente da banca.');
 		}
-		else alert('Professor já está inserido nesta banca.');	
+		else alert('Professor jÃ¡ estÃ¡ inserido nesta banca.');	
 			
   }
 
@@ -190,11 +201,11 @@ location('index.php?option=com_portalprofessor&task=alunos&Itemid=317');
 				
 				switch (vTipoMembro){
 
-				case 'p': tipoMembroBanca = 'Presidente';
+				case 'P': tipoMembroBanca = 'Presidente';
 						break;
-				case 'mi': tipoMembroBanca = 'Membro Interno';
+				case 'I': tipoMembroBanca = 'Membro Interno';
 						break;
-				case 'me': tipoMembroBanca = 'Membro Externo';
+				case 'E': tipoMembroBanca = 'Membro Externo';
 						break;
 					default: break;
 				}	
@@ -228,11 +239,11 @@ location('index.php?option=com_portalprofessor&task=alunos&Itemid=317');
 		
 		switch (vTipoMembro){
 
-		case 'p': tipoMembroBanca = 'Presidente';
+		case 'P': tipoMembroBanca = 'Presidente';
 				break;
-		case 'mi': tipoMembroBanca = 'Membro Interno';
+		case 'I': tipoMembroBanca = 'Membro Interno';
 				break;
-		case 'me': tipoMembroBanca = 'Membro Externo';
+		case 'E': tipoMembroBanca = 'Membro Externo';
 				break;
 			default: break;
 		}	
@@ -244,8 +255,8 @@ location('index.php?option=com_portalprofessor&task=alunos&Itemid=317');
 		cols += '<td>' + professoresInst[0] + '</td>' ; 		
 		cols += '<td>' + professoresInst[1] + '</td>' ; 
 		cols += '<td>' + tipoMembroBanca + '</td>';
-		cols += '<input type="hidden" name="idMembroBanca" value="'+vMembroBanca+'" />';
-		cols += '<input type="hidden" name="tipoMembroBanca" value="'+vTipoMembro+'" />';	
+		cols += '<input type="hidden" name="idMembroBanca[]" value="'+vMembroBanca+'" />';
+		cols += '<input type="hidden" name="tipoMembroBanca[]" value="'+vTipoMembro+'" />';	
 				
 	    newRow.append(cols);
 	    $("#tablebanca").append(newRow);
@@ -272,7 +283,7 @@ location('index.php?option=com_portalprofessor&task=alunos&Itemid=317');
         <hr />
         <tbody>
         
-        <tr ><td colspan="4"><label><</label>
+        <tr ><td colspan="4"><label><?php echo mb_convert_encoding('Título', 'UTF-8', 'ISO-8859-1'); ?></label>
          <input name="titulodefesa" style="width:95%"></td></tr>
         <tr >
         <td>
@@ -324,11 +335,11 @@ location('index.php?option=com_portalprofessor&task=alunos&Itemid=317');
 		<thead>
 			<td style="width:10%;"></td>
         	<td style="width:50%;">Professor</td>
-        	<td style="width:20%;">Instituição</td>
-        	<td style="width:20%;">Função</td>
+        	<td style="width:20%;">InstituiÃ§Ã£o</td>
+        	<td style="width:20%;">FunÃ§Ã£o</td>
         </thead>
         <tbody>
-        
+        	
         </tbody>
         
         <hr />
@@ -341,6 +352,43 @@ location('index.php?option=com_portalprofessor&task=alunos&Itemid=317');
 	<br />
 	<br />
 	<table width="100%" id="table-membrosbanca">
+	
+	
+	
+
+	
+		<?php for($count = 0; $count < count($this->membrosBancaTabela); $count++) {
+		
+		$cols = '<tr>';	
+		
+		switch ($this->membrosBancaTabela[$count]->tipoMembro){
+		
+			case 'P': $tipoMembroBanca = 'Presidente';
+			break;
+			case 'I': $tipoMembroBanca = 'Membro Interno';
+			break;
+			case 'E': $tipoMembroBanca = 'Membro Externo';
+			break;
+			default: break;
+		}
+			
+		$cols = $cols . '<td>';
+	    $cols = $cols . '<button onclick="RemoveTableRow(this)" type="button">Remover</button>';
+	    $cols = $cols . '</td>';
+		
+		$cols = $cols .  '<td>' . $this->membrosBancaTabela[$count]->nome . '</td>' ; 		
+		$cols = $cols .  '<td>' . $this->membrosBancaTabela[$count]->filiacao . '</td>' ; 
+		$cols = $cols .  '<td>' + $tipoMembroBanca + '</td>';
+		$cols = $cols .  '<input type="hidden" name="idMembroBanca[]" value="'. $this->membrosBancaTabela[$count]->id . '" />';
+		$cols = $cols .  '<input type="hidden" name="tipoMembroBanca[]" value="' . $this->membrosBancaTabela[$count]->tipoMembro . '" />';	
+		
+		
+		$cols = $cols . '</tr>';
+			
+		}
+		?>
+	
+	
 		<tr><td style="width:10%"><a href="javascript:adicionarMembro();"> <img alt="Adicionar Membro da Banca" src="components/com_defesasorientador/assets/img/add-icon.png" /></a></td>
 		<td style="width:40%">
 		<select name="professores" id="mBanca" style="width:80%">
@@ -368,9 +416,9 @@ location('index.php?option=com_portalprofessor&task=alunos&Itemid=317');
 		 <td>
 		 <fieldset>
   <legend> Tipo de membro </legend>
-  <label> <input type="radio" id="rdioPresidente" name="tipoMembro" checked="checked" value="p"> Presidente </label>
-  <label> <input type="radio" id="rdioMembroInterno" name="tipoMembro" value="mi"> Membro Interno</label>
-   <label> <input type="radio" id="rdioMembroExterno" name="tipoMembro" value="me"> Membro Externo</label>
+  <label> <input type="radio" id="rdioPresidente" name="tipoMembro" checked="checked" value="P"> Presidente </label>
+  <label> <input type="radio" id="rdioMembroInterno" name="tipoMembro" value="I"> Membro Interno</label>
+   <label> <input type="radio" id="rdioMembroExterno" name="tipoMembro" value="E"> Membro Externo</label>
   <!-- etc -->
 	</fieldset>
 </td>

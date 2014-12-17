@@ -17,7 +17,7 @@ class DefesasOrientadorModelSolicitarBanca extends JModelItem
 		$database =& JFactory::getDBO();
 		$idAluno = JRequest::getVar("idaluno");
 		
-		$sql = "select matricula, a.nome nome, pesq.nome linhapesquisa, curso, anoingresso from #__aluno a, #__linhaspesquisa pesq where a.id = $idAluno and pesq.id = a.area";	
+		$sql = "select matricula, a.id id,  a.nome nome, pesq.nome linhapesquisa, curso, anoingresso from #__aluno a, #__linhaspesquisa pesq where a.id = $idAluno and pesq.id = a.area";	
 		
 	//	var_dump($sql);
 		
