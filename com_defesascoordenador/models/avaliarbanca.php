@@ -13,21 +13,21 @@ class DefesasCoordenadorModelAvaliarBanca extends JModelItem
 	    
 	    public function visualizarBanca($idBanca) {
 			$database =& JFactory::getDBO();
-			$sql = "SELECT status_banca FROM #__banca_controledefesas WHERE id = ".$idBanca;
+			$sql = "SELECT status_banca, justificativa FROM #__banca_controledefesas WHERE id = ".$idBanca;
 			$database->setQuery($sql);
 			return $database->loadObjectList();
 		}
 
-		public function visualizarAluno($idAluno){
+		public function visualizarAluno($idBanca){
 			$database =& JFactory::getDBO();
-			$sql = "SELECT nome as nome_aluno,area,anoingresso FROM #__aluno WHERE id= ".$idAluno;
+			$sql = "SELECT a.nome as nome_aluno, a.area, a.anoingresso FROM (#__banca_controledefesas AS bcd JOIN #__defesa AS d ON bcd.id = d.banca_id) JOIN #__aluno AS a ON d.aluno_id = a.id WHERE bcd.id= ".$idBanca;
 			$database->setQuery($sql);
 			return $database->loadObjectList();
 		}
 		
-		public function visualizarDefesa($idDefesa){
+		public function visualizarDefesa($idBanca){
 			$database =& JFactory::getDBO();
-			$sql = "SELECT titulo, resumo, tipoDefesa FROM #__defesa WHERE idDefesa = ".$idDefesa;
+			$sql = "SELECT titulo, resumo, tipoDefesa FROM (#__banca_controledefesas AS bcd JOIN #__defesa AS d ON bcd.id = d.banca_id)  WHERE bcd.id= ".$idBanca;
 			$database->setQuery($sql);
 			return $database->loadObjectList();
 		}
@@ -47,9 +47,21 @@ class DefesasCoordenadorModelAvaliarBanca extends JModelItem
 			
 			$sucesso = $database->Query();
 			
+			
 			return $sucesso;
 				
 		}
-
+		
+		public function updateJustificativaBanca($idBanca,$justificativa){
+			$database =& JFactory::getDBO();
+			$sql = "UPDATE #__banca_controledefesas SET justificativa = ".$justificativa." WHERE id = ".$idBanca;
+			
+			$database->setQuery($sql);
+			
+			$sucesso = $database->Query();
+			
+			return $sucesso;
+				
+		}
         
 }

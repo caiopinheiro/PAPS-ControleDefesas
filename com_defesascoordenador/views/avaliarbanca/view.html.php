@@ -18,17 +18,16 @@ class DefesasCoordenadorViewAvaliarBanca extends JViewLegacy
         function display($tpl = null){	
 			$this->msg = 'Avaliar Banca';
 			$idBanca = JRequest::getVar('idBanca');		
-			$idDefesa = JRequest::getVar('idDefesa');
-			$idAluno = JRequest::getVar('idAluno');
+			$status = JRequest::getVar('status');
+			
+			$this->status = $status;
 			$this->idBanca = $idBanca;
-			$this->idDefesa = $idDefesa;	
-			$this->idAluno = $idAluno;
-					
+			
 			$model = $this->getModel();
 			
 			$this->banca = $model->visualizarBanca($idBanca);
-			$this->aluno = $model->visualizarAluno($idAluno);
-			$this->defesa = $model->visualizarDefesa($idDefesa);
+			$this->aluno = $model->visualizarAluno($idBanca);
+			$this->defesa = $model->visualizarDefesa($idBanca);
 			$this->membrosBanca = $model->visualizarMembrosBanca($idBanca);
 				
 			parent::display($tpl);
