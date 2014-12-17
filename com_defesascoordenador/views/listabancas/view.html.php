@@ -18,9 +18,9 @@ class DefesasCoordenadorViewListaBancas extends JViewLegacy
         function display($tpl = null) {              
 			
 			$status_bancas = JRequest::getCmd('buscaStatusBanca', false);
-			$nome_aluno = JRequest::getCmd('buscaNomeAluno', false);
+			$nome_aluno = JRequest::getVar('buscaNomeAluno', false);
 			$tipo_banca = JRequest::getCmd('tipoBanca', false);
-			$nome_orientador = JRequest::getCmd('buscaNomeOrientador', false);
+			$nome_orientador = JRequest::getVar('buscaNomeOrientador', false);
 			$linha_pesquisa = JRequest::getCmd('linhaPesquisa',false);
 			
 			$this->status_bancas = $status_bancas;

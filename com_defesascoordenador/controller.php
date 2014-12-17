@@ -32,35 +32,35 @@ class DefesascoordenadorController extends JController {
     }
     
     public function avaliarBanca(){
-//		$idBanca = JRequest::getCmd('idBancaSelec', false);
 		$idBanca = JRequest::getVar('idBanca');
-		$idDefesa = JRequest::getVar('idDefesa');
-		$idAluno = JRequest::getVar('idAluno');		
-		//echo '<p>'.$idAluno.'</p>';
-		header('Location: index.php?option=com_defesascoordenador&view=avaliarbanca&idBanca='.$idBanca.'&idDefesa='.$idDefesa.'&idAluno='.$idAluno);
+		
+		header('Location: index.php?option=com_defesascoordenador&view=avaliarbanca&idBanca='.$idBanca);
+
 	}
 	
 	public function deferirBanca(){
 		$idBanca = JRequest::getVar('idBanca');
-		$idDefesa = JRequest::getVar('idDefesa');
-		$idAluno = JRequest::getVar('idAluno');
 		$avaliacao = JRequest::getVar('avaliacao');
-		$model = $this->getModel('avaliarbanca');		
-		$sucesso = $model->updateStatusBanca($idBanca,$avaliacao);	
+		$model = $this->getModel('avaliarbanca');	
+			
+		$status = $model->updateStatusBanca($idBanca,$avaliacao);	
+			
+		header('Location: index.php?option=com_defesascoordenador&view=avaliarbanca&idBanca='.$idBanca.'&status='.$status);
 		
-		header('Location: index.php?option=com_defesascoordenador&view=avaliarbanca&idBanca='.$idBanca.'&idDefesa='.$idDefesa.'&idAluno='.$idAluno.'&idAvaliacao='.$sucesso);
 	}
 	
 	public function indeferirBanca(){
 		$idBanca = JRequest::getVar('idBanca');
-		$idDefesa = JRequest::getVar('idDefesa');
-		$idAluno = JRequest::getVar('idAluno');
 		$avaliacao = JRequest::getVar('avaliacao');
+		$justificativa = JRequest::getVar('justificativa');
+		
 		//echo '<p>'.$avaliacao.'</p>';
 		$model = $this->getModel('avaliarbanca');		
-		$sucesso = $model->updateStatusBanca($idBanca,$avaliacao);	
+		$status = $model->updateStatusBanca($idBanca,$avaliacao);	
+		//$sucesso2 = $model->updateJustificativaBanca($idBanca,$justificativa);
 		
-		header('Location: index.php?option=com_defesascoordenador&view=avaliarbanca&idBanca='.$idBanca.'&idDefesa='.$idDefesa.'&idAluno='.$idAluno.'&idAvaliacao='.$sucesso);
+
+		header('Location: index.php?option=com_defesascoordenador&view=avaliarbanca&idBanca='.$idBanca.'&status='.$status);
 			
 	}
 

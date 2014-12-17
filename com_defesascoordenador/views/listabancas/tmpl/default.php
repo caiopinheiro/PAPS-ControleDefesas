@@ -37,20 +37,16 @@ if(($this->status_bancas == NULL) AND
 <script language="JavaScript">
         function avaliarBanca(form){        
            var idBancaSelecionado = 0;
-           var idDefesaSelecionado = 0;
-           var idAlunoSelecionado = 0;
+           
            
            for(i = 0;i < form.idBancaSelec.length ;i++)
                 if(form.idBancaSelec[i].checked){
-					idBancaSelecionado = form.idBancaSelec[i].value;
-					idDefesaSelecionado = form.idDefesaSelec[i].value;
-					idAlunoSelecionado = form.idAlunoSelec[i].value;	
+					idBancaSelecionado = form.idBancaSelec[i].value;	
 				}
+				
            if(idBancaSelecionado > 0){
 				form.task.value = 'avaliarBanca';
 				form.idBanca.value = idBancaSelecionado;
-				form.idDefesa.value = idDefesaSelecionado;
-				form.idAluno.value = idAlunoSelecionado;
 				form.submit();
            } else {
            	alert('Ao menos 1 item deve ser selecionado para visualiza\xE7\xE3o.')
@@ -77,7 +73,7 @@ if(($this->status_bancas == NULL) AND
             <div class="cpanel2">
                 <div class="icon" id="toolbar-preview">
                     <a href="javascript:avaliarBanca(document.form)" class="toolbar">
-                    <span class="icon-32-preview"></span>Avaliar</br>Banca</a>
+                    <span class="icon-32-preview"></span>Detalhes</a>
                 </div>
                 
                 
@@ -179,9 +175,7 @@ if(($this->status_bancas == NULL) AND
 				foreach($bancas as $banca ) { ?>
 	
 				<tr>
-					<td width='15'><input type="radio" name="idBancaSelec" value="<?php echo $banca->idBanca;?>">
-								   <input type="hidden" name="idDefesaSelec" value="<?php echo $banca->idDefesa;?>">
-								   <input type="hidden" name="idAlunoSelec" value="<?php echo $banca->idAluno;?>"></td>
+					<td width='15'><input type="radio" name="idBancaSelec" value="<?php echo $banca->idBanca;?>"></td>
 					<td><img border='0' src='components/com_defesascoordenador/assets/images/<?php echo $statusImg[$banca->status_banca];?>' width='15' height='16' title='<?php echo $status[$banca->status_banca];?>'></td>
 					<td><?php echo $banca->nome_aluno;?></td>
 					<td><?php echo $arrayTipoBanca[$banca->tipo_banca];?></td>
@@ -189,6 +183,7 @@ if(($this->status_bancas == NULL) AND
 					<td><img border='0' src='components/com_portalsecretaria/images/<?php echo $linhaPesquisa[$banca->linha_pesquisa];?>.gif'></td>
 					
 				</tr>
+			
 			<?php } 
 			}?>
 		</tbody>
@@ -200,7 +195,6 @@ if(($this->status_bancas == NULL) AND
      <input name='task' type='hidden' value='display' />
      <input name='idBancaSelec' type='hidden' value='0' />
      <input name='idBanca' type='hidden' value='' />
-     <input name='idDefesa' type='hidden' value='' />
-     <input name='idAluno' type='hidden' value='' />
+
      
 </form>

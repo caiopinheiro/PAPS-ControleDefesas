@@ -1,5 +1,12 @@
 <?php
+
+JHTML::_('behavior.mootools');
+JHTML::_('script','modal.js', 'media/system/js', true);
+JHTML::_('stylesheet','modal.css');
+JHTML::_('behavior.modal', 'a.modal');
+
 // No direct access to this file
+
 
 $user =& JFactory::getUser();
 if(!$user->username) die( 'Acesso Restrito.' );
@@ -7,11 +14,9 @@ if(!$user->username) die( 'Acesso Restrito.' );
 defined('_JEXEC') or die('Restricted access');
 
 $document = &JFactory::getDocument();
-$document->addScript("includes/js/joomla.javascript.js");
+//$document->addScript("includes/js/joomla.javascript.js");
 
 $idBanca = $this->idBanca;
-$idDefesa = $this->idDefesa; 	
-$idAluno =  $this->idAluno;
 
 $Banca = $this->banca;
 $Aluno = $this->aluno;
@@ -20,7 +25,7 @@ $MembrosBanca = $this->membrosBanca;
 
 $linha_pes = array(0 => "Todos", 1 => "Banco de Dados e Recuperação da Informação", 2 => "Sistemas Embarcados & Engenharia de Software", 3 => "Inteligência Artificial", 4 => "Visão Computacional e Robótica", 5 => "Redes e Telecomunicações", 6 => "Otimização Algorítmica e Complexidade");
 			
-$arrayTipoDefesa = array('M' => "Mestrado", 'D' => "Doutorado");
+$arrayTipoDefesa = array('T' => "Mestrado", 'D' => "Doutorado");
 
 $status_banc = array (0 => "Banca Indeferida", 1 => "Banca Deferida", NULL => "Banca Não Avaliada");
 
@@ -32,19 +37,20 @@ foreach( $MembrosBanca as $membro ){
 			$nome_orientador = $membro->nome;
 }
 
-if($this->idAvaliacao){
-	$sucesso = $this->idAvaliacao;
-	if($sucesso){
-		JFactory :: getApplication()->enqueueMessage(JText :: _('Opera&#231;&#227;o realizada com sucesso.'));
-	}
-	else{
-		JError :: raiseWarning(100, 'ERRO: Opera&#231;&#227;o Falhou.');
-	}
+$sucesso = $this->status;	
+
+if($sucesso == true){
+	JFactory :: getApplication()->enqueueMessage(JText :: _('Opera&#231;&#227;o realizada com sucesso.'));
 }
+else if($sucesso == false AND $sucesso !=NULL ){
+	JError :: raiseWarning(100, 'ERRO: Opera&#231;&#227;o Falhou.');
+}
+
 
 ?>
 
 <script language="JavaScript">
+       
         function deferirBanca(form){        
            var confirmar;
            var deferir = 1;
@@ -57,19 +63,7 @@ if($this->idAvaliacao){
 				form.submit();
            }
         }
-        
-        function indeferirBanca(form){        
-           var confirmar;
-           var indeferir = 0;
-           confirmar = window.confirm('Você tem certeza que deseja INDEFERIR essa banca?');
-	
-           if(confirmar == true){
-				form.task.value = 'indeferirBanca';
-				form.avaliacao.value = indeferir;
-				form.submit();
-           }
-        }
-        
+					
 </script>
 
 <link rel="stylesheet" type="text/css" href="components/com_portalprofessor/template.css"> 	
@@ -85,7 +79,11 @@ if($this->idAvaliacao){
 					</div>
 				
 					<div <?php if($Banca[0]->status_banca != NULL) { ?> style="display: none;"<?php } ?>  class="icon" id="toolbar-back">
-						<a href ="javascript:indeferirBanca(document.form)" class = 'toolbar'>	
+						<!--a href ="javascript:indeferirBanca(document.form)" class = 'toolbar'-->
+						<!--a href="#column" class="modal"-->
+						<a class="modal" href="index.php?option=com_defesascoordenador&view=avaliarbanca&layout=modal">
+						<!--a href="index.php?option=com_defesascoordenador&modal" class="modal" 
+						rel="{size: {x: 350, y: 200 }, handler:'iframe'}"-->			
 						<span class="icon-32-delete"></span>Indeferir</a>
 				   </div>
 				   
@@ -97,9 +95,8 @@ if($this->idAvaliacao){
 				   
 				   <input name='task' type='hidden' value='display'>
 				   <input name='idBanca' type='hidden' value = <?php echo $idBanca;?>>
-				   <input name='idDefesa' type='hidden' value = <?php echo $idDefesa;?>>
-				   <input name='idAluno' type='hidden' value = <?php echo $idAluno;?>>
 				   <input name='avaliacao' type='hidden' value = ''>
+				   <input name='justificativa' type='hidden' value = ''>
 				</form>   
 		</div>
 		<div class="clr"></div>
@@ -159,7 +156,11 @@ if($this->idAvaliacao){
 		  <td width='25%'><?php echo $status_banc[$Banca[0]->status_banca];?></td>
 		</tr>
 		
-		
+		<tr <?php if(($Banca[0]->status_banca == 0) AND ($Banca[0]->status_banca != NULL) ) {?>>
+		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>JUSTIFICATIVA:</td>
+		  <td colspan='3'><?php echo $Banca[0]->justificativa;?></td>
+		</tr>
+		<?php }?>
 	  </tbody>
 	</table>
 	
@@ -175,20 +176,22 @@ if($this->idAvaliacao){
         </tr>
     
         <?php
-        foreach( $MembrosBanca as $membro )
-        {
-			if($membro->funcao == 'P')
-				$nome_orientador = $membro->nome;
-        ?>
-        <tr>
-          <td align='center'><?php echo $membro->nome;?></td>
-          <td align='center'><?php echo $membro->filiacao;?></td>
-          <td align='center'><?php echo $array_funcao[$membro->funcao];?></td>   
-        </tr>
-			
-			
-        <?php
-        } ?>
+        if(isset ($MembrosBanca)){
+			foreach( $MembrosBanca as $membro )
+			{
+				if($membro->funcao == 'P')
+					$nome_orientador = $membro->nome;
+			?>
+			<tr>
+			  <td align='center'><?php echo $membro->nome;?></td>
+			  <td align='center'><?php echo $membro->filiacao;?></td>
+			  <td align='center'><?php echo $array_funcao[$membro->funcao];?></td>   
+			</tr>
+				
+				
+			<?php
+			}
+		} ?>
     
       </tbody>
     </table>
