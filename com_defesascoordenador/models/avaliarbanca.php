@@ -52,9 +52,9 @@ class DefesasCoordenadorModelAvaliarBanca extends JModelItem
 				
 		}
 		
-		public function updateJustificativaBanca($idBanca,$justificativa){
+		public function setJustificativa($idBanca,$justificativa){
 			$database =& JFactory::getDBO();
-			$sql = "UPDATE #__banca_controledefesas SET justificativa = ".$justificativa." WHERE id = ".$idBanca;
+			$sql = "UPDATE #__banca_controledefesas SET justificativa = '".$justificativa."' WHERE id = ".$idBanca;
 			
 			$database->setQuery($sql);
 			

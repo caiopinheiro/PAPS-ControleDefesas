@@ -54,13 +54,13 @@ class DefesascoordenadorController extends JController {
 		$avaliacao = JRequest::getVar('avaliacao');
 		$justificativa = JRequest::getVar('justificativa');
 		
-		//echo '<p>'.$avaliacao.'</p>';
+		//echo '<p>'.$justificativa.'passei na controller</p>';
 		$model = $this->getModel('avaliarbanca');		
 		$status = $model->updateStatusBanca($idBanca,$avaliacao);	
-		//$sucesso2 = $model->updateJustificativaBanca($idBanca,$justificativa);
+		$status2 = $model->setJustificativa($idBanca,$justificativa);
 		
 
-		header('Location: index.php?option=com_defesascoordenador&view=avaliarbanca&idBanca='.$idBanca.'&status='.$status);
+		header('Location: index.php?option=com_defesascoordenador&view=avaliarbanca&idBanca='.$idBanca.'&status='.$status.'&status2='.$status2);
 			
 	}
 

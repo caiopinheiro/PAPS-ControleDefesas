@@ -31,23 +31,27 @@ $status_banc = array (0 => "Banca Indeferida", 1 => "Banca Deferida", NULL => "B
 
 $array_funcao = array ('P' => "Presidente",'E' => "Membro Externo", 'I' => "Membro Interno");
 
+$justificativa="";
 $nome_orientador = "";
+
 foreach( $MembrosBanca as $membro ){
 		if($membro->funcao == 'P')
 			$nome_orientador = $membro->nome;
 }
 
 $sucesso = $this->status;	
-
-if($sucesso == true){
+$sucesso2 = $this->status;
+if($sucesso == true OR $sucesso2 == true ){
 	JFactory :: getApplication()->enqueueMessage(JText :: _('Opera&#231;&#227;o realizada com sucesso.'));
 }
-else if($sucesso == false AND $sucesso !=NULL ){
+else if(($sucesso == false AND $sucesso !=NULL) OR ($sucesso2 == false AND $sucesso2 !=NULL) ){
 	JError :: raiseWarning(100, 'ERRO: Opera&#231;&#227;o Falhou.');
 }
 
 
 ?>
+
+<script type="text/javascript" src="/icomp/components/com_defesascoordenador/assets/jquery-ui-1.11.2.custom/jquery-ui.js"></script>
 
 <script language="JavaScript">
        
@@ -63,27 +67,37 @@ else if($sucesso == false AND $sucesso !=NULL ){
 				form.submit();
            }
         }
-					
+						
+		function indeferirBanca(form){        
+           var confirmar;
+           
+            
+           confirmar = window.confirm('Você tem certeza que deseja INDEFERIR essa banca?');
+			
+           if(confirmar == true){		
+				jQuery( "#dialog-form" ).dialog();
+           }
+           
+        }
+				
 </script>
 
 <link rel="stylesheet" type="text/css" href="components/com_portalprofessor/template.css"> 	
+<link rel="stylesheet" type="text/css" href="components/com_defesascoordenador/assets/jquery-ui-1.11.2.custom/jquery-ui.css"> 	
+
 
 <div id="toolbar-box">
 	<div class="m">
 		<div class="toolbar-list" id="toolbar">
 		  <div class="cpanel2">
-				<form method="post" name="form" enctype="multipart/form-data" action="index.php?option=com_defesascoordenador&view=avaliarBanca" >
+				<form method="post" id="formAvaliacao" name="form" enctype="multipart/form-data" action="index.php?option=com_defesascoordenador&view=avaliarBanca" >
 					<div <?php if($Banca[0]->status_banca != NULL) { ?> style="display: none;" <?php } ?> class="icon" id="toolbar-back">
 						<a href ="javascript:deferirBanca(document.form)" class = 'toolbar'>
 						<span class="icon-32-apply"></span>Deferir</a>
 					</div>
 				
-					<div <?php if($Banca[0]->status_banca != NULL) { ?> style="display: none;"<?php } ?>  class="icon" id="toolbar-back">
-						<!--a href ="javascript:indeferirBanca(document.form)" class = 'toolbar'-->
-						<!--a href="#column" class="modal"-->
-						<a class="modal" href="index.php?option=com_defesascoordenador&view=avaliarbanca&layout=modal">
-						<!--a href="index.php?option=com_defesascoordenador&modal" class="modal" 
-						rel="{size: {x: 350, y: 200 }, handler:'iframe'}"-->			
+					<div <?php if($Banca[0]->status_banca != NULL) { ?> style="display: none;"<?php } ?>  class="icon" id="indeferir">
+						<a href ="javascript:indeferirBanca(document.form)" class = 'toolbar'>
 						<span class="icon-32-delete"></span>Indeferir</a>
 				   </div>
 				   
@@ -96,7 +110,7 @@ else if($sucesso == false AND $sucesso !=NULL ){
 				   <input name='task' type='hidden' value='display'>
 				   <input name='idBanca' type='hidden' value = <?php echo $idBanca;?>>
 				   <input name='avaliacao' type='hidden' value = ''>
-				   <input name='justificativa' type='hidden' value = ''>
+				   <input id="justificativa" name='justificativa' type='hidden' value = ''>
 				</form>   
 		</div>
 		<div class="clr"></div>
@@ -126,6 +140,7 @@ else if($sucesso == false AND $sucesso !=NULL ){
 		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>INGRESSO:</td>
 		  <td colspan='3'><?php echo $Aluno[0]->anoingresso;?></td>
 		</tr>
+		
 		
 		<tr>
 		  <td bgcolor="#B0B0B0" style='font-weight: bold;'>ORIENTADOR:</td>
@@ -188,7 +203,6 @@ else if($sucesso == false AND $sucesso !=NULL ){
 			  <td align='center'><?php echo $array_funcao[$membro->funcao];?></td>   
 			</tr>
 				
-				
 			<?php
 			}
 		} ?>
@@ -199,3 +213,34 @@ else if($sucesso == false AND $sucesso !=NULL ){
 
 <div id="box-toggle" class="box">
 <div class="tgl"></div></div>
+
+<div id="dialog-form" title="Justificar Indeferimento" style='display:none'>
+ 
+  <form>
+    <fieldset>	
+		<table width="100%">	
+				<label for="justificativa">Digite a Jusitificativa de Indeferimento:</label>
+				<!--input type="text" rows="5" cols="10" name="justicaDialog" id="justicaDialog" class="text ui-widget-content ui-corner-all" value= </?php echo $justificativa; ?> --> 
+				<textarea name="justicaDialog" id="justicaDialog" value= <?php echo $justificativa; ?> rows="50" cols="11" style="margin: 0px; width: 250px; height: 85px;"></textarea>
+		</table>
+    </fieldset>
+  </form>
+  <button id="buttonIndeferir" type="button" value="Salvar" class="btn btn-primary">
+		<i class="icone-search icone-white"></i> Salvar
+  </button>
+</div>
+
+
+<script>
+	  
+    jQuery("#buttonIndeferir").on('click', function(){
+		var indeferir = 0;
+        var form = $('formAvaliacao');
+	
+		form.avaliacao.value = indeferir;
+		form.task.value = 'indeferirBanca';
+		form.justificativa.value = $('justicaDialog').value;
+		form.submit();		
+	});
+		
+</script>

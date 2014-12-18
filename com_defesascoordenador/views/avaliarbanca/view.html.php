@@ -19,8 +19,10 @@ class DefesasCoordenadorViewAvaliarBanca extends JViewLegacy
 			$this->msg = 'Avaliar Banca';
 			$idBanca = JRequest::getVar('idBanca');		
 			$status = JRequest::getVar('status');
+			$status2 = JRequest::getVar('status2');
 			
 			$this->status = $status;
+			$this->status2 = $status2;
 			$this->idBanca = $idBanca;
 			
 			$model = $this->getModel();
