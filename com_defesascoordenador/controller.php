@@ -44,8 +44,26 @@ class DefesascoordenadorController extends JController {
 		$model = $this->getModel('avaliarbanca');	
 			
 		$status = $model->updateStatusBanca($idBanca,$avaliacao);	
+		
+		$caio = "cfp@icomp.ufam.edu.br";
+		$caio2 = "pinheiro.caiof@gmail.com";
+
+		// subject
+		$subject  = "TESTE - [IComp/UFAM] Solicitacao de Afastamento do DCC";
+
+		// message
+		$message .= "O(A) professor(a) fkahfj enviou uma solicitacao de afastamento do IComp.\r\n\n";
+		$message .= "Nome: fsfsa \r\n";
+		$message .= "E-mail: fdsafa\r\n";
+		$message .= "Local: fdsfa\r\n";
+		$message .= "ISSO É APENAS UM TESTE!!!\r\n";
+		
+		$email[] = $caio;
+		$email[] = $caio2;
+
+		JUtility::sendMail($user->email, "Site do IComp: dfdsfas", $email, $subject, $message, false, 'gcarneirobr@gmail.com', NULL, NULL);
 			
-		header('Location: index.php?option=com_defesascoordenador&view=avaliarbanca&idBanca='.$idBanca.'&status='.$status);
+		//header('Location: index.php?option=com_defesascoordenador&view=avaliarbanca&idBanca='.$idBanca.'&status='.$status);
 		
 	}
 	
