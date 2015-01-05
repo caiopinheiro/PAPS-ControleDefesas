@@ -31,15 +31,12 @@ $status_banc = array (0 => "Banca Indeferida", 1 => "Banca Deferida", NULL => "B
 
 $array_funcao = array ('P' => "Presidente",'E' => "Membro Externo", 'I' => "Membro Interno");
 
-$emails;
-
 $justificativa="";
 $nome_orientador = "";
 
 foreach( $MembrosBanca as $membro ){
 		if($membro->funcao == 'P')
 			$nome_orientador = $membro->nome;
-		$emails[] = $membro->email;	
 }
 
 $sucesso = $this->status;	
@@ -114,9 +111,7 @@ else if(($sucesso == false AND $sucesso !=NULL) OR ($sucesso2 == false AND $suce
 				   <input name='idBanca' type='hidden' value = <?php echo $idBanca;?>>
 				   <input name='avaliacao' type='hidden' value = ''>
 				   <input id="justificativa" name='justificativa' type='hidden' value = ''>
-				   <input id="emails" name='emails' type='hidden' value = <?php echo $emails;?>>
 				</form>   
-				
 		</div>
 		<div class="clr"></div>
 		</div>
@@ -124,8 +119,6 @@ else if(($sucesso == false AND $sucesso !=NULL) OR ($sucesso2 == false AND $suce
 	<div class="pagetitle icon-48-user"><h2><?php echo $this->msg; ?></h2></div>
 	</div>
 </div>
-
-<?php //var_dump($emails); ?>
 
 <h2>Dados do Aluno</h2>
 <hr />
@@ -228,7 +221,7 @@ else if(($sucesso == false AND $sucesso !=NULL) OR ($sucesso2 == false AND $suce
 		<table width="100%">	
 				<label for="justificativa">Digite a Jusitificativa de Indeferimento:</label>
 				<!--input type="text" rows="5" cols="10" name="justicaDialog" id="justicaDialog" class="text ui-widget-content ui-corner-all" value= </?php echo $justificativa; ?> --> 
-				<textarea name="justificaDialog" id="justificaDialog" value= <?php echo $justificativa; ?> rows="50" cols="11" style="margin: 0px; width: 250px; height: 85px;"></textarea>
+				<textarea name="justicaDialog" id="justicaDialog" value= <?php echo $justificativa; ?> rows="50" cols="11" style="margin: 0px; width: 250px; height: 85px;"></textarea>
 		</table>
     </fieldset>
   </form>
@@ -246,7 +239,7 @@ else if(($sucesso == false AND $sucesso !=NULL) OR ($sucesso2 == false AND $suce
 	
 		form.avaliacao.value = indeferir;
 		form.task.value = 'indeferirBanca';
-		form.justificativa.value = $('justificaDialog').value;
+		form.justificativa.value = $('justicaDialog').value;
 		form.submit();		
 	});
 		
