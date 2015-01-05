@@ -34,7 +34,7 @@ class DefesasCoordenadorModelAvaliarBanca extends JModelItem
 		
 		public function visualizarMembrosBanca($idBanca){
 			$database =& JFactory::getDBO();
-			$sql = "SELECT mb.nome, bhmb.funcao, mb.filiacao FROM  #__banca_has_membrosbanca AS bhmb JOIN #__membrosbanca AS mb ON mb.id = bhmb.membrosbanca_id WHERE bhmb.banca_id = ".$idBanca;
+			$sql = "SELECT mb.nome, bhmb.funcao, mb.filiacao, mb.email FROM  #__banca_has_membrosbanca AS bhmb JOIN #__membrosbanca AS mb ON mb.id = bhmb.membrosbanca_id WHERE bhmb.banca_id = ".$idBanca;
 			$database->setQuery($sql);
 			return $database->loadObjectList();
 		}
