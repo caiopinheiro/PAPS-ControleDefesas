@@ -16,33 +16,82 @@ class DefesasOrientadorModelSolicitarBanca extends JModelItem
 		
 		$database =& JFactory::getDBO();
 		$idAluno = JRequest::getVar("idaluno");
-		//$idAluno = 372;
-		$sql = "select matricula, a.nome nome, pesq.nome linhapesquisa, curso, anoingresso from #__aluno a, #__linhaspesquisa pesq where a.id = $idAluno and pesq.id = a.area";	
 		
-//		var_dump($sql);
+		$sql = "select matricula, a.id id,  a.nome nome, pesq.nome linhapesquisa, curso, anoingresso from #__aluno a, #__linhaspesquisa pesq where a.id = $idAluno and pesq.id = a.area";	
+		
+	//	var_dump($sql);
 		
 		$database->setQuery($sql);
 
 		$aluno = $database->loadObjectList();
 		
-		//var_dump($aluno);		
-		
 		return $aluno;
 		
 	}
+	
+	
+	/**
+	 * Funcao que retorna um único membro da banca
+	 * 
+	 * @param unknown $id
+	 * @return Ambigous <mixed, NULL, multitype:unknown mixed >
+	 */
+	public function getMembroBanca($id) {
 
-	public function getMembrosBanca() {
-		
 		$database =& JFactory::getDBO();
-
-		$sql = "select id, nome, filiacao from #__membrosbanca";
+		
+		$sql = "select id, nome, filiacao from #__membrosbanca where id = $id";
 		
 		$database->setQuery($sql);
 		
 		$membrosbanca = $database->loadObjectList();
 		
-		return $membrosbanca;
+		return $membrosbanca[0];
 		
+	}
+	
+	
+	/**
+	 * funcao que retorna os membros internos, a saber, cuja filiação for 'PPGI/UFAM'
+	 * 
+	 * @return array
+	 */
+	
+	public function getMembrosInternos() {
+	
+		$database =& JFactory::getDBO();
+	
+		$sql = "select id, nome, filiacao from #__membrosbanca where filiacao = 'PPGI/UFAM'";
+	
+		$database->setQuery($sql);
+	
+		$membrosbanca = $database->loadObjectList();
+	
+		return $membrosbanca;
+	
+	}
+	
+	
+	/**
+	 * Função que retorna todos os membros externos para montagem de select
+	 * 
+	 * @return array
+	 * 
+	 */
+	
+
+	public function getMembrosExternos() {
+	
+		$database =& JFactory::getDBO();
+	
+		$sql = "select id, nome, filiacao from #__membrosbanca where filiacao <> 'PPGI/UFAM'";
+	
+		$database->setQuery($sql);
+	
+		$membrosbanca = $database->loadObjectList();
+	
+		return $membrosbanca;
+	
 	}
 	
 	/**
@@ -50,6 +99,8 @@ class DefesasOrientadorModelSolicitarBanca extends JModelItem
 	 * 
 	 * @return multitype:string boolean NULL
 	 */
+	
+		
 	
 	public function getFaseDefesa() {
 		
@@ -77,13 +128,12 @@ class DefesasOrientadorModelSolicitarBanca extends JModelItem
 		
 		$defesas = $database->loadObjectList();
 		
-		//var_dump($aluno);
-		
 		$fase[0] = 'P';
 		
 		/**
 		 * verifica exame de proeficiência
 		 */
+		
 		
 		if ((!is_null($aluno[0]->conceitoExameProf) || (!strlen($aluno[0]->conceitoExameProf))))
 		{
@@ -95,6 +145,9 @@ class DefesasOrientadorModelSolicitarBanca extends JModelItem
 		$countFase = 0;
 		$achou = 1;
 		
+		/**
+		 * 
+		 */
 		while ($fase[0] != $mapaFases[$aluno[0]->curso][count($mapaFases[$aluno[0]->curso]) - 1] && $achou && ($fase[1]))
 		{
 
@@ -104,24 +157,52 @@ class DefesasOrientadorModelSolicitarBanca extends JModelItem
 			
 			foreach ($defesas as $defesa) {
 				
-				if ($defesa->tipoDefesa == $mapaFases[$aluno[0]->curso][$countFase]) {
+				if (!strcmp($defesa->tipoDefesa,$mapaFases[$aluno[0]->curso][$countFase])) {
 					$achou = 1;
 					$defesaEncontrada = $defesa;
 				}
 			}
-
+				
 			if ($achou)
 			{
+								
 				$fase[0] = $defesaEncontrada->tipoDefesa;
 				
-				if ((!is_null($defesaEncontrada->conceito) || (!strlen($defesaEncontrada->conceito))))
-					$fase[1] = true;
-				else $fase[1] = false;
+				if ((is_null($defesaEncontrada->conceito) || (!strlen($defesaEncontrada->conceito))))
+					$fase[1] = false;
+				else $fase[1] = true;
 			}
 		}
 		
 		return $fase;
 	}
+	
+	
+	/**
+	 *
+	 *	Busca um orientador de um aluno específico
+	 * 
+	 * @return Ambigous <mixed, NULL, multitype:unknown mixed >
+	 */
+	
+	
+	public function getOrientador() {
+		
+		$database =& JFactory::getDBO();
+		$idAluno = JRequest::getVar("idaluno");
+		
+		$sql = "select , p.nomeProfessor orientador, 'PPGI/UFAM' filiacao from j17_aluno a, j17_professores p
+where a.orientador = p.id and a.id = $idAluno";
+		
+		$database->setQuery($sql);
+		
+		$orientador = $database->loadObjectList();
+		
+	
+		return $orientador;
+	}
+	
+	
 	
 	public function getMapaFases() {
 		

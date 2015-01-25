@@ -305,7 +305,7 @@ table th[class*="span"],
 }
 
 
-/* CABEÇALHO DE TABELAS ******************************************************************/
+/* CABEÃ‡ALHO DE TABELAS ******************************************************************/
 .head-one{
 	font-weight:bold;	
 	background-color:#e7e3e3;
@@ -368,7 +368,7 @@ table th[class*="span"],
 }
 
 
-/* FORMULÁRIO USANDO TABELA ***************************************************************/
+/* FORMULÃ�RIO USANDO TABELA ***************************************************************/
 .table-form{
 	width:auto;
 	height:auto;
@@ -1790,7 +1790,7 @@ input[type="submit"].btn.btn-mini {
   background-position: -456px -144px;
 }
 
-/* BOTÕES, CAMPOS DE TEXTO, ETC */
+/* BOTÃ•ES, CAMPOS DE TEXTO, ETC */
 .imgcalendar{
 	background-image:url(../img/calendar.png);
 	background-repeat:no-repeat;
@@ -1877,7 +1877,7 @@ label {
 }
 
 
-/* FORMATAÇÃO GERAL PARA TEXTO (NEGRITO, MAIUSCULO, ETC) */
+/* FORMATAÃ‡ÃƒO GERAL PARA TEXTO (NEGRITO, MAIUSCULO, ETC) */
 .upper{
 	text-transform:uppercase;
 }
@@ -2703,7 +2703,7 @@ button.close {
 
 /* Allow for input prepend/append in search forms */
 
-/* FORMULÁRIOS */
+/* FORMULÃ�RIOS */
 
 .form-search .input-append .search-query,
 .form-search .input-prepend .search-query {
@@ -3026,7 +3026,7 @@ legend small {
 	color: #161A1C;
 }
 
-/* OPÇÃO DE ATIVAR E DESATIVAR INSCRIÇÃO : SECRETARIA */
+/* OPÃ‡ÃƒO DE ATIVAR E DESATIVAR INSCRIÃ‡ÃƒO : SECRETARIA */
 .option-on{
 	padding:5px 25px 5px 10px;
 	border-radius:12px;
@@ -3065,7 +3065,7 @@ legend small {
 	margin-left:5px;
 }
 
-/* FORMULARIO DE INSCRIÇÃO DE CANDIDATO PPGI */
+/* FORMULARIO DE INSCRIÃ‡ÃƒO DE CANDIDATO PPGI */
 .box-form{
 	width:auto;
 	height:auto;
@@ -3093,3 +3093,7 @@ legend small {
 	color:#666;
 	font-size:13px;
 }
+
+/* ERROS DE VALIDAÇÃO */
+
+.msgError {color:#F00}
