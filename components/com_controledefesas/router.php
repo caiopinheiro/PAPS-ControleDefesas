@@ -2,7 +2,7 @@
 
 /**
  * @version     1.0.0
- * @package     com_controledefesas
+ * @package     com_defesascoordenador
  * @copyright   Copyright (C) 2014. Todos os direitos reservados.
  * @license     GNU General Public License versão 2 ou posterior; consulte o arquivo License. txt
  * @author      Caio <pinheiro.caiof@gmail.com> - http://
@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
  * @param	array	A named array
  * @return	array
  */
-function ControledefesasBuildRoute(&$query) {
+function DefesascoordenadorBuildRoute(&$query) {
     $segments = array();
 
     if (isset($query['task'])) {
@@ -39,11 +39,11 @@ function ControledefesasBuildRoute(&$query) {
  *
  * Formats:
  *
- * index.php?/controledefesas/task/id/Itemid
+ * index.php?/defesascoordenador/task/id/Itemid
  *
- * index.php?/controledefesas/id/Itemid
+ * index.php?/defesascoordenador/id/Itemid
  */
-function ControledefesasParseRoute($segments) {
+function DefesascoordenadorParseRoute($segments) {
     $vars = array();
 
     // view is always the first element of the array
