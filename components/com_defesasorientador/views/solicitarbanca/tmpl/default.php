@@ -141,11 +141,6 @@ return total;
 "><div class="toolbar-list" id="toolbar">
 <div class="cpanel2">
 
-<div class="icon" id="toolbar-listadefesas">
-<a href="javascript:visualizar(document.form)" class="toolbar">
-<span class="icon-32-back"></span>Lista de defesas</a>
-</div>
-
 <div class="icon" id="toolbar-salvar">
 <a href="javascript:enviarForm()">
 <span class="icon-32-save-new"></span>Salvar</a>
@@ -153,7 +148,7 @@ return total;
 
 
 <div class="icon" id="toolbar-cancel">
-<a href="javascript:visualizar(document.form)" class="toolbar">
+<a href="index.php?option=com_portalprofessor&task=alunos&Itemid=317&lang=pt-br" class="toolbar">
 <span class="icon-32-cancel"></span>Cancelar</a>
 </div>
 </div>
@@ -175,7 +170,7 @@ return total;
         <tbody>
         <tr >
         <td>
-        <label>Nome:</label> <input type="text" name="nomeAluno" value="<?php echo $this->aluno[0]->nome;?>" disabled="disabled"/>
+        <label>Nome</label> <input type="text" name="nomeAluno" value="<?php echo $this->aluno[0]->nome;?>" disabled="disabled"/>
         </td>
         <td>
         <input type="hidden" name="idaluno" value="<?php echo $this->aluno[0]->id?>" />
@@ -422,7 +417,7 @@ return total;
 		cols += '<td>' + professoresInst[1] + '</td>' ; 
 		cols += '<td>' + tipoMembroBanca + '</td>';
 		cols += '<td>';
-		cols += '<select name"passagem[]" style="display:' + display + '; width:100%">';
+		cols += '<select name="passagem[]" style="display:' + display + '; width:100%">';
 		cols += '<option value="N" selected="selected">' + "<?php echo  mb_convert_encoding('Não', 'UTF-8', 'ISO-8859-1')?>" + '</option>';
 		cols += '<option value="S">Sim</option>';
 		cols += '</select></td>'; 
@@ -434,6 +429,7 @@ return total;
 
 		if (vMembroBanca != -1)
 	    $("#tablebanca").append(newRow);
+
 
 	    return false;
 	  };
@@ -526,19 +522,27 @@ return total;
         
         	<label><?php echo mb_convert_encoding('Prévia', 'UTF-8', 'ISO-8859-1'); ?></label><input type="file" id="previa" name="previa">
         <?php 
-        	if ($this->previa['size'] > 0) {
+        	if (isset($this->urlPrevia)) {
 			
-				echo '<a href"'. '/tmp/' . end(explode('\'', $this->previa['tmp_name'])) . '">'. $this->previa['name'] . '</a>';
+				echo '<a target="_blank" href="' . $this->urlPrevia .  '">previa</a>'; 
+				
 
 			}
         ?>
         	</td>
         	
-       	<td > 
+       	<td >
        	<label>Local</label>
-        		<select name="tipoLocal" id="tLocal" onchange="javascript:changeLocal();">
-        			<option value="I" selected="selected">Interno</option>
-        			<option value="E">Externo</option>
+        		<select name="tipolocal" id="tLocal" onchange="javascript:changeLocal();">
+        			<option value="I" <?php 
+        			
+        			if (isset($this->tipoLocal)) {
+        									if ($this->tipoLocal == 'I') echo 'selected="selected"';
+        			} else echo 'selected="selected"';
+        				
+        				?>>Interno</option>
+        			<option value="E" <?php if (isset($this->tipoLocal))
+        									if ($this->tipoLocal == 'E') echo 'selected="selected"'?>>Externo</option>
         		</select>
         </td>
         	
@@ -563,18 +567,31 @@ return total;
         <tbody>
         <tr>
         	<td colspan="4">
+        	 <?php if ($this->mensagens['local']) 
+						echo '<span class="msgError">' . mb_convert_encoding('Informar o local da defesa.', 'UTF-8', 'ISO-8859-1') . '</span>';
+        	    	
+        	    	?>   	
         		<label>Local</label>
-        		<input type="text" name="localDescricao"/>
+        		<input type="text" name="localDescricao" value="<?php if (isset($this->localDescricao)) echo $this->localDescricao ?>"/>
         	</td>
         	</tr>
         <tr>
         	<td>
+        	 <?php if ($this->mensagens['sala']) 
+						echo '<span class="msgError">' . mb_convert_encoding('Informar a sala da defesa.', 'UTF-8', 'ISO-8859-1') . '</span>';
+        	    	
+        	    	?>   	
         		<label>Sala</label>
-        		<input type="text" name="localSala" />
+        		<input type="text" name="localSala" value="<?php if (isset($this->llocalSala)) echo $this->localSala ?>"/>
         	</td>
         	        	<td>
-        		<label>Horário</label>
-        		<input type="text" name="localHorario" />
+        	        	
+        	    <?php if ($this->mensagens['horario']) 
+						echo '<span class="msgError">' . mb_convert_encoding('Informar o horário da defesa.', 'UTF-8', 'ISO-8859-1') . '</span>';
+        	    	
+        	    	?>   	
+        		<label><?php echo mb_convert_encoding('Horário', 'UTF-8', 'ISO-8859-1')?></label>
+        		<input type="text" name="localHorario" value="<?php if (isset($this->localHorario)) echo $this->localHorario ?>"/>
         	</td>
         </tr>		
         </td>
@@ -602,7 +619,7 @@ return total;
 			echo '<span class="msgError">' .  mb_convert_encoding('Selecionar os membros da banca.', 'UTF-8', 'ISO-8859-1') . '</span>';
 			
 			if ($this->mensagens['semMembrosInternos']) 
-			echo '<span class="msgError">' .  mb_convert_encoding('Selecionar no mínimo um membro interno.', 'UTF-8', 'ISO-8859-1') . '</span>';
+			echo '<span class="msgError">' .  mb_convert_encoding('Selecionar no mínimo um membro interno.', 'UTF-8', 'ISO-8859-1') . '</span><br />';
 			
 			if ($this->mensagens['semMembrosExternos']) 
 			echo '<span class="msgError">' .  mb_convert_encoding('Selecionar no mínimo um membro externo.', 'UTF-8', 'ISO-8859-1') . '</span>';
@@ -638,6 +655,16 @@ return total;
         			break;
         			default: break;
         		}
+        		
+        		
+        		$selectedNao = '';
+        		$selectedSim = '';
+        		
+        		$display = ($this->membrosBancaTabela['tipoMembro'][$count] == 'I' ? 'none' : 'block');
+        		
+        		if ($this->membrosBancaTabela['passagem'][$count] == 'N')
+        			$selectedNao = 'selected="selected"';
+        		else $selectedSim = 'selected="selected"';
         			
         		$cols = $cols . '<td>';
         		$cols = $cols . '<button onclick="RemoveTableRow(this)" type="button">Remover</button>';
@@ -647,9 +674,9 @@ return total;
         		$cols = $cols .  '<td>' . $this->membrosBancaTabela['filiacao'][$count]. '</td>' ;
         		$cols = $cols .  '<td>' . $tipoMembroBanca . '</td>';
         		$cols = $cols . '<td>';
-        		$cols = $cols . '<select name="passagem[]" style="display:' . ($tipoMembroBanca == 'I' ? 'none' : 'block' ) . ';">';
-        		$cols = $cols . '<option value="N" selected="selected">' . mb_convert_encoding('Não', 'UTF-8', 'ISO-8859-1') . '</option>';
-        		$cols = $cols . '<option value="S">Sim</option>';
+        		$cols = $cols . '<select name="passagem[]" style="display:' . $display . '; width:100%">';
+        		$cols = $cols . '<option value="N" ' . $selectedNao . '>' . mb_convert_encoding('Não', 'UTF-8', 'ISO-8859-1') . '</option>';
+        		$cols = $cols . '<option value="S" ' . $selectedSim . '>Sim</option>';
         		$cols = $cols . '</select>';
         		$cols = $cols . '</td>';
         		$cols = $cols .  '<input type="hidden" name="idMembroBanca[]" value="'. $this->membrosBancaTabela['id'][$count] . '" />';
@@ -739,6 +766,7 @@ return total;
    <script>
    		$('#rdioMembroInterno').prop('checked', true);
 		carregaMembrosInterno();
+		changeLocal();
    </script>
   <!-- etc -->
 	</fieldset>

@@ -1,4 +1,4 @@
-<?php
+	<?php
 
 /**
  * @version     1.0.0
@@ -31,6 +31,26 @@ class DefesasorientadorController extends JController {
         return $this;
     }
 
+    public function confirmarbanca() {
+    	
+    	$view = $this->getView('confirmacaobanca', 'html');
+    	
+    	$tipoLocal = $this->get('tipoLocal');
+    	
+    	$data = $this->get('data');
+    	
+    	$view->data = $data;
+    	$data = explode('/', $data);
+    	
+    	$view->dia = $data[0];
+    	$view->mes = $data[1];
+		$view->ano = $data[2];
+
+		$view->tipoLocal = $tipoLocal;
+		
+		$view->display();
+    }
+    
     public function solicitarbanca() {
     	
     	$view = $this->getView('solicitarbanca', 'html');
@@ -56,8 +76,22 @@ class DefesasorientadorController extends JController {
     	$view->titulo = $this->get('titulo');
     	$view->resumo = $this->get('resumo');
     	$view->datadefesa = $this->get('datadefesa');
-    	$view->membrosBancaTabela = $this->get('membrosBancaTabela');   
-    	$view->previa = $this->get('previa');
+    	$view->membrosBancaTabela = $this->get('membrosBancaTabela'); 
+
+    	
+    		
+    	
+    	//dados local
+    	$view->tipoLocal = $this->get('tipoLocal');
+    	$view->localDescricao = $this->get('localDescricao');
+    	$view->localSala = $this->get('localSala');
+    	$view->localHorario = $this->get('localHorario');
+    	
+    	$previa =  $this->get('previa');
+    	
+    	if (isset($previa)) {
+    		$view->urlPrevia = 'tmp/' . basename($previa['name']);
+    	}
     	
     	$arrayNome = array();
     	$arrayFiliacao = array();
@@ -118,7 +152,7 @@ class DefesasorientadorController extends JController {
     	$defesa['localSala'] = JRequest::getVar('localsala');
     	$defesa['localHorario'] = JRequest::getVar('localhorario');
     	 
-    	$membrosBanca["id"] = JRequest::getVar('idMembroBanca', array(), 'ARRAY');
+    	$membrosBanca['id'] = JRequest::getVar('idMembroBanca', array(), 'ARRAY');
     	$membrosBanca['tipoMembro'] = JRequest::getVar('tipoMembroBanca', array(), 'ARRAY');
     	$membrosBanca['passagem'] = JRequest::getVar('passagem', array(), 'ARRAY');
     	 
@@ -136,26 +170,30 @@ class DefesasorientadorController extends JController {
 			$this->set('titulo', $defesa['titulo']);
 			$this->set('resumo', $defesa['resumo']);
 			$this->set('datadefesa', $defesa['data']);
-			$this->set('previa', $defesa['previa']);
+			
+			if (!$resultado['semArquivo'] && !$resultado['arquivoTamanho'] && !$resultado['arquivoFormato'])
+				$this->set('previa', $defesa['previa']);
+			
 			$this->set('membrosBancaTabela', $defesa['membrosBanca']);
 			$this->set('tipoLocal', $defesa['tipoLocal']);
 			$this->set('localDescricao', $defesa['localDescricao']);
 			$this->set('localSala', $defesa['localSala']);
 			$this->set('localHorario', $defesa['localHorario']);
-			 
 			$this->execute('solicitarbanca');	
 			
 		} else {
 			
 			// se não houver erros redireciona para view de confirmação			
 			
-			$this->default_view = 'confirmacao-banca';
-			
 			$this->set('idaluno', $idAluno);
 			
-			$this->set('aluno', $model->getAluno());
+			$this->set('aluno', $model->getAluno($idAluno));
 			$this->set('tipoDefesa', $defesa['tipoDefesa']);
+			$this->set('tipoLocal', $defesa['tipoLocal']);
+
+			$this->set('data', $defesa['data']);
 			
+			$this->execute('confirmarbanca');
 			
 			// evitar de cadastrar duas vezes por atualização de página
 			unset($_POST);

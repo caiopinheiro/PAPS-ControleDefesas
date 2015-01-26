@@ -33,79 +33,80 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	 * @return multitype:string boolean NULL
 	 */
 
-	private function getFaseDefesa($idAluno) {
-		
+	public function getFaseDefesa($idAluno) {
+	
 		$database =& JFactory::getDBO();
-		
+	
 		$fase = array('', false);
-		
+	
 		$mapaFases = array(
-			1 => array ('P', 'Q1', 'D'),
-			2 => array ('P', 'Q1', 'Q2', 'T')
+				1 => array ('P', 'Q1', 'D'),
+				2 => array ('P', 'Q1', 'Q2', 'T')
 		);
-		
+	
 		$cursos = array(1 => 'D', 2 => 'T');
-		
+	
 		$sql = "select curso, nome, id, conceitoExameProf from #__aluno where id = $idAluno";
-
+	
 		$database->setQuery($sql);
-		
+	
 		$aluno = $database->loadObjectList();
-		
-		$sql = "select tipoDefesa, conceito, idDefesa from #__defesa where aluno_id = $idAluno";
-
+	
+		$sql = "select tipoDefesa, conceito, idDefesa, banca_id, status_banca from #__defesa d left join #__banca_controledefesas b on d.banca_id = b.id where aluno_id = $idAluno";
+	
 		$database->setQuery($sql);
-		
+	
 		$defesas = $database->loadObjectList();
-		
+	
 		$fase[0] = 'P';
-		
+	
 		/**
 		 * verifica exame de proeficiência
 		 */
-		
-		
+	
+	
 		if ((!is_null($aluno[0]->conceitoExameProf) || (!strlen($aluno[0]->conceitoExameProf))))
 		{
 			$fase[1] = true;
 		} else {
 			$fase[1] = false;
 		}
-
+	
 		$countFase = 0;
 		$achou = 1;
-		
+	
 		/**
-		 * 
+		 *
 		 */
 		while ($fase[0] != $mapaFases[$aluno[0]->curso][count($mapaFases[$aluno[0]->curso]) - 1] && $achou && ($fase[1]))
 		{
-
+	
 			$countFase++;
 			$achou = 0;
 			$defesaEncontrada = '';
-			
-			foreach ($defesas as $defesa) {
 				
-				if (!strcmp($defesa->tipoDefesa,$mapaFases[$aluno[0]->curso][$countFase])) {
+			foreach ($defesas as $defesa) {
+		
+				if (!strcmp($defesa->tipoDefesa,$mapaFases[$aluno[0]->curso][$countFase]) && (!($defesa->status_banca === 0))) {
 					$achou = 1;
 					$defesaEncontrada = $defesa;
 				}
 			}
-				
+	
 			if ($achou)
 			{
-								
+	
 				$fase[0] = $defesaEncontrada->tipoDefesa;
-				
+	
 				if ((is_null($defesaEncontrada->conceito) || (!strlen($defesaEncontrada->conceito))))
 					$fase[1] = false;
 				else $fase[1] = true;
 			}
 		}
-		
+	
 		return $fase;
 	}
+	
 	
 	public function getMapaFases() {
 
@@ -212,20 +213,23 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 		$mensagens['titulo'] = (!strlen($defesa['titulo']) || is_null($defesa['titulo']));
 		$mensagens['resumo'] = (!strlen($defesa['resumo']) || is_null($defesa['resumo']));
 	 	$mensagens['dataInvalida'] = !$this->validaData($defesa['data']);
-	 	$dateDefesa = DateTime::createFromFormat('d/m/Y', $defesa['data']);
-	 	$dateNow = date_create();
+	 	
 	 	
 	 	$validacaoArquivo = $this->validaArquivo($defesa['previa']);
 
 	 	$mensagens['semArquivo'] = $validacaoArquivo['semArquivo'];
 	 	$mensagens['arquivoTamanho'] = $validacaoArquivo['tamanho'];
 	 	$mensagens['arquivoFormato'] = $validacaoArquivo['formato'];
-		 	
+		
+	 	if (!$mensagens['dataInvalida']) {
+	 	
+	 	$dateNow = date_create();
+	 	$dateDefesa = DateTime::createFromFormat('d/m/Y', $defesa['data']);
 	 	$diff = date_diff($dateNow, $dateDefesa);
-
 	 	// solicitação de banca deve ser feita com no minimo 30 dias de antecedência
 	 	$mensagens['dataAnterior'] = !(($diff->days >= 30) && (!$diff->invert));
-	 	if ($mensagens['dataInvalida']) $mensagens['dataAnterior'] = false;
+	 	 
+	 	} else $mensagens['dataAnterior'] = false;
 	 	
 	 	if (count($defesa['membrosBanca']['id'])) {
 	 	
@@ -235,11 +239,11 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 		 	for($count = 0; $count < count($defesa['membrosBanca']['id']); $count++) {
 		 		
 		 		if ($defesa['membrosBanca']['tipoMembro'][$count] == 'I') {
-		 			$countMembroExterno++;
+		 			$countMembroInterno++;
 		 		}
 
 		 		if ($defesa['membrosBanca']['tipoMembro'][$count] == 'E') {
-		 			$countMembroInterno++;
+		 			$countMembroExterno++;
 		 		}
 		 		
 		 	}
@@ -248,8 +252,8 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 		 	
 		 	// nega duas vezes para se transformar em booleano
 		 	
-		 	$mensagens['semMembrosInternos'] = !(!($countMembroInterno));
-		 	$mensagens['semMembrosExternos'] = !(!($countMembroExterno));
+		 	$mensagens['semMembrosInternos'] = !$countMembroInterno;
+		 	$mensagens['semMembrosExternos'] = !$countMembroExterno;
 			
 	 	} else  {
 	 		$mensagens['semMembros'] = true;
@@ -262,14 +266,14 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	 	
 	 	if ($defesa['tipoLocal'] == 'E') {
 	 		
-	 		$mensagens['semLocal'] = (!strlen($defesa['localDescricao']) || is_null($defesa['localDescricao']));
-	 		$mensagens['horarioInvalido'] = !$this->validaHora($defesa['localHorario']);
-	 		$mensagens['semSala'] = (!strlen($defesa['localSala']) || is_null($defesa['localSala']));
+	 		$mensagens['local'] = (!strlen($defesa['localDescricao']) || is_null($defesa['localDescricao']));
+	 		$mensagens['horario'] = !$this->validaHora($defesa['localHorario']);
+	 		$mensagens['sala'] = (!strlen($defesa['localSala']) || is_null($defesa['localSala']));
 	 		
 	 	} else {
-	 		$mensagens['semLocal'] = false;
-	 		$mensagens['horarioInvalido'] = false;
-	 		$mensagens['semSala'] = false;
+	 		$mensagens['local'] = false;
+	 		$mensagens['horario'] = false;
+	 		$mensagens['sala'] = false;
 	 	}
 	 	
 	 	
@@ -277,16 +281,66 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	 	$fase = $this->getFaseDefesa($defesa['aluno']);
 	 	
 	 	//segundo a regra de negócio, qualificação 1 de doutorado não tem membros de banca
-	 	if ($aluno->curso == 2 && !strcmp($fase, 'Q1')) {
+	 	if ($aluno->curso == 2 && !strcmp($fase[0], 'Q1')) {
 	 		$mensagens['semMembros'] = false;
 	 		$mensagens['semMembrosExternos'] = false;
 	 		$mensagens['semMembrosInternos'] = false;
 	 	}
 	 	
-	 	var_dump($mensagens);
+	 	if (!$mensagens['semArquivo'] && !$mensagens['arquivoTamanho'] && !$mensagens['arquivoFormato'])
+	 		$this->moverArquivoTemp($defesa['previa']);
+			 	
 	 	return $mensagens;
 	 	
 	}
+	
+	
+	/**
+	 * move arquivo para pasta temporária do sistema
+	 * 
+	 * @param unknown $arquivo
+	 */
+	private function moverArquivoTemp($arquivo) {
+		
+		$target_dir = "tmp/";
+		$target_file = $target_dir . basename($arquivo["name"]);
+		
+		if (move_uploaded_file($arquivo["tmp_name"], $target_file)) {	
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * mover arquivo para destino final
+	 * 
+	 * @param unknown $arquivoPrevia
+	 * @return boolean
+	 */
+	
+	
+	private function moverArquivo($arquivo, $tipoDefesa) {
+	
+		
+		$oldLocation = 'tmp/';
+		
+		$oldName = $oldLocation . basename($arquivo['name']);
+		
+		$newLocation = 'components/com_defesasorientador/previas/';
+		
+		$newName = $tipoDefesa . $arquivo['name'];
+		
+		$newName = md5($newName);
+			
+		$moveu = rename($oldName, $newLocation . $newName . '.pdf');
+
+		if ($moveu) {
+			return $newName . '.pdf';
+		} else return false;
+	
+	}
+	
 	
 	private function validaHora($hora){
 	
@@ -294,6 +348,9 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 		if ($t=="")
 			return false;
 		$h=$t[0];
+		
+		
+		if (!isset($t[1])) return false;
 		$m=$t[1];
 		
 		if (!is_numeric($h) || !is_numeric($m))
@@ -320,9 +377,6 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 		
 		$validacao = $this->validaDefesa($defesa);
 		
-		var_dump($validacao);
-		
-		//exit(0);
 		// usado para operação lógica com array de booleanos
 		$resultadoValidacao = false;
 
@@ -340,28 +394,33 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 				
 			$database =& JFactory::getDBO();
 
-			$sql = "insert into #__banca_controledefesas (descricao) values ('Banca do aluno: " . $nomeAluno . "')" ;
-				
+			if (!strcmp($defesa['tipoDefesa'], 'Q1') || !strcmp($defesa['tipoDefesa'], 'Q2')) {
+				$statusBanca = 1;
+			} else $statusBanca = 'null';
+			
+			$sql = "insert into #__banca_controledefesas (justificativa, status_banca) values ('', " . $statusBanca . ")" ;
+			
+			var_dump($sql);
 			$database->setQuery($sql);
 				
 			$database->execute();
 				
 			$idBanca = $database->insertid();
 			
+			
+			$arquivoPrevia = $this->moverArquivo($defesa['previa'], $defesa['tipoDefesa']);
 			$this->inserirMembroBanca($defesa['membrosBanca'], $idBanca);
 				
-			$sql = "insert into #__defesa (aluno_id, titulo, resumo, tipoDefesa, data, banca_id) values (" . $defesa['aluno'].  ", '" . $defesa["titulo"] . "', '" . $defesa["resumo"] . "', " .
-					"'" . $defesa['tipoDefesa'] . "', " . "str_to_date('" . $defesa['data'] .  "', '%d/%m/%Y'), $idBanca)";
+			$sql = "insert into #__defesa (aluno_id, titulo, resumo, tipoDefesa, data, banca_id, previa) values (" . $defesa['aluno'].  ", '" . $defesa["titulo"] . "', '" . $defesa["resumo"] . "', " .
+					"'" . $defesa['tipoDefesa'] . "', " . "str_to_date('" . $defesa['data'] .  "', '%d/%m/%Y'), $idBanca, '" .  $arquivoPrevia . "')";
 				
 			$database->setQuery($sql);
 				
-			//var_dump($sql);
+			var_dump($sql);
 			
-		//	$database->execute();
+			$database->execute();
 			
-			//$result = $database->insertid(); 					
-			
-			$this->moverArquivo($arquivoPrevia);
+			$result = $database->insertid(); 					
 			
 			return $result;
 			
@@ -377,14 +436,6 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	 * @return boolean
 	 */
 	
-	private function moverArquivo($arquivoPrevia) {
-		
-		$moveu = true;
-		
-		return $moveu;
-		
-	}
-	
 	/**
 	 * 
 	 * Função que retorna um único membro de banca
@@ -392,6 +443,7 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	 * @param unknown $id
 	 * @return Ambigous <unknown, mixed>
 	 */
+	
 	public function getMembroBanca($id) {
 
 		$database =& JFactory::getDBO();
@@ -417,8 +469,8 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 		
 		for ($count = 0; $count < count($membroBanca['id']); $count++) {
 
-			$sql = "insert into #__banca_has_membrosbanca (banca_id, membrosbanca_id, funcao) " .
-					"values ($idBanca, " . $membroBanca['id'][$count] . ", '" . $membroBanca['tipoMembro'][$count] . "')";
+			$sql = "insert into #__banca_has_membrosbanca (banca_id, membrosbanca_id, funcao, passagem) " .
+					"values ($idBanca, " . $membroBanca['id'][$count] . ", '" . $membroBanca['tipoMembro'][$count] . "', '" . $membroBanca['passagem'][$count] . "')";
 			
 			var_dump($sql);
 			
