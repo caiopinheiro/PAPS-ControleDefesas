@@ -24,7 +24,7 @@ class DefesasCoordenadorModelAvaliarBanca extends JModelItem
 			$database->setQuery($sql);
 			return $database->loadObjectList();
 		}
-		
+			
 		public function visualizarDefesa($idBanca){
 			$database =& JFactory::getDBO();
 			$sql = "SELECT titulo, resumo, tipoDefesa FROM (#__banca_controledefesas AS bcd JOIN #__defesa AS d ON bcd.id = d.banca_id)  WHERE bcd.id= ".$idBanca;
@@ -34,7 +34,18 @@ class DefesasCoordenadorModelAvaliarBanca extends JModelItem
 		
 		public function visualizarMembrosBanca($idBanca){
 			$database =& JFactory::getDBO();
-			$sql = "SELECT mb.nome, bhmb.funcao, mb.filiacao, mb.email FROM  #__banca_has_membrosbanca AS bhmb JOIN #__membrosbanca AS mb ON mb.id = bhmb.membrosbanca_id WHERE bhmb.banca_id = ".$idBanca;
+
+			$sql1 = "(select concat('Prof. ', p.nomeProfessor) nome, 'P' funcao, 'PPGI/UFAM' filiacao, p.email
+			from ((j17_professores p join j17_aluno a on a.orientador = p.id) join j17_defesa d on d.aluno_id = a.id) join j17_banca_controledefesas b on b.id = d.banca_id
+			where b.id = $idBanca )";
+			
+			
+			$sql = "(SELECT mb.nome, bhmb.funcao, mb.filiacao, mb.email FROM  #__banca_has_membrosbanca AS bhmb JOIN #__membrosbanca AS mb ON mb.id = bhmb.membrosbanca_id WHERE bhmb.banca_id = ".$idBanca . ')';
+			
+			$sql = $sql1 . 'UNION ' . $sql;
+			
+			
+	//		var_dump(%sql)
 			$database->setQuery($sql);
 			return $database->loadObjectList();
 		}

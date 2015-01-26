@@ -169,7 +169,7 @@ if(($this->status_bancas == NULL) AND
 			
 			$linhaPesquisa = array (1 => "bd_ri",2 => "se_es",3 => "ia",4 => "visao",5 => "redes",6 => "otimizacao");
 			
-			$arrayTipoBanca = array('T' => "Mestrado", 'D' => "Doutorado");
+			$arrayTipoBanca = array('D' => "Mestrado", 'T' => "Doutorado");
 			
 			if(isset ($bancas)){
 				foreach($bancas as $banca ) { ?>

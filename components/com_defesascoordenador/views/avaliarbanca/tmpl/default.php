@@ -24,9 +24,9 @@ $Aluno = $this->aluno;
 $Defesa = $this->defesa;
 $MembrosBanca = $this->membrosBanca;
 
-$linha_pes = array(0 => "Todos", 1 => "Banco de Dados e Recuperação da Informação", 2 => "Sistemas Embarcados & Engenharia de Software", 3 => "Inteligência Artificial", 4 => "Visão Computacional e Robótica", 5 => "Redes e Telecomunicações", 6 => "Otimização Algorítmica e Complexidade");
+$linha_pes = array(0 => "Todos", 1 => "Banco de Dados e Recuperação da Informação"	, 2 => "Sistemas Embarcados & Engenharia de Software", 3 => "Inteligência Artificial", 4 => "Visão Computacional e Robótica", 5 => "Redes e Telecomunicações", 6 => "Otimização Algorítmica e Complexidade");
 			
-$arrayTipoDefesa = array('T' => "Mestrado", 'D' => "Doutorado");
+$arrayTipoDefesa = array('D' => "Mestrado", 'T' => "Doutorado");
 
 $status_banc = array (0 => "Banca Indeferida", 1 => "Banca Deferida", NULL => "Banca Não Avaliada");
 
@@ -116,7 +116,7 @@ else if(($sucesso == false AND $sucesso !=NULL) OR ($sucesso2 == false AND $suce
 				   <input name='idBanca' type='hidden' value = <?php echo $idBanca;?>>
 				   <input name='avaliacao' type='hidden' value = ''>
 				   <input id="justificativa" name='justificativa' type='hidden' value = ''>
-				   <input id="emails" name='emails' type='hidden' value = <?php echo $emails;?>>
+				   <input id="emails" name='emails' type='hidden' value = <?php echo $emails;?>
 				</form>   
 				
 		</div>
@@ -242,7 +242,7 @@ else if(($sucesso == false AND $sucesso !=NULL) OR ($sucesso2 == false AND $suce
 
 <script>
 	  
-    jQuery("#buttonIndeferir").on('click', function(){
+    $("#buttonIndeferir").on('click', function(){
 		var indeferir = 0;
         var form = $('formAvaliacao');
 		
