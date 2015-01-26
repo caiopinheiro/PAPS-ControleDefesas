@@ -79,7 +79,6 @@ class DefesasorientadorController extends JController {
     	$view->membrosBancaTabela = $this->get('membrosBancaTabela'); 
 
     	
-    		
     	
     	//dados local
     	$view->tipoLocal = $this->get('tipoLocal');
@@ -147,10 +146,10 @@ class DefesasorientadorController extends JController {
     	$defesa['resumo'] = JRequest::getVar('resumodefesa');
     	$defesa['tipoDefesa'] = JRequest::getVar('tipoDefesa');
     	$defesa['previa'] = JRequest::getVar('previa', null, 'files', 'array');
-    	$defesa['tipoLocal'] = JRequest::getVar('tipolocal');
-    	$defesa['localDescricao'] = JRequest::getVar('localdescricao');
-    	$defesa['localSala'] = JRequest::getVar('localsala');
-    	$defesa['localHorario'] = JRequest::getVar('localhorario');
+    	$defesa['tipoLocal'] = JRequest::getVar('tipoLocal');
+    	$defesa['localDescricao'] = JRequest::getVar('localDescricao');
+    	$defesa['localSala'] = JRequest::getVar('localSala');
+    	$defesa['localHorario'] = JRequest::getVar('localHorario');
     	 
     	$membrosBanca['id'] = JRequest::getVar('idMembroBanca', array(), 'ARRAY');
     	$membrosBanca['tipoMembro'] = JRequest::getVar('tipoMembroBanca', array(), 'ARRAY');
@@ -193,13 +192,13 @@ class DefesasorientadorController extends JController {
 
 			$this->set('data', $defesa['data']);
 			
+		//	var_dump($defesa);
+									
 			$this->execute('confirmarbanca');
 			
 			// evitar de cadastrar duas vezes por atualização de página
 			unset($_POST);
 			
-			$this->display();
-		
 		}
 		
     	

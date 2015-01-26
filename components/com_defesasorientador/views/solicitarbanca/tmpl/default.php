@@ -11,6 +11,17 @@ $document->addScript('//code.jquery.com/ui/1.11.2/jquery-ui.js');
 $document->addStyleSheet('//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css');
 ?>
 
+<?php if ($this->aluno[0]->curso == 3) { ?>
+
+<script>
+
+alert ('<?php echo mb_convert_encoding('Aluno especial não possui defesa.', 'UTF-8', 'ISO-8859-1');?>');
+location.href = 'index.php?option=com_portalprofessor&task=alunos&Itemid=317';
+
+</script>
+
+<?php }?>
+
 <?php if ($this->semProeficiencia) {?>
 
 <script>

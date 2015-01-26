@@ -261,7 +261,6 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	 		$mensagens['semMembrosInternos'] = false;
 	 	}
 	 	
-	 	
 	 	// validar local
 	 	
 	 	if ($defesa['tipoLocal'] == 'E') {
@@ -400,7 +399,7 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 			
 			$sql = "insert into #__banca_controledefesas (justificativa, status_banca) values ('', " . $statusBanca . ")" ;
 			
-			var_dump($sql);
+			//var_dump($sql);
 			$database->setQuery($sql);
 				
 			$database->execute();
@@ -416,7 +415,7 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 				
 			$database->setQuery($sql);
 				
-			var_dump($sql);
+		//	var_dump($sql);
 			
 			$database->execute();
 			
@@ -472,7 +471,7 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 			$sql = "insert into #__banca_has_membrosbanca (banca_id, membrosbanca_id, funcao, passagem) " .
 					"values ($idBanca, " . $membroBanca['id'][$count] . ", '" . $membroBanca['tipoMembro'][$count] . "', '" . $membroBanca['passagem'][$count] . "')";
 			
-			var_dump($sql);
+			//var_dump($sql);
 			
 			$database->setQuery($sql);
 			

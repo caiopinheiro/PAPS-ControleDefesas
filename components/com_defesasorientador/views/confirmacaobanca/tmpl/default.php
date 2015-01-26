@@ -14,18 +14,19 @@ $document->addStyleSheet('components/com_defesasorientador/assets/css/estilo.css
 <script>
 
 <?php 
-var_dump($this->tipoLocal );
+//echo 'aeaeaeaeaeae';
+//var_dump($this->tipoLocal);
 if ($this->tipoLocal == 'I') {
 
 		
 	?>
-alert('Defesa cadastrada com sucesso. Agora você será redirecionado para a reserva da sala.');
+alert(mb_convert_encoding('Defesa cadastrada com sucesso. Agora você será redirecionado para a reserva da sala.', 'UTF-8', 'ISO-8859-1'));
 
-<?php echo "location.href = 'index.php?option=com_reserva&dia=$this->dia" . "&mes=$this->mes" . "&ano=$this->ano" . "&data=$this->data" . "&task=addReserva"?>
+<?php echo "location.href = 'index.php?option=com_reserva&dia=$this->dia" . "&mes=$this->mes" . "&ano=$this->ano" . "&data=$this->data" . "&task=addReserva';"?>
 
 <?php } else {
 	
-		JFactory :: getApplication()->enqueueMessage(JText :: _('Solicitação de banca realizada com sucesso.'));
+		JFactory :: getApplication()->enqueueMessage(JText :: _(mb_convert_encoding('Solicitação de banca realizada com sucesso.', 'UTF-8', 'ISO-8859-1')));
 		?>
 
 	<?php 
@@ -39,21 +40,18 @@ alert('Defesa cadastrada com sucesso. Agora você será redirecionado para a reser
 </form>
 
 
-
 <div id="toolbar-box"><div class="m
 "><div class="toolbar-list" id="toolbar">
 <div class="cpanel2">
 
 
+<div class="icon" id="toolbar-cancel">
+<a href="index.php?option=com_portalprofessor&task=alunos&Itemid=317&lang=pt-br" class="toolbar">
+<span class="icon-32-back"></span>Voltar</a>
+</div>
 </div>
 <div class="clr"></div>
 </div>
 
-<div class="icon" id="toolbar-back">
-<a href="index.php?option=com_portalprofessor&task=alunos&Itemid=317&lang=pt-br">
-<span class="icon-32-save-new"></span>Voltar</a>
-</div>
-
-<div class="pagetitle icon-48-groups"><h2>Solicitar Banca - <?php echo mb_convert_encoding($this->nomeFase[$this->faseDefesa[0]], 'UTF-8', 'ISO-8859-1');	?></h2></div>
+<div class="pagetitle icon-48-groups"><h2>Solicitar Banca</h2></div>
 </div></div>
-
