@@ -33,14 +33,14 @@ $status_banc = array (0 => "Banca Indeferida", 1 => "Banca Deferida", NULL => "B
 $array_funcao = array ('P' => "Presidente",'E' => "Membro Externo", 'I' => "Membro Interno");
 
 $emails;
-
+$nomesMembros;
+$filiacaoMembros;
 $justificativa="";
 $nome_orientador = "";
 
 foreach( $MembrosBanca as $membro ){
 		if($membro->funcao == 'P')
 			$nome_orientador = $membro->nome;
-		$emails[] = $membro->email;	
 }
 
 $sucesso = $this->status;	
@@ -68,6 +68,20 @@ else if(($sucesso == false AND $sucesso !=NULL) OR ($sucesso2 == false AND $suce
            confirmar = window.confirm('Você tem certeza que deseja DEFERIR essa banca?');
        
            if(confirmar == true){
+			   
+				jQuery( "#process" ).dialog({
+					autoOpen: false,
+					width: 400,
+					resizable: false,
+					draggable: false,
+					close: function(){
+						// executa uma ação ao fechar
+						//alert("você fechou a janela");
+					}
+				});
+				jQuery( "#process" ).dialog( "open" ).html("<p>Enviando os dados...</p>");
+				
+				
 				form.task.value = 'deferirBanca';
 				form.avaliacao.value = deferir;
 				form.submit();
@@ -116,9 +130,9 @@ else if(($sucesso == false AND $sucesso !=NULL) OR ($sucesso2 == false AND $suce
 				   <input name='idBanca' type='hidden' value = <?php echo $idBanca;?>>
 				   <input name='avaliacao' type='hidden' value = ''>
 				   <input id="justificativa" name='justificativa' type='hidden' value = ''>
-				   <input id="emails" name='emails' type='hidden' value = <?php echo $emails;?>
+				   
+				   
 				</form>   
-				
 		</div>
 		<div class="clr"></div>
 		</div>
@@ -126,8 +140,6 @@ else if(($sucesso == false AND $sucesso !=NULL) OR ($sucesso2 == false AND $suce
 	<div class="pagetitle icon-48-user"><h2><?php echo $this->msg; ?></h2></div>
 	</div>
 </div>
-
-<?php //var_dump($emails); ?>
 
 <h2>Dados do Aluno</h2>
 <hr />
@@ -241,11 +253,11 @@ else if(($sucesso == false AND $sucesso !=NULL) OR ($sucesso2 == false AND $suce
 
 
 <script>
-	  
-    $("#buttonIndeferir").on('click', function(){
+    jQuery("#buttonIndeferir").on('click', function(){
 		var indeferir = 0;
         var form = $('formAvaliacao');
-		
+
+
 		if($('justificaDialog').value == ''){
 			alert('Digite a Justificativa do Indeferimento.')
 		}
@@ -258,3 +270,7 @@ else if(($sucesso == false AND $sucesso !=NULL) OR ($sucesso2 == false AND $suce
 	});
 		
 </script>
+
+<div id="process" title="Mensagem">
+    <p></p>
+</div>
