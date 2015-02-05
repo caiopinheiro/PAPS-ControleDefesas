@@ -2139,6 +2139,7 @@ a.jgrid:hover {	text-decoration: none;}
 .icon-16-weblinks-cat				{	background-image: url(../../administrator/templates/bluestork/images/menu/icon-16-links-cat.png);	}
 
 /* -- TOOLBAR ICON STYLES ----------------------------- */
+.icon-32-deny						{	background-image: url(../../administrator/templates/bluestork/images/toolbar/icon-32-deny.png);	}
 .icon-32-send						{	background-image: url(../../administrator/templates/bluestork/images/toolbar/icon-32-send.png);	}
 .icon-32-delete						{	background-image: url(../../administrator/templates/bluestork/images/toolbar/icon-32-delete.png);	}
 .icon-32-help						{	background-image: url(../../administrator/templates/bluestork/images/toolbar/icon-32-help.png);	}
