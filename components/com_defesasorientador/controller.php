@@ -201,7 +201,54 @@ class DefesasorientadorController extends JController {
 			
 		}
 		
-    	
     }
+    
+    public function detalhesDefesa(){
+    	$idDefesa = JRequest::getVar('idDefesa');
+    	$idAluno = JRequest::getVar('idAluno');
+    	$isUpdate = JRequest::getVar('isUpdate');
+    
+    	header('Location: index.php?option=com_defesasorientador&view=detalhesdefesa&idDefesa='.$idDefesa.'&idAluno='.$idAluno.'&isUpdate='.$isUpdate);
+    }
+    
+    public function atualizarDefesa(){
+    	$idDefesa = JRequest::getVar('idDefesa');
+    	$idAluno = JRequest::getVar('idAluno');
+    	$titulo = JRequest::getVar('titulo');
+    	$dataDefesa = JRequest::getVar('dataDefesa');
+    	$horarioDefesa = JRequest::getVar('horarioDefesa');
+    	$localDefesa = JRequest::getVar('localDefesa');
+    	$resumo = JRequest::getVar('resumo');
+    
+    	$model = $this->getModel('detalhesdefesa');
+    	$resultado = $model->updateDefesa($idDefesa, $idAluno, $titulo, $dataDefesa, $horarioDefesa, $localDefesa, $resumo);
+    
+    	header('Location: index.php?option=com_defesasorientador&view=detalhesdefesa&idDefesa='.$idDefesa.'&idAluno='.$idAluno.'&isUpdate=1&updated='.$resultado);
+    }
+    
+    public function deletarDefesa(){
+    	$idDefesa = JRequest::getVar('idDefesa');
+    	$idAluno = JRequest::getVar('idAluno');
+    	$idBanca = JRequest::getVar('idBanca');
+    
+    	$model = $this->getModel('detalhesdefesa');
+    	$resultado = $model->deleteDefesa($idDefesa, $idAluno, $idBanca);
+    
+    	if($resultado == 0){
+    		echo '<script>';
+    		echo 'alert("ERRO: O comando falhou. Tente Novamente.");';
+    		echo 'location.href="index.php?option=com_defesasorientador&view=listadefesas"';
+    		echo '</script>';
+    	}
+    	else
+    	{
+    		echo '<script>';
+    		echo 'alert("Defesa deletada com sucesso!");';
+    		echo 'location.href="index.php?option=com_defesasorientador&view=listadefesas"';
+    		echo '</script>';
+    	}
+    	exit;
+    }
+    
     
 }

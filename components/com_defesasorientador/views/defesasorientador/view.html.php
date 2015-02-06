@@ -1,4 +1,8 @@
 <?php
+
+$user =& JFactory::getUser();
+if(!$user->username) die( 'Acesso Restrito.' );
+
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
  
@@ -14,9 +18,7 @@ class DefesasOrientadorViewDefesasOrientador extends JViewLegacy
         function display($tpl = null) 
         {
                 // Assign data to the view
-                $this->msg = 'Módulo de defesas do Orientador';
-                
-                $this->aluno = $this->get('aluno');
+                $this->msg = 'Módulo de Defesas do Orientador';
                 
                 // Display the view
                 parent::display($tpl);
