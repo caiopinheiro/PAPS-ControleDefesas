@@ -64,6 +64,33 @@ if(($this->status_bancas == NULL) AND
            	alert('Ao menos 1 item deve ser selecionado para visualiza\xE7\xE3o.')
            }
         }
+
+
+
+        function folhaaprovacao(form){
+           var idDefesaSelecionado = 0;
+           var idAlunoSelec = 0;
+           
+           for(i = 0;i < form.idDefesaSelec.length ;i++)
+                if(form.idDefesaSelec[i].checked){
+                    idDefesaSelecionado = form.idDefesaSelec[i].value;  
+                    idAlunoSelec = form.idAlunoSelec[i].value;
+                }
+                
+           if(idDefesaSelecionado > 0){
+                form.task.value = 'folhaaprovacao'; 
+                form.idDefesa.value = idDefesaSelecionado;
+                form.idAluno.value = idAlunoSelec;
+                form.submit();
+           } else {
+            alert('Ao menos 1 item deve ser selecionado para visualiza\xE7\xE3o.')
+           }
+
+            alert('oi');
+        }
+
+
+
 </script>
         
     <link rel="stylesheet" type="text/css" href="components/com_portalprofessor/template.css">
@@ -82,11 +109,18 @@ if(($this->status_bancas == NULL) AND
     <form method="post" name="form" enctype="multipart/form-data" action="index.php?option=com_controledefesas&view=listabancas">
 		<div id="toolbar-box"><div class="m"><div class="toolbar-list" id="toolbar">
             <div class="cpanel2">
+                <div class="icon" id="toolbar-apply">
+                    <a href="javascript:folhaaprovacao(document.form)" class="toolbar">
+                    <span class="icon-32-apply"></span>Folha<br>Aprovação<br></a>
+                </div>
+                
+
                 <div class="icon" id="toolbar-preview">
                     <a href="javascript:lancarconceito(document.form)" class="toolbar">
                     <span class="icon-32-preview"></span>Detalhes<br></a>
                 </div>
-                
+
+
                 
                 <div class="icon" id="toolbar-back">
                     <a href="index.php?option=com_controledefesas">
@@ -231,7 +265,7 @@ if(($this->status_bancas == NULL) AND
 					<td><img border='0' src='components/com_controledefesas/assets/images/<?php echo $statusImg[$valor_status2];?>' width='15' height='16' title='<?php echo $status[$valor_status2];?>'></td>
 
                     <td style="padding-right:20px">  <?php echo date ('d/m/Y',(strtotime($defesa->data)));  ?> </td>
-					<td><?php echo $defesa->nome_aluno; echo $defesa->idDefesa." "; echo $defesa->idAluno; ?></td>
+					<td><?php echo $defesa->nome_aluno; /*echo $defesa->idDefesa." "; echo $defesa->idAluno;*/ ?></td>
 					<td><?php echo $arrayTipoBanca[$defesa->tipo_banca];?></td>
                     <td><?php if ($defesa->curso == 1) echo 'Mestrado'; else if($defesa->curso == 2) echo 'Doutorado'; else echo 'Especial'?></td>
 					<td><?php echo $defesa->nomeProfessor;?></td>

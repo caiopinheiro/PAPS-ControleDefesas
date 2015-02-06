@@ -59,6 +59,13 @@ class ControledefesasController extends JController {
 	}
 	 
 
+	public function folhaaprovacao(){
+		$idDefesa = JRequest::getVar('idDefesa');
+		$idAluno = JRequest::getVar('idAluno');
+		header('Location: index.php?option=com_controledefesas&view=folhaaprovacao&idDefesa='.$idDefesa.'&idAluno='.$idAluno);
+
+	} 
+
 	public function enviarConvite($emails){
 		//$caio = "thiagoleitexd@gmail.com";
 		$caio2 = "pinheiro.caiof@gmail.com";
