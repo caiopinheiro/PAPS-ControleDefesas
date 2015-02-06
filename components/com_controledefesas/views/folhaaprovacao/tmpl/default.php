@@ -349,14 +349,21 @@ $linha_pes = array(
 }
 
 
-
 ////////////////////
+if ($Defesa[0]->tipoDefesa == 'D' || $Defesa[0]->tipoDefesa == 'T'){
 
-//imprimirFolhaAprovacao($Defesa,$MembrosBanca);
+imprimirFolhaAprovacao($Defesa,$MembrosBanca);
+}
+else if (($Defesa[0]->tipoDefesa == "Q1" AND $Defesa[0]->curso == 1) || ($Defesa[0]->tipoDefesa == "Q2" AND $Defesa[0]->curso == 2)){
+
 imprimirFolhaQualificacao($Defesa,$MembrosBanca);
+}
+else {
 
+echo "Não há folha de aprovação para Qualificação 1 do Doutorado";
 
-echo date ('Y',(strtotime($Defesa[0]->data)));
+}
+
 
 
 ?>

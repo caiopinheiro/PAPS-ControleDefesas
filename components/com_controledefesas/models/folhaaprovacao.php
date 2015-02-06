@@ -66,7 +66,7 @@ class ControledefesasModelFolhaaprovacao extends JModelItem
 
 		public function folhaaprovacao($idDefesa){
 			$database =& JFactory::getDBO();
-			$sql = "SELECT a.nome as nome, a.area, a.orientador, nomeProfessor, d.titulo, d.data, d.local, d.horario
+			$sql = "SELECT  tipoDefesa, curso , a.nome as nome, a.area, a.orientador, nomeProfessor, d.titulo, d.data, d.local, d.horario
 			 		FROM #__defesa as d JOIN #__aluno as a ON a.id = d.aluno_id JOIN #__professores as p ON p.id = a.orientador
 			 		WHERE d.idDefesa = ".$idDefesa;
 			$database->setQuery($sql);
