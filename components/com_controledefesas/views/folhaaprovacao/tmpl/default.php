@@ -282,7 +282,7 @@ $linha_pes = array(
 	$pdf->MultiCell(0,5,"",0, 'C');
 	$pdf->MultiCell(0,5,"Linha de Pesquisa: ".utf8_decode($linha_pes[$alunos[0]->area]),0, 'J');
 	$pdf->MultiCell(0,5,"",0, 'C');
-	$pdf->MultiCell(0,5,"Orientador: ".utf8_decode($alunos[0]->orientador),0, 'J');
+	$pdf->MultiCell(0,5,"Orientador: ".utf8_decode($alunos[0]->nomeProfessor),0, 'J');
 
 	$pdf->MultiCell(0,5,"",0, 'C');
 	$pdf->MultiCell(0,5,"",0, 'C');
