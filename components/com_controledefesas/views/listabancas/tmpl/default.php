@@ -288,8 +288,8 @@ if(($this->status_bancas == NULL) AND
      <input name='idDefesaSelec' type='hidden' value='0' />
      <input name='idAlunoSelec' type='hidden' value='0'/>
      <input name='idDefesa' type='hidden' value=''/>
-     <input name ='idAluno' value =''/>
-     
+     <input name= 'idAluno' type='hidden' value =''/>
+   
 
      
 </form>
