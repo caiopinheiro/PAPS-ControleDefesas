@@ -232,7 +232,7 @@ function tipoDefesa($tipoDefesa){
 	<?php
 
 
-//	if ($Defesa[0]->tipoDefesa != 'Q1' AND $Aluno[0]->curso != 2){ 
+	if ($Defesa[0]->tipoDefesa != 'Q1' AND $Aluno[0]->curso != 2){ 
 		// VERIFICAR ISSO COM URGENCIA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
 		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
@@ -248,7 +248,7 @@ function tipoDefesa($tipoDefesa){
           <td style='text-align: center; font-weight: bold;' width='10%'>FUNÇÃO</td>
         </tr>
     <?php
-//}
+}
     ?>
         <?php
         if(isset ($MembrosBanca)){
@@ -279,7 +279,8 @@ function tipoDefesa($tipoDefesa){
 	if ((date('Y/m/d'))  < ($Defesa[0]->data)){
 	?>
 		<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
-		alert ("Observações.:\n\n  -Não é possivel lançar o conceito, pois a defesa ainda não foi realizada.");
+		alert ("Observações.:\n\n  -Não é possivel lançar o conceito, pois a 
+			defesa ainda não foi realizada.")
 		</SCRIPT>
 	<?php 
 	}
@@ -288,17 +289,17 @@ function tipoDefesa($tipoDefesa){
 	?>
 
 		<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
-		alert ("Observações.:\n\n  -Conceito já foi devidamente Lançado.");
-		</SCRIPT>;
+		alert ("Observações.:\n\n  -Conceito já foi devidamente Lançado.")
+		</SCRIPT>
 	
 	<?php 
 	}
 
 	else if ($Defesa[0]->banca_id == NULL || $Defesa[0]->banca_id == 0){ 
-		var_dump($Defesa);
 	?>
 		<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
-		alert ("Observações.:\n\n  -Não será possivel lançar o conceito, pois não consta no Banco de Dados a existência de uma Banca Avaliadora.");
+		alert ("Observações.:\n\n  -Não será possivel lançar o conceito, pois não 
+			consta no Banco de Dados a existência de uma Banca Avaliadora.")
 		</SCRIPT>
 	<?php 
 	}
@@ -306,12 +307,12 @@ function tipoDefesa($tipoDefesa){
 		else if(($Defesa[0]->tipoDefesa = 'T' OR $Defesa[0]->tipoDefesa = 'D')  && ($Defesa[0]->status_banca == NULL)){
 	?>
 		<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
-		alert ("Observações.:\n\n  -Não é possivel lançar o conceito, pois a Banca Avaliadora ainda não foi aprovada pelo Coordenador.")
+		alert ("Observações.:\n\n  -Não é possivel lançar o conceito, pois a Banca Avaliadora
+			ainda não foi aprovada pelo Coordenador.")
 		</SCRIPT>
 
 	<?php 
 	}
-	
 	?>
 
 <div id="box-toggle" class="box">
