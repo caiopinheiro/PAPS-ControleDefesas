@@ -27,13 +27,6 @@ $idDefesa= JRequest::getVar('idDefesa');
 $idAluno = JRequest::getVar('idAluno'); 
 
 
-var_dump($Defesa[0]->conceito);
-var_dump($Defesa[0]->banca_id);
-var_dump($Defesa[0]->data);
-echo(date('d/m/Y'));
-
-
-
 
 $linha_pes = array(0 => "Todos", 1 => "Banco de Dados e Recuperação da Informação", 2 => "Sistemas Embarcados & Engenharia de Software", 3 => "Inteligência Artificial", 4 => "Visão Computacional e Robótica", 5 => "Redes e Telecomunicações", 6 => "Otimização Algorítmica e Complexidade");
 			
@@ -123,6 +116,16 @@ function tipoDefesa($tipoDefesa){
         }
 
 
+        function carta(form){
+
+        	alert('oi1');
+        }
+
+        function declaracao(form){
+
+			alert('oi2');
+
+        }
 
 </script>
 
@@ -229,46 +232,55 @@ function tipoDefesa($tipoDefesa){
 
 	  </tbody>
 	</table>
+	
 	<?php
 
+	if ( $Defesa[0]->banca_id != 0 ){ 
 
-	if ($Defesa[0]->tipoDefesa != 'Q1' AND $Aluno[0]->curso != 2){ 
-		// VERIFICAR ISSO COM URGENCIA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
-	?>
-<h2>Dados da Comissão Examinadora</h2>
-<hr />
-	
-	<table style='text-align: left; width: 100%;' border='1' cellpadding='3' cellspacing='0'>
-      <tbody>
-        <tr bgcolor='#B0B0B0'>
-          <td style='text-align: center; font-weight: bold;' width='70%'>MEMBROS DA BANCA</td>
-          <td style='text-align: center; font-weight: bold;' width='20%'>FILIAÇÃO</td>
-          <td style='text-align: center; font-weight: bold;' width='10%'>FUNÇÃO</td>
-        </tr>
-    <?php
-}
-    ?>
-        <?php
-        if(isset ($MembrosBanca)){
-
-
-			foreach( $MembrosBanca as $membro )
-			{
-				if($membro->funcao == 'P')
-
-					$nome_orientador = $membro->nome;
 			?>
-			<tr>
-			  <td align='center'><?php echo $membro->nome;?></td>
-			  <td align='center'><?php echo $membro->filiacao;?></td>
-			  <td align='center'><?php echo $array_funcao[$membro->funcao];?></td>   
-			</tr>
-				
-			<?php
-			}
-		} ?>
+		<h2>Dados da Comissão Examinadora</h2>
+		<hr />
+			
+			<table style='text-align: left; width: 100%;' border='1' cellpadding='3' cellspacing='0'>
+		      <tbody>
+		        <tr bgcolor='#B0B0B0'>
+		        <td style='text-align: center; font-weight: bold;' width='10%'>Carta de Agradecimento</td>		
+		          <td style='text-align: center; font-weight: bold;' width='10%'>Declaração de Participação</td>	
+		          <td style='text-align: center; font-weight: bold;' width='50%'>MEMBROS DA BANCA</td>
+		          <td style='text-align: center; font-weight: bold;' width='15%'>FILIAÇÃO</td>
+		          <td style='text-align: center; font-weight: bold;' width='15%'>FUNÇÃO</td>
+		        </tr>
+
+		        <?php
+		        if(isset ($MembrosBanca)){
+
+
+					foreach( $MembrosBanca as $membro )
+					{
+						if($membro->funcao == 'P')
+
+							$nome_orientador = $membro->nome;
+					?>
+					<tr>
+					  <td align='center'>  
+					  	<a href ="javascript:carta(document.form)">
+					  		<img src="components/com_controledefesas/assets/images/carta.jpg" border="0" title='Carta de Agradecimento'>  
+					  	</a>
+					  </td>
+					  <td align='center'>  
+					  	<a href ="javascript:declaracao(document.form)">
+					  		<img src="components/com_controledefesas/assets/images/declaracao.jpg" border="0" title='Declaração de Comparecimento'> 
+					  	</a>
+					  </td>
+					  <td align='center'><?php echo $membro->nome; echo ' '.$membro->id;?></td>
+					  <td align='center'><?php echo $membro->filiacao;?></td>
+					  <td align='center'><?php echo $array_funcao[$membro->funcao];?></td>   
+					</tr>
+						
+					<?php
+					}
+				}
+	} ?>
     
       </tbody>
     </table>
@@ -279,8 +291,7 @@ function tipoDefesa($tipoDefesa){
 	if ((date('Y/m/d'))  < ($Defesa[0]->data)){
 	?>
 		<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
-		alert ("Observações.:\n\n  -Não é possivel lançar o conceito, pois a 
-			defesa ainda não foi realizada.")
+		alert ("Observações.:\n\n  -Não é possivel lançar o conceito, pois a defesa ainda não foi realizada.");
 		</SCRIPT>
 	<?php 
 	}
@@ -289,30 +300,31 @@ function tipoDefesa($tipoDefesa){
 	?>
 
 		<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
-		alert ("Observações.:\n\n  -Conceito já foi devidamente Lançado.")
-		</SCRIPT>
+		alert ("Observações.:\n\n  -Conceito já foi devidamente Lançado.");
+		</SCRIPT>;
 	
 	<?php 
 	}
 
-	else if ($Defesa[0]->banca_id == NULL || $Defesa[0]->banca_id == 0){ 
+	else if (($Defesa[0]->banca_id == NULL || $Defesa[0]->banca_id == 0) AND (($Aluno[0]->curso == 1 AND $Defesa[0]->tipoDefesa == 'Q1') || ($Aluno[0]->curso == 2 AND $Defesa[0]->tipoDefesa == 'Q2' )  || ($Aluno[0]->curso == 1 AND $Defesa[0]->tipoDefesa == 'D')  || ($Aluno[0]->curso == 2 AND $Defesa[0]->tipoDefesa == 'T' ))){ 
 	?>
 		<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
-		alert ("Observações.:\n\n  -Não será possivel lançar o conceito, pois não 
-			consta no Banco de Dados a existência de uma Banca Avaliadora.")
+		alert ("Observações.:\n\n  -Ainda não é possivel lançar o conceito, pois não consta no Banco de Dados a existência de uma Banca Avaliadora.");
 		</SCRIPT>
 	<?php 
 	}
 
-		else if(($Defesa[0]->tipoDefesa = 'T' OR $Defesa[0]->tipoDefesa = 'D')  && ($Defesa[0]->status_banca == NULL)){
+		else if(($Defesa[0]->tipoDefesa == 'T' OR $Defesa[0]->tipoDefesa == 'D')  && ($Defesa[0]->status_banca == NULL AND $Defesa[0]->banca_id != 0)){
 	?>
 		<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
-		alert ("Observações.:\n\n  -Não é possivel lançar o conceito, pois a Banca Avaliadora
-			ainda não foi aprovada pelo Coordenador.")
+		alert ("Observações.:\n\n  -Ainda não é possivel lançar o conceito, pois a Banca Avaliadora ainda não foi aprovada pelo Coordenador.")
 		</SCRIPT>
 
 	<?php 
 	}
+	
+
+	var_dump($MembrosBanca);
 	?>
 
 <div id="box-toggle" class="box">

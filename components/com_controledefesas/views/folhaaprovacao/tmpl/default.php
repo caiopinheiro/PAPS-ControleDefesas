@@ -63,7 +63,6 @@ function imprimirFolhaAprovacao($Defesa,$MembrosBanca) {
 			$this->Image('components/com_portalsecretaria/images/icon_casa.jpg', '134', '290');
 		}
 	}
-//	$database = & JFactory :: getDBO();
 
 	$curso = array (
 		'Q' => 'DISSERTA&Ccedil;&Atilde;O',
@@ -162,13 +161,6 @@ function imprimirFolhaAprovacao($Defesa,$MembrosBanca) {
 }
 
 
-
-
-
-
-
-//////////////////// nao mexer na funcao abaixo:
-
 function imprimirFolhaQualificacao($Defesa,$MembrosBanca) {
 
 	$alunos = $Defesa;
@@ -237,10 +229,6 @@ $linha_pes = array(
 	5 => "Redes e Telecomunicações", 
 	6 => "Otimização Algorítmica e Complexidade"
 	);
-
-
-
-
 
 
 	$chave = md5($alunos[0]->id . $alunos[0]->nome . date("l jS \of F Y h:i:s A"));
@@ -359,9 +347,14 @@ else if (($Defesa[0]->tipoDefesa == "Q1" AND $Defesa[0]->curso == 1) || ($Defesa
 imprimirFolhaQualificacao($Defesa,$MembrosBanca);
 }
 else {
+?>
+		<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
+		alert ("Observação:\n\n  -Não há folha de aprovação para Qualificação I do curso de Doutorado.")
+		</SCRIPT>
 
-echo "Não há folha de aprovação para Qualificação 1 do Doutorado";
+<?php
 
+		header('refresh:1; url =index.php?option=com_controledefesas&view=listabancas&lang=pt-br');
 }
 
 

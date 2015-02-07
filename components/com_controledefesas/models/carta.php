@@ -8,7 +8,7 @@ jimport('joomla.application.component.modelitem');
 /**
  * HelloWorld Model
  */
-class ControledefesasModelConceitos extends JModelItem
+class ControledefesasModelCarta extends JModelItem
 {             
 	    
 	    public function visualizarBanca($idBanca) {
@@ -29,7 +29,7 @@ class ControledefesasModelConceitos extends JModelItem
 		
 		public function visualizarDefesa($idDefesa){
 			$database =& JFactory::getDBO();
-			$sql = "SELECT conceito, idDefesa, status_banca, titulo, d.data as data, banca_id, resumo, tipoDefesa FROM (#__defesa AS d LEFT JOIN #__banca_controledefesas AS bcd ON bcd.id = d.banca_id)  WHERE idDefesa= ".$idDefesa;
+			$sql = "SELECT conceito, status_banca, titulo, d.data as data, banca_id, resumo, tipoDefesa FROM (#__defesa AS d LEFT JOIN #__banca_controledefesas AS bcd ON bcd.id = d.banca_id)  WHERE idDefesa= ".$idDefesa;
 			$database->setQuery($sql); 
 			return $database->loadObjectList();
 		}
@@ -43,17 +43,5 @@ class ControledefesasModelConceitos extends JModelItem
 			return $database->loadObjectList();
 		}
 
-		public function updateConceito($idAluno,$idDefesa,$escolha){
-			$database =& JFactory::getDBO();
-			$sql = "UPDATE #__defesa SET conceito='".$escolha."' WHERE aluno_id=".$idAluno." AND idDefesa = ".$idDefesa;
-			$database->setQuery($sql);
-			var_dump($sql);
-			
-			$sucesso = $database->Query();
-			return $sucesso;
-		}
-
-		
-		
-        
+ 
 }

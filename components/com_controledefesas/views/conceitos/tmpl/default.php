@@ -109,7 +109,6 @@ function tipoDefesa($tipoDefesa){
 			
            if(confirmar == true){		
 				form.task.value = 'reprovar';
-				//form.avaliacao.value = deferir;
 				form.submit();
            }
            
@@ -234,9 +233,11 @@ function tipoDefesa($tipoDefesa){
 			<table style='text-align: left; width: 100%;' border='1' cellpadding='3' cellspacing='0'>
 		      <tbody>
 		        <tr bgcolor='#B0B0B0'>
-		          <td style='text-align: center; font-weight: bold;' width='70%'>MEMBROS DA BANCA</td>
-		          <td style='text-align: center; font-weight: bold;' width='20%'>FILIAÇÃO</td>
-		          <td style='text-align: center; font-weight: bold;' width='10%'>FUNÇÃO</td>
+		        <td style='text-align: center; font-weight: bold;' width='10%'>Carta de Agradecimento</td>		
+		          <td style='text-align: center; font-weight: bold;' width='10%'>Declaração de Participação</td>	
+		          <td style='text-align: center; font-weight: bold;' width='50%'>MEMBROS DA BANCA</td>
+		          <td style='text-align: center; font-weight: bold;' width='15%'>FILIAÇÃO</td>
+		          <td style='text-align: center; font-weight: bold;' width='15%'>FUNÇÃO</td>
 		        </tr>
 
 		        <?php
@@ -250,7 +251,17 @@ function tipoDefesa($tipoDefesa){
 							$nome_orientador = $membro->nome;
 					?>
 					<tr>
-					  <td align='center'><?php echo $membro->nome;?></td>
+					  <td align='center'>  
+					  	<a href ="index.php?option=com_controledefesas&view=carta&idMembro=<?php echo $membro->id?>&idDefesa=<?php echo $Defesa[0]->idDefesa?>&funcao=<?php echo $membro->funcao?>" TARGET="_blank">
+					  		<img src="components/com_controledefesas/assets/images/carta.jpg" border="0" title='Carta de Agradecimento'>  
+					  	</a>
+					  </td>
+					  <td align='center'>  
+					  	<a href ="index.php?option=com_controledefesas&view=declaracao&idMembro=<?php echo $membro->id?>&idDefesa=<?php echo $Defesa[0]->idDefesa?>&funcao=<?php echo $membro->funcao?>" TARGET="_blank"x>
+					  		<img src="components/com_controledefesas/assets/images/declaracao.jpg" border="0" title='Declaração de Comparecimento'> 
+					  	</a>
+					  </td>
+					  <td align='center'><?php echo $membro->nome; echo ' '.$membro->id;?></td>
 					  <td align='center'><?php echo $membro->filiacao;?></td>
 					  <td align='center'><?php echo $array_funcao[$membro->funcao];?></td>   
 					</tr>
@@ -301,6 +312,8 @@ function tipoDefesa($tipoDefesa){
 	<?php 
 	}
 	
+
+	var_dump($Defesa);
 	?>
 
 <div id="box-toggle" class="box">

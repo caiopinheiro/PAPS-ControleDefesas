@@ -85,8 +85,6 @@ if(($this->status_bancas == NULL) AND
            } else {
             alert('Ao menos 1 item deve ser selecionado para visualiza\xE7\xE3o.')
            }
-
-            alert('oi');
         }
 
 
