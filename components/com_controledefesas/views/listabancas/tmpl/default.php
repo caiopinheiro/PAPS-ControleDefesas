@@ -71,19 +71,27 @@ if(($this->status_bancas == NULL) AND
         function folhaaprovacao(form){
            var idDefesaSelecionado = 0;
            var idAlunoSelec = 0;
-           
+           var valorconceito = -1;
+          
            for(i = 0;i < form.idDefesaSelec.length ;i++)
                 if(form.idDefesaSelec[i].checked){
                     idDefesaSelecionado = form.idDefesaSelec[i].value;  
                     idAlunoSelec = form.idAlunoSelec[i].value;
-                }
-                
+                //  valorconceito = form.conceito[i].value;
+             }
+               
            if(idDefesaSelecionado > 0){
                 form.task.value = 'folhaaprovacao'; 
                 form.idDefesa.value = idDefesaSelecionado;
                 form.idAluno.value = idAlunoSelec;
+              //  form.conceito.value = valorconceito;
+              //      if (valorconceito == 0){
+              //          alert ('Não é possivel visualizar a folha de aprovação, pois o conceito ainda não foi lançado.');
+              //     }
+              //      else { 
                 window.open(URL='index.php?option=com_controledefesas&task=folhaaprovacao&idDefesa='+idDefesaSelecionado+'&idAluno='+idAlunoSelec+'&lang=pt-br');
-           } else {
+              //      }
+            } else {
             alert('Ao menos 1 item deve ser selecionado para visualiza\xE7\xE3o.')
            }
         }
@@ -271,6 +279,7 @@ if(($this->status_bancas == NULL) AND
 					<td width='15'>
                                 <input type="radio" name="idDefesaSelec" value="<?php echo $defesa->idDefesa;?>">
                                 <input type="hidden" name="idAlunoSelec" value="<?php echo $defesa->idAluno;?>">
+                                <input type="hidden" name="conceito" value="<?php echo $valor_status2;?>">
                     </td>
 					<td><img border='0' src='components/com_controledefesas/assets/images/<?php echo $statusImg[$valor_status2];?>' width='15' height='16' title='<?php echo $status[$valor_status2];?>'></td>
 
@@ -299,7 +308,7 @@ if(($this->status_bancas == NULL) AND
      <input name='idAlunoSelec' type='hidden' value='0'/>
      <input name='idDefesa' type='hidden' value=''/>
      <input name= 'idAluno' type='hidden' value =''/>
-   
+     <input name= 'valor' type='hidden' value =''/>
 
      
 </form>
