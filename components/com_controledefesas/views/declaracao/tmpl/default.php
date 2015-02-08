@@ -138,7 +138,7 @@ function imprimirDeclaracao($alunos, $banca, $funcao) {
 	
 	// OBTENDO OS DADOS A SEREM PREENCHIDOS
 	
-	$nome = utf8_decode($alunos[0]->nome);	
+	$nome = $alunos[0]->nome;	
 	if ($alunos[0]->tipoDefesa == 'Q1' || $alunos[0]->tipoDefesa == 'Q2') {	
 		$data = explode("/",$alunos[0]->data);
 		$titulo = $alunos[0]->titulo;
@@ -181,7 +181,7 @@ function imprimirDeclaracao($alunos, $banca, $funcao) {
 	else if ($funcao == "E")
         	$participacao = "membro externo";
 
-	$tag = "DECLARAMOS para os devidos fins que o(a) ".$banca[0]->nome." fez parte, na qualidade de ".$participacao.", da comissão julgadora da defesa de ".$complemento2." do(a) aluno(a) ".utf8_decode($nome).", intitulada \"".$titulo."\", do curso de ".$complemento." em Informática do Programa de Pós-Graduação em Informática da Universidade Federal do Amazonas, realizada no dia ".date('d',(strtotime($data[0])))." de ". $mes[date('m',(strtotime($data[0])))]." de ".date('Y',(strtotime($data[0])))." às ".$hora.".";
+	$tag = "DECLARAMOS para os devidos fins que o(a) ".$banca[0]->nome." fez parte, na qualidade de ".$participacao.", da comissão julgadora da defesa de ".$complemento2." do(a) aluno(a) ".$nome.", intitulada \"".$titulo."\", do curso de ".$complemento." em Informática do Programa de Pós-Graduação em Informática da Universidade Federal do Amazonas, realizada no dia ".date('d',(strtotime($data[0])))." de ". $mes[date('m',(strtotime($data[0])))]." de ".date('Y',(strtotime($data[0])))." às ".$hora.".";
 	$pdf->SetFont("Helvetica",'', 12);
 	$pdf->MultiCell(0,10,utf8_decode($tag),0, 'J');
 

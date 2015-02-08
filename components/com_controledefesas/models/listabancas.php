@@ -67,14 +67,16 @@ class ControledefesasModelListaBancas extends JModelItem
 	
 
 
-			if($status_banca ==2){					
-				$sql_status_banca = " AND (conceito = '' OR conceito is NULL)";
+			if($status_banca == 2){					
+				$sql_status_banca = " AND (bcd.status_banca = '1' OR bcd.status_banca is NULL) AND (conceito = '' OR conceito is NULL)";
 				//' AND bcd.status_banca IS NULL';
 			}
-			else if($status_banca ==1){
+			else if($status_banca == 1 ){
 				$sql_status_banca = " AND (conceito = 'Aprovado' OR conceito = 'Reprovado')";
 			}
-
+			else if($status_banca == 4 ){
+				$sql_status_banca = " AND (bcd.status_banca = '0')";
+			}
 
 
 

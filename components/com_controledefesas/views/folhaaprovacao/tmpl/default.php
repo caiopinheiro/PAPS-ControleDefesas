@@ -151,7 +151,7 @@ function imprimirFolhaAprovacao($Defesa,$MembrosBanca) {
 	}
 	$pdf->MultiCell(0,5,"",0, 'C');
 	$pdf->SetFont("Helvetica",'', 10);
-	$pdf->MultiCell(0,5,"Manaus, ".date('d',(strtotime($data[0])))." de ". $mes[date('m',(strtotime($data[0])))]." de ".date('Y',(strtotime($data[0]))),0, 'C');
+	$pdf->MultiCell(0,5,"Manaus, ".date('d',(strtotime($data[0])))." de ". utf8_decode($mes[date('m',(strtotime($data[0])))])." de ".date('Y',(strtotime($data[0]))),0, 'C');
 
 	ob_clean(); // Limpa o buffer de saída
 	//cria o arquivo pdf e exibe no navegador

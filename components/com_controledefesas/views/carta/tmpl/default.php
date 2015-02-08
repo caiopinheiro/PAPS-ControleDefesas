@@ -116,15 +116,7 @@ function imprimirAgradecimento($alunos, $banca, $funcao) {
 		"11" => "Novembro",
 		"12" => "Dezembro"
 	);
-/*
-	$sql = "SELECT nome FROM #__membrosbanca WHERE id = $idMembro";
-	$database->setQuery($sql);
-	$banca = $database->loadObjectList();
 
-	$sql = "SELECT a.nome, titulo,tipoDefesa,data,horario,local,curso FROM #__defesa as d JOIN #__aluno as a on a.id = d.aluno_id WHERE idDefesa = ".$idDefesa;
-	$database->setQuery($sql);
-	$alunos = $database->loadObjectList();
-*/
 	$chave = md5($alunos[0]->id . $alunos[0]->nome . date("l jS \of F Y h:i:s A"));
 
 	//$pdf = new FPDF('P','cm','A4');
@@ -193,7 +185,7 @@ function imprimirAgradecimento($alunos, $banca, $funcao) {
 	$pdf->MultiCell(0,8,"",0, 'C');
 	$pdf->MultiCell(0,8,"",0, 'C');	
 	$pdf->SetFont("Helvetica",'', 10);
-	$pdf->MultiCell(0,5,"Manaus, ".date('d',(strtotime($data[0])))." de ". $mes[date('m',(strtotime($data[0])))]." de ".date('Y',(strtotime($data[0]))),0, 'C');
+	$pdf->MultiCell(0,5,"Manaus, ".date('d',(strtotime($data[0])))." de ". utf8_decode($mes[date('m',(strtotime($data[0])))])." de ".date('Y',(strtotime($data[0]))),0, 'C');
 
 	ob_clean(); // Limpa o buffer de saída
 	//cria o arquivo pdf e exibe no navegador

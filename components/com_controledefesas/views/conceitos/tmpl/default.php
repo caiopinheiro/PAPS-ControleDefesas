@@ -22,7 +22,7 @@ $MembrosBanca = $this->membrosBanca;
 $idDefesa= JRequest::getVar('idDefesa'); 
 $idAluno = JRequest::getVar('idAluno'); 
 
-$habilitarbotao = 1;
+$botao = 0;
 $linha_pes = array(0 => "Todos", 1 => "Banco de Dados e Recuperação da Informação", 2 => "Sistemas Embarcados & Engenharia de Software", 3 => "Inteligência Artificial", 4 => "Visão Computacional e Robótica", 5 => "Redes e Telecomunicações", 6 => "Otimização Algorítmica e Complexidade");
 $arrayTipoDefesa = array('1' => "Mestrado", '2' => "Doutorado");
 $array_funcao = array ('P' => "Presidente",'E' => "Membro Externo", 'I' => "Membro Interno");
@@ -48,36 +48,90 @@ else if(($sucesso == false AND $sucesso !=NULL) OR ($sucesso2 == false AND $suce
 $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Qualificação II", 'T' => "Tese", 'D' => "Dissertação");
 
 
+	if ((date('Y/m/d'))  < ($Defesa[0]->data)){
+		$botao = 1;
+	}
+
+	else if ($Defesa[0]->conceito != ''){ 
+		$botao = 2;
+	}
+
+	else if (($Defesa[0]->banca_id == NULL || $Defesa[0]->banca_id == 0) && (($Aluno[0]->curso == 1 && $Defesa[0]->tipoDefesa == 'Q1') || ($Aluno[0]->curso == 2 && $Defesa[0]->tipoDefesa == 'Q2' )  || ($Aluno[0]->curso == 1 && $Defesa[0]->tipoDefesa == 'D')  || ($Aluno[0]->curso == 2 && $Defesa[0]->tipoDefesa == 'T' ))){ 
+		$botao = 3;
+
+	}
+	else if(($Defesa[0]->tipoDefesa == 'T' || $Defesa[0]->tipoDefesa == 'D')  && ($Defesa[0]->status_banca == NULL && ($Defesa[0]->banca_id != 0 || $Defesa[0]->banca_id != NULL ))){
+		$botao = 4;
+	}
+	else if($Defesa[0]->status_banca == 0){
+		$botao = 5;
+	}
 ?>
+
 
 <script type="text/javascript" src="/icomp/components/com_defesascoordenador/assets/jquery-ui-1.11.2.custom/jquery-ui.js"></script>
 
 <script language="JavaScript">
        
+
+	function observacao(botao){
+
+		if (botao == 1){
+			alert ("Observação:\n\n  -Não é possivel lançar o conceito, pois a defesa ainda não foi realizada.");
+		}
+		else if (botao == 2){
+			alert ("Observação:\n\n  -Conceito já foi devidamente Lançado.");
+		}
+		else if (botao == 3){
+			alert ("Observação:\n\n  -Ainda não é possivel lançar o conceito, pois não consta no Banco de Dados a existência de uma Banca Avaliadora.");
+		}
+		else if (botao == 4){
+			alert ("Observação:\n\n  -Ainda não é possivel lançar o conceito, pois a Banca Avaliadora ainda não foi aprovada pelo Coordenador.");
+		}
+		else if (botao == 5) {
+			alert ("Observação:\n\n  -Não é possivel lançar o conceito, pois a Banca Avaliadora foi INDEFERIDA pelo Coordenador.");	
+		}
+		else if (botao == 6){
+			alert ("Observação:\n\n  -Só é possivel imprimir a Carta de Agradecimento e Declaração de Participação após o DEFERIMENTO da Banca Avaliadora pelo Coordenador.");		
+		}
+	}
+
+
         function aprovar(form){        
            var confirmar;
            var deferir = 1;
-           
-           confirmar = window.confirm('Você tem certeza que deseja APROVAR esse(a) aluno(a)?');
-       
-           if(confirmar == true){
-				form.task.value = 'aprovar';
-				
-				form.submit(); // 'continuacao no arquivo de controller.php da raiz'
+           var botao = <?php echo $botao?>;
 
-           }
+           	if (botao != 0){
+           		observacao(botao);
+           	}
+           else{
+	           confirmar = window.confirm('Você tem certeza que deseja APROVAR esse(a) aluno(a)?');
+	       
+	           if(confirmar == true){
+					form.task.value = 'aprovar';
+					
+					form.submit(); // 'continuacao no arquivo de controller.php da raiz'
+
+	           }
+	       }
         }
 						
 		function reprovar(form){        
            var confirmar;
-           
+            var botao = <?php echo $botao?>;
             
-           confirmar = window.confirm('Você tem certeza que deseja REPROVAR esse(a) aluno(a)?');
-			
-           if(confirmar == true){		
-				form.task.value = 'reprovar';
-				form.submit();
-           }
+            if (botao != 0){
+           		observacao(botao);
+           	}
+           else{
+	           confirmar = window.confirm('Você tem certeza que deseja REPROVAR esse(a) aluno(a)?');
+				
+	           if(confirmar == true){		
+					form.task.value = 'reprovar';
+					form.submit();
+	           }
+       		}
            
         }
 
@@ -218,17 +272,32 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 							$nome_orientador = $membro->nome;
 					?>
 					<tr>
+
 					  <td align='center'>  
-					  	<a href ="index.php?option=com_controledefesas&view=carta&idMembro=<?php echo $membro->id?>&idDefesa=<?php echo $Defesa[0]->idDefesa?>&funcao=<?php echo $membro->funcao?>" TARGET="_blank">
+					  	<?php if ($botao == 0 || $botao == 2) { ?>
+					  	<a 	href ="index.php?option=com_controledefesas&view=carta&idMembro=<?php echo $membro->id?>&idDefesa=<?php echo $Defesa[0]->idDefesa?>&funcao=<?php echo $membro->funcao?>" TARGET="_blank">
+					  	<?php }
+					  	else { ?>
+					  		
+							<a href ="javascript:observacao(6)">
+					  	<?php } 
+					  	?>
 					  		<img src="components/com_controledefesas/assets/images/carta.jpg" border="0" title='Carta de Agradecimento'>  
 					  	</a>
 					  </td>
-					  <td align='center'>  
+					  <td align='center'>
+					  	<?php if ($botao == 0 || $botao == 2) { ?>
 					  	<a href ="index.php?option=com_controledefesas&view=declaracao&idMembro=<?php echo $membro->id?>&idDefesa=<?php echo $Defesa[0]->idDefesa?>&funcao=<?php echo $membro->funcao?>" TARGET="_blank"x>
+					  	<?php }
+					  	else { ?>
+					  		
+							<a href ="javascript:observacao(6)">
+					  	<?php } 
+					  	?>
 					  		<img src="components/com_controledefesas/assets/images/declaracao.jpg" border="0" title='Declaração de Participação'> 
 					  	</a>
 					  </td>
-					  <td align='center'><?php echo $membro->nome; echo ' '.$membro->id;?></td>
+					  <td align='center'><?php echo $membro->nome;?></td>
 					  <td align='center'><?php echo $membro->filiacao;?></td>
 					  <td align='center'><?php echo $array_funcao[$membro->funcao];?></td>   
 					</tr>
@@ -241,46 +310,6 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
       </tbody>
     </table>
 
-	<?php 
-
-
-	if ((date('Y/m/d'))  < ($Defesa[0]->data)){
-		
-	?>
-		<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
-		alert ("Observações.:\n\n  -Não é possivel lançar o conceito, pois a defesa ainda não foi realizada.");
-		</SCRIPT>
-	<?php 
-	}
-
-	else if ($Defesa[0]->conceito != ''){ 
-	?>
-
-		<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
-		alert ("Observações.:\n\n  -Conceito já foi devidamente Lançado.");
-		</SCRIPT>;
-	
-	<?php 
-	}
-
-	else if (($Defesa[0]->banca_id == NULL || $Defesa[0]->banca_id == 0) && (($Aluno[0]->curso == 1 && $Defesa[0]->tipoDefesa == 'Q1') || ($Aluno[0]->curso == 2 && $Defesa[0]->tipoDefesa == 'Q2' )  || ($Aluno[0]->curso == 1 && $Defesa[0]->tipoDefesa == 'D')  || ($Aluno[0]->curso == 2 && $Defesa[0]->tipoDefesa == 'T' ))){ 
-	?>
-		<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
-		alert ("Observações.:\n\n  -Ainda não é possivel lançar o conceito, pois não consta no Banco de Dados a existência de uma Banca Avaliadora.");
-		</SCRIPT>
-	<?php 
-	}
-
-		else if(($Defesa[0]->tipoDefesa == 'T' || $Defesa[0]->tipoDefesa == 'D')  && ($Defesa[0]->status_banca == NULL && ($Defesa[0]->banca_id != 0 || $Defesa[0]->banca_id != NULL ))){
-	?>
-		<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
-		alert ("Observações.:\n\n  -Ainda não é possivel lançar o conceito, pois a Banca Avaliadora ainda não foi aprovada pelo Coordenador.")
-		</SCRIPT>
-
-	<?php 
-	}
-	
-?>
 
 <div id="box-toggle" class="box">
 <div class="tgl"></div></div>

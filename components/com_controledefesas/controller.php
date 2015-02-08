@@ -71,6 +71,7 @@ class ControledefesasController extends JController {
 		$idDefesa = JRequest::getVar('idDefesa');
 		$idAluno = JRequest::getVar('idAluno');
 		header('Location: index.php?option=com_controledefesas&view=carta&idDefesa='.$idDefesa.'&idAluno='.$idAluno);
+		
 	}
 
 	public function declaracao(){

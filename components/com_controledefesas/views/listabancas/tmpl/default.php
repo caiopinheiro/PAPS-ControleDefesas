@@ -59,7 +59,8 @@ if(($this->status_bancas == NULL) AND
 				form.task.value = 'conceitos'; 
 				form.idDefesa.value = idDefesaSelecionado;
                 form.idAluno.value = idAlunoSelec;
-				form.submit();
+				//form.submit();
+                window.open(URL='index.php?option=com_controledefesas&task=conceitos&idDefesa='+idDefesaSelecionado+'&idAluno='+idAlunoSelec+'&lang=pt-br');
            } else {
            	alert('Ao menos 1 item deve ser selecionado para visualiza\xE7\xE3o.')
            }
@@ -81,13 +82,16 @@ if(($this->status_bancas == NULL) AND
                 form.task.value = 'folhaaprovacao'; 
                 form.idDefesa.value = idDefesaSelecionado;
                 form.idAluno.value = idAlunoSelec;
-                form.submit();
+                window.open(URL='index.php?option=com_controledefesas&task=folhaaprovacao&idDefesa='+idDefesaSelecionado+'&idAluno='+idAlunoSelec+'&lang=pt-br');
            } else {
             alert('Ao menos 1 item deve ser selecionado para visualiza\xE7\xE3o.')
            }
         }
 
-
+        function buscar(form){
+            form.task.value = null; 
+            form.submit();
+        }
 
 </script>
         
@@ -104,7 +108,7 @@ if(($this->status_bancas == NULL) AND
 	    
 	<link rel="stylesheet" href="components/com_portalsecretaria/assets/css/estilo.css" type="text/css" />
 
-    <form method="post" name="form" enctype="multipart/form-data" action="index.php?option=com_controledefesas&view=listabancas">
+    <form method="post" name="form" enctype="multipart/form-data" action="index.php?option=com_controledefesas&view=listabancas" >
 		<div id="toolbar-box"><div class="m"><div class="toolbar-list" id="toolbar">
             <div class="cpanel2">
                 <div class="icon" id="toolbar-apply">
@@ -136,8 +140,9 @@ if(($this->status_bancas == NULL) AND
                
             <div class="pagetitle icon-48-groups"><h2>Lista de Defesas</h2></div>
         </div></div>
-
+        
 		<!-- FILTRO DA BUSCA -->
+
 		<fieldset>
         	<legend>Filtros para consulta</legend>
             </br>
@@ -154,8 +159,9 @@ if(($this->status_bancas == NULL) AND
                     <td>
                     <select id="buscaStatusBanca" name="buscaStatusBanca">    
                         <option value="2" <?php if($status_bancas == 2) echo 'SELECTED';?>>Não Conceituadas</option>
-                        <option value="3" <?php if($status_bancas == 3) echo 'SELECTED';?>> Mostrar Todos</option>
                         <option value="1" <?php if($status_bancas == 1) echo 'SELECTED';?>>Conceituadas</option>
+                        <option value="4" <?php if($status_bancas == 4) echo 'SELECTED';?>> Indeferidas - Coordenador</option>
+                        <option value="3" <?php if($status_bancas == 3) echo 'SELECTED';?>> Mostrar Todos</option>
                         
                     </select>
                     </td>
@@ -168,7 +174,7 @@ if(($this->status_bancas == NULL) AND
                         <option value="0" <?php if($tipo_curso == 0) echo 'SELECTED';?>>Todos</option>
                         <option value="1" <?php if($tipo_curso == 1) echo 'SELECTED';?>>Mestrado</option>
                         <option value="2" <?php if($tipo_curso == 2) echo 'SELECTED';?>>Doutorado</option>
-                        <option value="3" <?php if($tipo_curso == 3) echo 'SELECTED';?>>Especial</option>
+                     
                     </select>
                     </td>
 
@@ -189,7 +195,7 @@ if(($this->status_bancas == NULL) AND
 						<option value="4" <?php if($tipo_banca == 4) echo 'SELECTED';?>>Mostrar Todos</option>
                         <option value="1" <?php if($tipo_banca == 1) echo 'SELECTED';?>>Tese</option>
                         <option value="0" <?php if($tipo_banca == 0) echo 'SELECTED';?>>Dissertação</option>
-                        <option value="2" <?php if($tipo_banca == 2) echo 'SELECTED';?>>Qualificação 1 <?php  ?> </option>
+                        <option value="2" <?php if($tipo_banca == 2) echo 'SELECTED';?>>Qualificação 1 </option>
                         <option value="3" <?php if($tipo_banca == 3) echo 'SELECTED';?>>Qualificação 2</option>
 
                     </select>
@@ -215,7 +221,7 @@ if(($this->status_bancas == NULL) AND
 				
 				<tr>
 					<td align="right">
-						<button type="submit"  value="Buscar" class="btn btn-primary">
+						<button type="button"  value="Buscar" onClick = "buscar(form);" class="btn btn-primary">
 							<i class="icone-search icone-white"></i> Buscar
 						</button>
 					</td>		
@@ -223,7 +229,7 @@ if(($this->status_bancas == NULL) AND
                 
 			</table>
 		</fieldset>
-    
+
         <table class="table table-striped" id="tablesorter-imasters">
             <thead>
               <tr>
@@ -269,7 +275,7 @@ if(($this->status_bancas == NULL) AND
 					<td><img border='0' src='components/com_controledefesas/assets/images/<?php echo $statusImg[$valor_status2];?>' width='15' height='16' title='<?php echo $status[$valor_status2];?>'></td>
 
                     <td style="padding-right:20px">  <?php echo date ('d/m/Y',(strtotime($defesa->data)));  ?> </td>
-					<td><?php echo $defesa->nome_aluno; /*echo $defesa->idDefesa." "; echo $defesa->idAluno;*/ ?></td>
+					<td><?php echo $defesa->nome_aluno; ?></td>
 					<td><?php echo $arrayTipoBanca[$defesa->tipo_banca];?></td>
                     <td><?php if ($defesa->curso == 1) echo 'Mestrado'; else if($defesa->curso == 2) echo 'Doutorado'; else echo 'Especial'?></td>
 					<td><?php echo $defesa->nomeProfessor;?></td>
