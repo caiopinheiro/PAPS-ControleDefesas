@@ -20,12 +20,13 @@ $document = &JFactory::getDocument();
 
 $Banca = $this->banca;
 $Aluno = $this->aluno;
-$Defesa = $this->defesa;
-$MembrosBanca = $this->membrosBanca;
+$alunos = $this->alunos;
+$banca = $this->banca;
+
 
 $idDefesa= JRequest::getVar('idDefesa'); 
 $idMembro = JRequest::getVar('idMembro'); 
-$funcao = JRequest::getVar('funcao'); 
+$funcao = JRequest::getVar('funcao');  
 
 
 $linha_pes = array(0 => "Todos", 1 => "Banco de Dados e Recuperação da Informação", 2 => "Sistemas Embarcados & Engenharia de Software", 3 => "Inteligência Artificial", 4 => "Visão Computacional e Robótica", 5 => "Redes e Telecomunicações", 6 => "Otimização Algorítmica e Complexidade");
@@ -56,7 +57,7 @@ else if(($sucesso == false AND $sucesso !=NULL) OR ($sucesso2 == false AND $suce
 }
 
 
-function imprimirAgradecimento($idMembro, $idDefesa, $funcao) {
+function imprimirAgradecimento($alunos, $banca, $funcao) {
 
 	require('fpdf/fpdf.php');
 	//configurações iniciais
@@ -115,7 +116,7 @@ function imprimirAgradecimento($idMembro, $idDefesa, $funcao) {
 		"11" => "Novembro",
 		"12" => "Dezembro"
 	);
-
+/*
 	$sql = "SELECT nome FROM #__membrosbanca WHERE id = $idMembro";
 	$database->setQuery($sql);
 	$banca = $database->loadObjectList();
@@ -123,7 +124,7 @@ function imprimirAgradecimento($idMembro, $idDefesa, $funcao) {
 	$sql = "SELECT a.nome, titulo,tipoDefesa,data,horario,local,curso FROM #__defesa as d JOIN #__aluno as a on a.id = d.aluno_id WHERE idDefesa = ".$idDefesa;
 	$database->setQuery($sql);
 	$alunos = $database->loadObjectList();
-
+*/
 	$chave = md5($alunos[0]->id . $alunos[0]->nome . date("l jS \of F Y h:i:s A"));
 
 	//$pdf = new FPDF('P','cm','A4');
@@ -201,7 +202,7 @@ function imprimirAgradecimento($idMembro, $idDefesa, $funcao) {
 	
 }
 
-imprimirAgradecimento($idMembro,$idDefesa,$funcao);
+imprimirAgradecimento($alunos,$banca,$funcao);
 
 ?>
 

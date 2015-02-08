@@ -57,8 +57,7 @@ class ControledefesasModelFolhaaprovacao extends JModelItem
 			$database =& JFactory::getDBO();
 			$sql = "UPDATE #__defesa SET conceito='".$escolha."' WHERE aluno_id=".$idAluno." AND idDefesa = ".$idDefesa;
 			$database->setQuery($sql);
-			var_dump($sql);
-			
+		
 			$sucesso = $database->Query();
 			return $sucesso;
 		}

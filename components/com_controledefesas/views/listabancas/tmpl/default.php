@@ -108,14 +108,20 @@ if(($this->status_bancas == NULL) AND
 		<div id="toolbar-box"><div class="m"><div class="toolbar-list" id="toolbar">
             <div class="cpanel2">
                 <div class="icon" id="toolbar-apply">
-                    <a href="javascript:folhaaprovacao(document.form)" class="toolbar">
+                    <a href="javascript:folhaaprovacao(document.form)" class="toolbar" title = 
+                    "Funcionalidade que permite:
+                    -Imprimir folha de aprovação">
                     <span class="icon-32-apply"></span>Folha<br>Aprovação<br></a>
                 </div>
                 
 
                 <div class="icon" id="toolbar-preview">
-                    <a href="javascript:lancarconceito(document.form)" class="toolbar">
-                    <span class="icon-32-preview"></span>Detalhes<br></a>
+                    <a href="javascript:lancarconceito(document.form)" class="toolbar" title = 
+                    "Funcionalidade que permite:
+                    -Lançar Conceito;
+                    -Imprimir Carta de Agradecimento e 
+                    -Declaração de Participação">
+                    <span class="icon-32-preview"></span>Detalhes</a>
                 </div>
 
 

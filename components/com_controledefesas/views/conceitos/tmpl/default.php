@@ -7,16 +7,12 @@ JHTML::_('script','modal.js', 'media/system/js', true);
 JHTML::_('stylesheet','modal.css');
 JHTML::_('behavior.modal', 'a.modal');
 
-// No direct access to this file
-
-
 $user =& JFactory::getUser();
 if(!$user->username) die( 'Acesso Restrito.' );
 
 defined('_JEXEC') or die('Restricted access');
 
 $document = &JFactory::getDocument();
-//$document->addScript("includes/js/joomla.javascript.js");
 
 $Banca = $this->banca;
 $Aluno = $this->aluno;
@@ -26,17 +22,10 @@ $MembrosBanca = $this->membrosBanca;
 $idDefesa= JRequest::getVar('idDefesa'); 
 $idAluno = JRequest::getVar('idAluno'); 
 
-
-
+$habilitarbotao = 1;
 $linha_pes = array(0 => "Todos", 1 => "Banco de Dados e Recuperação da Informação", 2 => "Sistemas Embarcados & Engenharia de Software", 3 => "Inteligência Artificial", 4 => "Visão Computacional e Robótica", 5 => "Redes e Telecomunicações", 6 => "Otimização Algorítmica e Complexidade");
-			
 $arrayTipoDefesa = array('1' => "Mestrado", '2' => "Doutorado");
-
-//$status_banc = array (0 => "Banca Indeferida", 1 => "Banca Deferida", NULL => "Banca Não Avaliada");
-
 $array_funcao = array ('P' => "Presidente",'E' => "Membro Externo", 'I' => "Membro Interno");
-
-
 $justificativa="";
 $nome_orientador = "";
 
@@ -56,29 +45,7 @@ else if(($sucesso == false AND $sucesso !=NULL) OR ($sucesso2 == false AND $suce
 }
 
 
-function tipoDefesa($tipoDefesa){
-
-	switch ($tipoDefesa) {
-		case 'Q1':
-			return "Exame de Qualificação 1";
-			break;
-		case 'Q2':
-			return "Qualificação 2";
-			break;
-		case 'T':
-
-			return "Tese";
-			break;
-
-		case 'D':
-
-			return "Dissertação";
-			break;
-		default:
-			break;
-	}
-
-}
+$tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Qualificação II", 'T' => "Tese", 'D' => "Dissertação");
 
 
 ?>
@@ -128,14 +95,15 @@ function tipoDefesa($tipoDefesa){
 		<div class="toolbar-list" id="toolbar">
 		  <div class="cpanel2">
 				<form method="post" id="formAvaliacao" name="form" enctype="multipart/form-data" action="index.php?option=com_controledefesas&view=conceitos" >
-					<div <?php if(($Defesa[0]->conceito != '') || ($Defesa[0]->data > (date('Y/m/d'))) || ($Defesa[0]->banca_id == 0)  ||   ($Defesa[0]->tipoDefesa = 'T' OR $Defesa[0]->tipoDefesa = 'D')  && ($Defesa[0]->status_banca == NULL)  ) {  ?> style="display: none;" <?php } ?> class="icon" id="toolbar-back">
+					<!--<div <?php if(($Defesa[0]->conceito != '') || ($Defesa[0]->data > (date('Y/m/d'))) || ($Defesa[0]->banca_id == 0)  ||   ($Defesa[0]->tipoDefesa == 'T' OR $Defesa[0]->tipoDefesa == 'D')  && ($Defesa[0]->status_banca == NULL)  ) {  ?> style="display: none;" <?php } ?> class="icon" id="toolbar-back"> -->
+					<div class="icon" id="toolbar-back">
 						<a href ="javascript:aprovar(document.form)" class = 'toolbar'>
-						<span class="icon-32-apply"></span>Aprovar</a>
+						<span class="icon-32-apply"></span>Conceito:<br>Aprovar</a>
 					</div>
-				
-					<div <?php if(($Defesa[0]->conceito != '') || ($Defesa[0]->data > (date('Y/m/d')))  || ($Defesa[0]->banca_id == 0)  ||  ($Defesa[0]->tipoDefesa = 'T' OR $Defesa[0]->tipoDefesa = 'D')  && ($Defesa[0]->status_banca == NULL)    ) { ?> style="display: none;"<?php } ?>  class="icon" id="indeferir">
+					<!-- <div <?php if(($Defesa[0]->conceito != '') || ($Defesa[0]->data > (date('Y/m/d')))  || ($Defesa[0]->banca_id == 0)  ||  ($Defesa[0]->tipoDefesa == 'T' OR $Defesa[0]->tipoDefesa == 'D')  && ($Defesa[0]->status_banca == NULL)    ) { ?> style="display: none;"<?php } ?>  class="icon" id="indeferir"> -->
+					<div class="icon" id="indeferir">
 						<a href ="javascript:reprovar(document.form)" class = 'toolbar'>
-						<span class="icon-32-delete"></span>Reprovar</a>
+						<span class="icon-32-delete"></span>Conceito:<br>Reprovar</a>
 				   </div>
 
 				   <div class="icon" id="toolbar-back">
@@ -159,7 +127,6 @@ function tipoDefesa($tipoDefesa){
 	</div>
 </div>
 
-<?php //var_dump($emails); ?>
 
 <h2>Dados do Aluno</h2>
 <hr />
@@ -195,7 +162,7 @@ function tipoDefesa($tipoDefesa){
 
 	<br>
 
-<h2>Dados da Defesa - <?php echo (tipoDefesa($Defesa[0]->tipoDefesa));  ?> </h2>
+<h2>Dados da Defesa - <?php echo $tipoDefesa[$Defesa[0]->tipoDefesa];  ?> </h2>
 <hr />
 	<table style='text-align: left; width: 100%;' border='1' cellpadding='3' cellspacing='0'>
 	  <tbody>
@@ -258,7 +225,7 @@ function tipoDefesa($tipoDefesa){
 					  </td>
 					  <td align='center'>  
 					  	<a href ="index.php?option=com_controledefesas&view=declaracao&idMembro=<?php echo $membro->id?>&idDefesa=<?php echo $Defesa[0]->idDefesa?>&funcao=<?php echo $membro->funcao?>" TARGET="_blank"x>
-					  		<img src="components/com_controledefesas/assets/images/declaracao.jpg" border="0" title='Declaração de Comparecimento'> 
+					  		<img src="components/com_controledefesas/assets/images/declaracao.jpg" border="0" title='Declaração de Participação'> 
 					  	</a>
 					  </td>
 					  <td align='center'><?php echo $membro->nome; echo ' '.$membro->id;?></td>
@@ -278,6 +245,7 @@ function tipoDefesa($tipoDefesa){
 
 
 	if ((date('Y/m/d'))  < ($Defesa[0]->data)){
+		
 	?>
 		<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
 		alert ("Observações.:\n\n  -Não é possivel lançar o conceito, pois a defesa ainda não foi realizada.");
@@ -295,7 +263,7 @@ function tipoDefesa($tipoDefesa){
 	<?php 
 	}
 
-	else if (($Defesa[0]->banca_id == NULL || $Defesa[0]->banca_id == 0) AND (($Aluno[0]->curso == 1 AND $Defesa[0]->tipoDefesa == 'Q1') || ($Aluno[0]->curso == 2 AND $Defesa[0]->tipoDefesa == 'Q2' )  || ($Aluno[0]->curso == 1 AND $Defesa[0]->tipoDefesa == 'D')  || ($Aluno[0]->curso == 2 AND $Defesa[0]->tipoDefesa == 'T' ))){ 
+	else if (($Defesa[0]->banca_id == NULL || $Defesa[0]->banca_id == 0) && (($Aluno[0]->curso == 1 && $Defesa[0]->tipoDefesa == 'Q1') || ($Aluno[0]->curso == 2 && $Defesa[0]->tipoDefesa == 'Q2' )  || ($Aluno[0]->curso == 1 && $Defesa[0]->tipoDefesa == 'D')  || ($Aluno[0]->curso == 2 && $Defesa[0]->tipoDefesa == 'T' ))){ 
 	?>
 		<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
 		alert ("Observações.:\n\n  -Ainda não é possivel lançar o conceito, pois não consta no Banco de Dados a existência de uma Banca Avaliadora.");
@@ -303,7 +271,7 @@ function tipoDefesa($tipoDefesa){
 	<?php 
 	}
 
-		else if(($Defesa[0]->tipoDefesa == 'T' OR $Defesa[0]->tipoDefesa == 'D')  && ($Defesa[0]->status_banca == NULL AND $Defesa[0]->banca_id != 0)){
+		else if(($Defesa[0]->tipoDefesa == 'T' || $Defesa[0]->tipoDefesa == 'D')  && ($Defesa[0]->status_banca == NULL && ($Defesa[0]->banca_id != 0 || $Defesa[0]->banca_id != NULL ))){
 	?>
 		<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
 		alert ("Observações.:\n\n  -Ainda não é possivel lançar o conceito, pois a Banca Avaliadora ainda não foi aprovada pelo Coordenador.")
@@ -312,9 +280,7 @@ function tipoDefesa($tipoDefesa){
 	<?php 
 	}
 	
-
-	var_dump($Defesa);
-	?>
+?>
 
 <div id="box-toggle" class="box">
 <div class="tgl"></div></div>

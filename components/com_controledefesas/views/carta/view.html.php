@@ -21,7 +21,7 @@ class ControledefesasViewCarta extends JViewLegacy
 			$status = JRequest::getVar('status');
 			$status2 = JRequest::getVar('status2');
 			$idAluno = JRequest::getvar('idAluno');
-			$idBanca = JRequest::getVar('idBanca');
+			$idMembro = JRequest::getVar('idMembro');
 			
 			$this->status = $status;
 			$this->status2 = $status2;
@@ -32,11 +32,9 @@ class ControledefesasViewCarta extends JViewLegacy
 			
 			$model = $this->getModel();
 			
-			//$this->conceito = $model->updateConceito($idAluno);
-			$this->banca = $model->visualizarBanca($idBanca);
-			$this->aluno = $model->visualizarAluno($idAluno);
-			$this->defesa = $model->visualizarDefesa($idDefesa);
-			$this->membrosBanca = $model->visualizarMembrosBanca($idDefesa);
+
+			$this->alunos = $model->visualizarDefesa($idDefesa);
+			$this->banca = $model->visualizarNomeMembro($idMembro);
 				
 			parent::display($tpl);
         }

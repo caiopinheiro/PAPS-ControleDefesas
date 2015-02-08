@@ -20,12 +20,13 @@ $document = &JFactory::getDocument();
 
 $Banca = $this->banca;
 $Aluno = $this->aluno;
-$Defesa = $this->defesa;
-$MembrosBanca = $this->membrosBanca;
+$alunos = $this->alunos;
+$banca = $this->banca;
+
 
 $idDefesa= JRequest::getVar('idDefesa'); 
-$idAluno = JRequest::getVar('idAluno'); 
-
+$idMembro = JRequest::getVar('idMembro'); 
+$funcao = JRequest::getVar('funcao'); 
 
 
 $linha_pes = array(0 => "Todos", 1 => "Banco de Dados e Recuperação da Informação", 2 => "Sistemas Embarcados & Engenharia de Software", 3 => "Inteligência Artificial", 4 => "Visão Computacional e Robótica", 5 => "Redes e Telecomunicações", 6 => "Otimização Algorítmica e Complexidade");
@@ -56,276 +57,143 @@ else if(($sucesso == false AND $sucesso !=NULL) OR ($sucesso2 == false AND $suce
 }
 
 
-function tipoDefesa($tipoDefesa){
+//function imprimirDeclaracao($idMembro, $idDefesa, $funcao) {
+function imprimirDeclaracao($alunos, $banca, $funcao) {
 
-	switch ($tipoDefesa) {
-		case 'Q1':
-			return "Exame de Qualificação 1";
-			break;
-		case 'Q2':
-			return "Qualificação 2";
-			break;
-		case 'T':
+	require('fpdf/fpdf.php');
+	//configurações iniciais
 
-			return "Tese";
-			break;
+	class PDF extends FPDF
+	{
+		function Header()
+		{
+			$this->Image('components/com_portalsecretaria/images/logo-brasil.jpg', 10, 7, 32.32);
+			$this->Image('components/com_portalsecretaria/images/ufam.jpg', 175, 7, 25.25);
 
-		case 'D':
+			//exibe o cabecalho do documento
+			$this->SetFont("Helvetica",'B', 12);
+			$this->MultiCell(0,5,"PODER EXECUTIVO",0, 'C');
+			$this->SetFont("Helvetica",'B', 10);
+			$this->MultiCell(0,5,utf8_decode("MINISTÉRIO DA EDUCAÇÃO"),0, 'C');
+			$this->MultiCell(0,5,utf8_decode("INSTITUTO DE COMPUTAÇÃO"),0, 'C');
+			$this->MultiCell(0,5,"",0, 'C');
+			$this->MultiCell(0,5,utf8_decode("PROGRAMA DE PÓS-GRADUAÇÃO EM INFORMÁTICA"),0, 'C');
+			$this->SetDrawColor(0,0,0);
+			$this->Line(10,42,200,42);
+			$this->ln( 7 );
+		}
 
-			return "Dissertação";
-			break;
-		default:
-			break;
+		function Footer()
+		{
+			$this->Line(10,285,200,285);
+			$this->SetFont('Helvetica','I',8);
+			$this->SetXY(10, 281);
+			$this->MultiCell(0,5,"",0, 'C');
+			$this->MultiCell(0,4,utf8_decode("Av. Rodrigo Otávio, 6.200 - Campus Universitário Senador Arthur Virgílio Filho - CEP 69077-000 - Manaus, AM, Brasil"),0, 'C');
+			$this->MultiCell(0,4," Tel. (092) 3305 1193         E-mail: secretariappgi@icomp.ufam.edu.br          www.ppgi.ufam.edu.br",0, 'C');
+			$this->Image('components/com_portalsecretaria/images/icon_telefone.jpg', '40', '290');
+			$this->Image('components/com_portalsecretaria/images/icon_email.jpg', '73', '290');
+			$this->Image('components/com_portalsecretaria/images/icon_casa.jpg', '134', '290');
+		}
 	}
+//	$database = & JFactory :: getDBO();
 
+	$curso = array (
+		'Q' => 'DISSERTAÇÃO',
+		'T' => 'TESE'
+	);
+	
+	$mes = array (
+		"01" => "Janeiro",
+		"02" => "Fevereiro",
+		"03" => "Março",
+		"04" => "Abril",
+		"05" => "Maio",
+		"06" => "Junho",
+		"07" => "Julho",
+		"08" => "Agosto",
+		"09" => "Setembro",
+		"10" => "Outubro",
+		"11" => "Novembro",
+		"12" => "Dezembro"
+	);
+/*
+	$sql = "SELECT nome FROM #__membrosbanca WHERE id = $idMembro";
+	$database->setQuery($sql);
+	$banca = $database->loadObjectList();
+
+	$sql = "SELECT a.nome, titulo,tipoDefesa,data,horario,local,curso FROM #__defesa as d JOIN #__aluno as a on a.id = d.aluno_id WHERE idDefesa = ".$idDefesa;
+	$database->setQuery($sql);
+	$alunos = $database->loadObjectList();
+*/
+	$chave = md5($alunos[0]->id . $alunos[0]->nome . date("l jS \of F Y h:i:s A"));
+
+	//$pdf = new FPDF('P','cm','A4');
+	$pdf = new PDF();
+	$pdf->Open();
+	$pdf->AddPage();
+
+	//titulos de configuração do documento
+	$pdf->SetTitle(utf8_decode("Declaração de Participação"));
+	
+	// OBTENDO OS DADOS A SEREM PREENCHIDOS
+	
+	$nome = utf8_decode($alunos[0]->nome);	
+	if ($alunos[0]->tipoDefesa == 'Q1' || $alunos[0]->tipoDefesa == 'Q2') {	
+		$data = explode("/",$alunos[0]->data);
+		$titulo = $alunos[0]->titulo;
+		$hora = $alunos[0]->horario;
+		if ($alunos[0]->curso == 2){
+			$complemento = "Doutorado";
+			$complemento2 = "Exame de Qualificação de Doutorado";
+		}
+		else{
+			$complemento = "Mestrado";
+			$complemento2 = "Exame de Qualificação de Mestrado";
+		}
+	}
+	else{
+		$data = explode("/",$alunos[0]->data);	
+		$titulo = $alunos[0]->titulo;
+		$hora = $alunos[0]->horario;
+		if ($alunos[0]->curso == 2){
+			$complemento2 = "Tese de Doutorado";
+			$complemento = "Doutorado";
+		}
+		else if ($alunos[0]->curso == 1){
+			$complemento2= "Dissertação de Mestrado";
+			$complemento = "Mestrado";
+		}
+	}
+	// OBTENDO OS DADOS A SEREM PREENCHIDOS
+	
+	$pdf->SetFont("Helvetica",'B', 14);
+	$pdf->MultiCell(0,7,"",0, 'C');
+	$pdf->MultiCell(0,5,utf8_decode('DECLARAÇÃO'),0, 'C');
+	$pdf->MultiCell(0,8,"",0, 'C');
+	$pdf->MultiCell(0,8,"",0, 'C');
+	$pdf->MultiCell(0,8,"",0, 'C');
+	
+	if ($funcao == "P")
+        	$participacao = "presidente/orientador(a)";
+	else if ($funcao == "I")
+        	$participacao = "membro interno";
+	else if ($funcao == "E")
+        	$participacao = "membro externo";
+
+	$tag = "DECLARAMOS para os devidos fins que o(a) ".$banca[0]->nome." fez parte, na qualidade de ".$participacao.", da comissão julgadora da defesa de ".$complemento2." do(a) aluno(a) ".utf8_decode($nome).", intitulada \"".$titulo."\", do curso de ".$complemento." em Informática do Programa de Pós-Graduação em Informática da Universidade Federal do Amazonas, realizada no dia ".date('d',(strtotime($data[0])))." de ". $mes[date('m',(strtotime($data[0])))]." de ".date('Y',(strtotime($data[0])))." às ".$hora.".";
+	$pdf->SetFont("Helvetica",'', 12);
+	$pdf->MultiCell(0,10,utf8_decode($tag),0, 'J');
+
+
+	ob_clean(); // Limpa o buffer de saída
+	//cria o arquivo pdf e exibe no navegador
+	$pdf->Output('components/com_portalsecretaria/defesas/$chave.pdf','I');
+	exit;
+	
 }
 
+imprimirDeclaracao($alunos,$banca,$funcao);
 
 ?>
 
-<script type="text/javascript" src="/icomp/components/com_defesascoordenador/assets/jquery-ui-1.11.2.custom/jquery-ui.js"></script>
-
-<script language="JavaScript">
-       
-        function aprovar(form){        
-           var confirmar;
-           var deferir = 1;
-           
-           confirmar = window.confirm('Você tem certeza que deseja APROVAR esse(a) aluno(a)?');
-       
-           if(confirmar == true){
-				form.task.value = 'aprovar';
-				
-				form.submit(); // 'continuacao no arquivo de controller.php da raiz'
-
-           }
-        }
-						
-		function reprovar(form){        
-           var confirmar;
-           
-            
-           confirmar = window.confirm('Você tem certeza que deseja REPROVAR esse(a) aluno(a)?');
-			
-           if(confirmar == true){		
-				form.task.value = 'reprovar';
-				//form.avaliacao.value = deferir;
-				form.submit();
-           }
-           
-        }
-
-
-        function carta(form){
-
-        	alert('oi1');
-        }
-
-        function declaracao(form){
-
-			alert('oi2');
-
-        }
-
-</script>
-
-<link rel="stylesheet" type="text/css" href="components/com_portalprofessor/template.css"> 	
-<link rel="stylesheet" type="text/css" href="components/com_defesascoordenador/assets/jquery-ui-1.11.2.custom/jquery-ui.css"> 	
-
-
-
-<div id="toolbar-box">
-	<div class="m">
-		<div class="toolbar-list" id="toolbar">
-		  <div class="cpanel2">
-				<form method="post" id="formAvaliacao" name="form" enctype="multipart/form-data" action="index.php?option=com_controledefesas&view=conceitos" >
-					<div <?php if(($Defesa[0]->conceito != '') || ($Defesa[0]->data > (date('Y/m/d'))) || ($Defesa[0]->banca_id == 0)  ||   ($Defesa[0]->tipoDefesa = 'T' OR $Defesa[0]->tipoDefesa = 'D')  && ($Defesa[0]->status_banca == NULL)  ) {  ?> style="display: none;" <?php } ?> class="icon" id="toolbar-back">
-						<a href ="javascript:aprovar(document.form)" class = 'toolbar'>
-						<span class="icon-32-apply"></span>Aprovar</a>
-					</div>
-				
-					<div <?php if(($Defesa[0]->conceito != '') || ($Defesa[0]->data > (date('Y/m/d')))  || ($Defesa[0]->banca_id == 0)  ||  ($Defesa[0]->tipoDefesa = 'T' OR $Defesa[0]->tipoDefesa = 'D')  && ($Defesa[0]->status_banca == NULL)    ) { ?> style="display: none;"<?php } ?>  class="icon" id="indeferir">
-						<a href ="javascript:reprovar(document.form)" class = 'toolbar'>
-						<span class="icon-32-delete"></span>Reprovar</a>
-				   </div>
-
-				   <div class="icon" id="toolbar-back">
-						<a href="index.php?option=com_controledefesas&view=listabancas">
-						<span class="icon-32-back"></span>Voltar</a>
-				   </div>
-				   
-				   <input name='task' type='hidden' value='display'>
-				   <input name='idDefesa' type='hidden' value = <?php echo $idDefesa;?>>
-				   <input name='idAluno' type='hidden' value = <?php echo $idAluno;?>>
-				   <input name='avaliacao' type='hidden' value = ''>
-				   <input id="justificativa" name='justificativa' type='hidden' value = ''>
-				   <input id="emails" name='emails' type='hidden' value = <?php echo $emails;?>>
-				</form>   
-				
-		</div>
-		<div class="clr"></div>
-		</div>
-
-	<div class="pagetitle icon-48-user"><h2><?php echo $this->msg; ?></h2></div>
-	</div>
-</div>
-
-<?php //var_dump($emails); ?>
-
-<h2>Dados do Aluno</h2>
-<hr />
-
-	<table style='text-align: left; width: 100%;' border='1' cellpadding='3' cellspacing='0'>
-	  <tbody>
-		
-		<tr>
-		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>ALUNO:</td>
-		  <td colspan='3'><?php echo $Aluno[0]->nome_aluno; ?></td>
-		</tr>
-				
-		<tr>
-		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>LINHA DE PESQUISA:</td>
-		  <td colspan='3'><?php echo $linha_pes[$Aluno[0]->area];?></td>
-		</tr>
-		
-		<tr>
-		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>INGRESSO:</td>
-		  <td colspan='3'><?php echo $Aluno[0]->anoingresso;?></td>
-		</tr>
-		
-		
-		<tr>
-		  <td bgcolor="#B0B0B0" style='font-weight: bold;'>ORIENTADOR:</td>
-		  <td colspan='3' ><?php echo $Aluno[0]->nomeProfessor; ?></td>
-		</tr>
-		</tbody>
-	</table>
-
-
-	<br> 
-
-	<br>
-
-<h2>Dados da Defesa - <?php echo (tipoDefesa($Defesa[0]->tipoDefesa));  ?> </h2>
-<hr />
-	<table style='text-align: left; width: 100%;' border='1' cellpadding='3' cellspacing='0'>
-	  <tbody>
-
-		<tr>
-		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>TITULO:</td>
-		  <td colspan='3'><?php echo $Defesa[0]->titulo;?></td>
-		</tr>
-		
-		<tr>
-		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>RESUMO:</td>
-		  <td colspan='3'><?php echo $Defesa[0]->resumo;?></td>
-		</tr>
-		
-		<tr>
-		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>CURSO:</td>
-		  <td width='30%'><?php echo $arrayTipoDefesa[$Aluno[0]->curso];?></td>
-		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='25%'>Conceito Obtido:</td>
-		  <td width='25%'><?php if ($Defesa[0]->conceito == NULL) echo "<b> Conceito  NÃO Lançado </b>"; 
-		  	else echo $Defesa[0]->conceito;?> </td>
-		</tr>
-		
-
-	  </tbody>
-	</table>
-	
-	<?php
-
-	if ( $Defesa[0]->banca_id != 0 ){ 
-
-			?>
-		<h2>Dados da Comissão Examinadora</h2>
-		<hr />
-			
-			<table style='text-align: left; width: 100%;' border='1' cellpadding='3' cellspacing='0'>
-		      <tbody>
-		        <tr bgcolor='#B0B0B0'>
-		        <td style='text-align: center; font-weight: bold;' width='10%'>Carta de Agradecimento</td>		
-		          <td style='text-align: center; font-weight: bold;' width='10%'>Declaração de Participação</td>	
-		          <td style='text-align: center; font-weight: bold;' width='50%'>MEMBROS DA BANCA</td>
-		          <td style='text-align: center; font-weight: bold;' width='15%'>FILIAÇÃO</td>
-		          <td style='text-align: center; font-weight: bold;' width='15%'>FUNÇÃO</td>
-		        </tr>
-
-		        <?php
-		        if(isset ($MembrosBanca)){
-
-
-					foreach( $MembrosBanca as $membro )
-					{
-						if($membro->funcao == 'P')
-
-							$nome_orientador = $membro->nome;
-					?>
-					<tr>
-					  <td align='center'>  
-					  	<a href ="javascript:carta(document.form)">
-					  		<img src="components/com_controledefesas/assets/images/carta.jpg" border="0" title='Carta de Agradecimento'>  
-					  	</a>
-					  </td>
-					  <td align='center'>  
-					  	<a href ="javascript:declaracao(document.form)">
-					  		<img src="components/com_controledefesas/assets/images/declaracao.jpg" border="0" title='Declaração de Comparecimento'> 
-					  	</a>
-					  </td>
-					  <td align='center'><?php echo $membro->nome; echo ' '.$membro->id;?></td>
-					  <td align='center'><?php echo $membro->filiacao;?></td>
-					  <td align='center'><?php echo $array_funcao[$membro->funcao];?></td>   
-					</tr>
-						
-					<?php
-					}
-				}
-	} ?>
-    
-      </tbody>
-    </table>
-
-	<?php 
-
-
-	if ((date('Y/m/d'))  < ($Defesa[0]->data)){
-	?>
-		<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
-		alert ("Observações.:\n\n  -Não é possivel lançar o conceito, pois a defesa ainda não foi realizada.");
-		</SCRIPT>
-	<?php 
-	}
-
-	else if ($Defesa[0]->conceito != ''){ 
-	?>
-
-		<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
-		alert ("Observações.:\n\n  -Conceito já foi devidamente Lançado.");
-		</SCRIPT>;
-	
-	<?php 
-	}
-
-	else if (($Defesa[0]->banca_id == NULL || $Defesa[0]->banca_id == 0) AND (($Aluno[0]->curso == 1 AND $Defesa[0]->tipoDefesa == 'Q1') || ($Aluno[0]->curso == 2 AND $Defesa[0]->tipoDefesa == 'Q2' )  || ($Aluno[0]->curso == 1 AND $Defesa[0]->tipoDefesa == 'D')  || ($Aluno[0]->curso == 2 AND $Defesa[0]->tipoDefesa == 'T' ))){ 
-	?>
-		<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
-		alert ("Observações.:\n\n  -Ainda não é possivel lançar o conceito, pois não consta no Banco de Dados a existência de uma Banca Avaliadora.");
-		</SCRIPT>
-	<?php 
-	}
-
-		else if(($Defesa[0]->tipoDefesa == 'T' OR $Defesa[0]->tipoDefesa == 'D')  && ($Defesa[0]->status_banca == NULL AND $Defesa[0]->banca_id != 0)){
-	?>
-		<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
-		alert ("Observações.:\n\n  -Ainda não é possivel lançar o conceito, pois a Banca Avaliadora ainda não foi aprovada pelo Coordenador.")
-		</SCRIPT>
-
-	<?php 
-	}
-	
-
-	var_dump($MembrosBanca);
-	?>
-
-<div id="box-toggle" class="box">
-<div class="tgl"></div></div>
