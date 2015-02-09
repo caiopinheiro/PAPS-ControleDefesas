@@ -20,7 +20,7 @@ $tipo_banca = $this->tipo_banca;
 $nome_orientador = $this->nome_orientador;
 $linha_pesquisa = $this->linha_pesquisa;
 $tipo_curso = $this->tipo_curso;
-//$conceito = $this->conceito;
+
 
 
 if(($this->status_bancas == NULL) AND 
@@ -28,7 +28,7 @@ if(($this->status_bancas == NULL) AND
    ($this->tipo_banca == NULL) AND 
    ($this->nome_orientador == NULL) AND
    ($this->linha_pesquisa == NULL)){
-	$status_bancas = 2;
+	$status_bancas = 5;
 	$nome_aluno = '';
     $tipo_curso = 0;
 	$tipo_banca = 4;
@@ -71,27 +71,19 @@ if(($this->status_bancas == NULL) AND
         function folhaaprovacao(form){
            var idDefesaSelecionado = 0;
            var idAlunoSelec = 0;
-           var valorconceito = -1;
-          
+           
            for(i = 0;i < form.idDefesaSelec.length ;i++)
                 if(form.idDefesaSelec[i].checked){
                     idDefesaSelecionado = form.idDefesaSelec[i].value;  
                     idAlunoSelec = form.idAlunoSelec[i].value;
-                //  valorconceito = form.conceito[i].value;
-             }
-               
+                }
+                
            if(idDefesaSelecionado > 0){
                 form.task.value = 'folhaaprovacao'; 
                 form.idDefesa.value = idDefesaSelecionado;
                 form.idAluno.value = idAlunoSelec;
-              //  form.conceito.value = valorconceito;
-              //      if (valorconceito == 0){
-              //          alert ('Não é possivel visualizar a folha de aprovação, pois o conceito ainda não foi lançado.');
-              //     }
-              //      else { 
                 window.open(URL='index.php?option=com_controledefesas&task=folhaaprovacao&idDefesa='+idDefesaSelecionado+'&idAluno='+idAlunoSelec+'&lang=pt-br');
-              //      }
-            } else {
+           } else {
             alert('Ao menos 1 item deve ser selecionado para visualiza\xE7\xE3o.')
            }
         }
@@ -169,6 +161,9 @@ if(($this->status_bancas == NULL) AND
                         <option value="2" <?php if($status_bancas == 2) echo 'SELECTED';?>>Não Conceituadas</option>
                         <option value="1" <?php if($status_bancas == 1) echo 'SELECTED';?>>Conceituadas</option>
                         <option value="4" <?php if($status_bancas == 4) echo 'SELECTED';?>> Indeferidas - Coordenador</option>
+                        <option value="5" <?php if($status_bancas == 5) echo 'SELECTED';?>> Pendente apenas de Conceito</option>
+                        <option value="6" <?php if($status_bancas == 6) echo 'SELECTED';?>> Pendente deferimento Coordenador</option>
+                     <option value="7" <?php if($status_bancas == 7) echo 'SELECTED';?>> Pendente de Banca</option>
                         <option value="3" <?php if($status_bancas == 3) echo 'SELECTED';?>> Mostrar Todos</option>
                         
                     </select>
@@ -279,7 +274,6 @@ if(($this->status_bancas == NULL) AND
 					<td width='15'>
                                 <input type="radio" name="idDefesaSelec" value="<?php echo $defesa->idDefesa;?>">
                                 <input type="hidden" name="idAlunoSelec" value="<?php echo $defesa->idAluno;?>">
-                                <input type="hidden" name="conceito" value="<?php echo $valor_status2;?>">
                     </td>
 					<td><img border='0' src='components/com_controledefesas/assets/images/<?php echo $statusImg[$valor_status2];?>' width='15' height='16' title='<?php echo $status[$valor_status2];?>'></td>
 
@@ -308,7 +302,7 @@ if(($this->status_bancas == NULL) AND
      <input name='idAlunoSelec' type='hidden' value='0'/>
      <input name='idDefesa' type='hidden' value=''/>
      <input name= 'idAluno' type='hidden' value =''/>
-     <input name= 'valor' type='hidden' value =''/>
+   
 
      
 </form>
