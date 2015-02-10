@@ -253,7 +253,7 @@ else if(($sucesso == false AND $sucesso !=NULL) OR ($sucesso2 == false AND $suce
 
 
 <script>
-    jQuery("#buttonIndeferir").on('click', function(){
+    jQuery("#buttonIndeferir").click(function(){
 		var indeferir = 0;
         var form = $('formAvaliacao');
 
