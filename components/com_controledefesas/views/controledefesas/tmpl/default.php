@@ -19,13 +19,28 @@ $document->addScript("includes/js/joomla.javascript.js");
 	
 		<link rel="stylesheet" type="text/css" href="components/com_controledefesas/assets/css/template.css">
 		
+		<div class="icon-wrapper">
+			<div class="icon">
+				<a href="index.php?option=com_controledefesas&view=listabancas">
+				<img width="32" height="32" border="0" src="components/com_portalsecretaria/images/gerencia.png">
+				<span><?php echo JText::_( 'Gerenciar Defesas' ); ?></span></a>
+			</div>
+		</div>
+		
+		<div class="icon-wrapper">
+			<div class="icon">
+				<a href="index.php?option=com_portalsecretaria&Itemid=190&task=membrosbanca">
+				<img width="32" height="32" border="0" src="components/com_portalsecretaria/images/funcionario.png">
+				<span><?php echo JText::_( 'Membros de Banca' ); ?></span></a>
+			</div>
+		</div>
 		
 		<div class="icon-wrapper">
 			<div class="icon">
 				<a href="index.php?option=com_controledefesas&view=listabancas">
 				<img width="32" height="32" border="0" src="components/com_controledefesas/assets/images/aprovarcandidatos.png">
-				<span><?php echo JText::_( 'Consultar Bancas' ); ?></span></a>
+				<span><?php echo JText::_( 'Relatórios' ); ?></span></a>
 			</div>
 		</div>
-
+		
 </div>

@@ -30,9 +30,8 @@ class ControledefesasModelListaBancas extends JModelItem
         
       	    
 	    public function filtroBanca($status_banca, $nome_aluno, $tipo_curso, $nome_orientador, $tipo_banca, $linha_pesquisa) {
-			
 			$database =& JFactory::getDBO();
-			$sql_standard = "SELECT d.data as data , d.idDefesa, a.curso as curso, prof.nomeProfessor, a.orientador, prof.id ,bcd.id as idBanca, a.id as idAluno, bcd.status_banca, a.nome as nome_aluno, 
+			$sql_standard = "SELECT d.numDefesa, d.data as data , d.idDefesa, a.curso as curso, prof.nomeProfessor, a.orientador, prof.id ,bcd.id as idBanca, a.id as idAluno, bcd.status_banca, a.nome as nome_aluno, 
 							M.nome as nome_orientador, d.tipoDefesa as tipo_banca, a.area as linha_pesquisa, d.conceito as conceito
 					FROM ((((( j17_defesa as d JOIN  j17_aluno as a  ON d.aluno_id = a.id) LEFT JOIN j17_banca_controledefesas as bcd 
 					ON d.banca_id = bcd.id) LEFT JOIN j17_banca_has_membrosbanca AS MB ON bcd.id = MB.banca_id) LEFT JOIN j17_membrosbanca 
@@ -48,7 +47,7 @@ class ControledefesasModelListaBancas extends JModelItem
 			$sql_nome_orientador = '';
 			$sql_tipo_banca = '';
 			$sql_linha_pesquisa = '';
-			$sql_tipo_curso = ''; //
+			$sql_tipo_curso = ''; // falta fazer o tipo CURSO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			
 				
 			
@@ -67,6 +66,7 @@ class ControledefesasModelListaBancas extends JModelItem
 				$sql_tipo_curso = " AND curso = 3";
 	
 
+
 			if($status_banca == 2){					
 				$sql_status_banca = " AND (bcd.status_banca = '1' OR bcd.status_banca is NULL) AND (conceito = '' OR conceito is NULL)";
 				//' AND bcd.status_banca IS NULL';
@@ -77,8 +77,8 @@ class ControledefesasModelListaBancas extends JModelItem
 			else if($status_banca == 4 ){
 				$sql_status_banca = " AND (bcd.status_banca = '0')";
 			}
-			else if($status_banca == 5 ){
-				$sql_status_banca = " AND (d.banca_id <> '0' AND bcd.status_banca = '1')"; //pendente apenas de conceito
+			else if($status_banca == 5){
+				$sql_status_banca = " AND (d.banca_id <> '0' AND bcd.status_banca = '1')";
 			}
 			else if($status_banca == 6){
 				$sql_status_banca = " AND (d.banca_id <> '0' AND bcd.status_banca is NULL )";//pendente deferimento coordenador
@@ -115,5 +115,57 @@ class ControledefesasModelListaBancas extends JModelItem
 			$database->setQuery($sql);		
 			return $database->loadObjectList();
 	    
-		}        
+		}
+		
+		///Consultas para gerar ata
+		public function visualizarAluno($idDefesa){
+			$database =& JFactory::getDBO();
+			$sql = "SELECT a.nome as nome_aluno, a.curso FROM #__defesa AS d JOIN #__aluno AS a ON d.aluno_id = a.id WHERE d.idDefesa= ".$idDefesa;
+			$database->setQuery($sql);
+			return $database->loadObjectList();
+		}
+			
+		public function visualizarDefesa($idDefesa){
+			$database =& JFactory::getDBO();
+			$sql = "SELECT titulo, resumo, tipoDefesa, data, horario, local, numDefesa FROM j17_defesa  WHERE idDefesa= ".$idDefesa;
+			$database->setQuery($sql);
+			return $database->loadObjectList();
+		}
+		
+		public function visualizarMembrosBanca($idDefesa){
+			$database =& JFactory::getDBO();
+
+			$sql1 = "(select concat('Prof. ', p.nomeProfessor) nome, 'P' funcao, 'PPGI/UFAM' filiacao, p.email
+			from ((#__professores p join #__aluno a on a.orientador = p.id) join #__defesa d on d.aluno_id = a.id) join #__banca_controledefesas b on b.id = d.banca_id
+			where d.idDefesa = $idDefesa )";
+			
+			
+			$sql = "(SELECT mb.nome, bhmb.funcao, mb.filiacao, mb.email FROM  (#__banca_has_membrosbanca AS bhmb JOIN #__membrosbanca AS mb ON mb.id = bhmb.membrosbanca_id) JOIN #__defesa AS d ON bhmb.banca_id = d.banca_id WHERE d.idDefesa = ".$idDefesa. ')';
+			
+			$sql = $sql1 . 'UNION ' . $sql;
+			
+			
+	//		var_dump(%sql)
+			$database->setQuery($sql);
+			return $database->loadObjectList();
+		} 
+		
+		
+		//atualização do numero de defesa
+		public function updateNumDefesa($idDefesa,$numDefesa){
+			$database =& JFactory::getDBO();
+			$sql = "UPDATE #__defesa SET numDefesa='".$numDefesa."' WHERE idDefesa = ".$idDefesa;
+			$database->setQuery($sql);
+			
+			$sucesso = $database->Query();
+			return $sucesso;
+		}
+		// para validaçao do convite a ser gerado
+		public function visualizarBanca($idDefesa) {
+			$database =& JFactory::getDBO();
+			$sql = "SELECT status_banca, justificativa FROM #__banca_controledefesas JOIN #__defesa AS d ON id = d.banca_id WHERE d.idDefesa =".$idDefesa;
+			$database->setQuery($sql);
+			return $database->loadObjectList();
+		}
+		       
 }

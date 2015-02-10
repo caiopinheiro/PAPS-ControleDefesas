@@ -16,7 +16,7 @@ class ControledefesasViewConceitos extends JViewLegacy
 {
         // Overwriting JView display method
         function display($tpl = null){	
-			$this->msg = 'Defesa - Detalhes';
+			$this->msg = 'Aluno - Detalhes';
 			$idDefesa = JRequest::getVar('idDefesa');		
 			$status = JRequest::getVar('status');
 			$status2 = JRequest::getVar('status2');

@@ -26,7 +26,7 @@ $botao = 0;
 $linha_pes = array(0 => "Todos", 1 => "Banco de Dados e Recuperação da Informação", 2 => "Sistemas Embarcados & Engenharia de Software", 3 => "Inteligência Artificial", 4 => "Visão Computacional e Robótica", 5 => "Redes e Telecomunicações", 6 => "Otimização Algorítmica e Complexidade");
 $arrayTipoDefesa = array('1' => "Mestrado", '2' => "Doutorado");
 $array_funcao = array ('P' => "Presidente",'E' => "Membro Externo", 'I' => "Membro Interno");
-$justificativa="";
+$numDefesa=null;
 $nome_orientador = "";
 
 foreach( $MembrosBanca as $membro ){
@@ -110,7 +110,6 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 	       
 	           if(confirmar == true){
 					form.task.value = 'aprovar';
-					
 					form.submit(); // 'continuacao no arquivo de controller.php da raiz'
 
 	           }
@@ -135,12 +134,27 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
            
         }
 
-        function folhaaprovacao(form){
-                window.open(URL='index.php?option=com_controledefesas&task=folhaaprovacao&idDefesa='+<?php echo $idDefesa ?>+'&idAluno='+<?php echo $idAluno?>+'&lang=pt-br');
-            
+		function gerarAtaDefesa(form,idDefesa, num_defesa){        
+       	
+           if(num_defesa != null){
+				form.task.value = 'gerarAta'; 
+				form.idDefesa.value = idDefesa;
+				form.submit();
+           } 
+           else {
+			  alert('Defesa sem número! Por favor, coloque o número de defesa antes de gerar a ata.');
+		   }
+	    }
+	    
+	    function gerarConviteDefesa(form, idDefesa){               	
+			form.task.value = 'gerarConviteDefesa'; 
+			form.idDefesa.value = idDefesa;
+			form.submit();
+	    }
+	    
+	    function setarNumDefesa(form){        
+			jQuery( "#dialog-form" ).dialog();
         }
-
-
 
 </script>
 
@@ -155,26 +169,31 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 		  <div class="cpanel2">
 				<form method="post" id="formAvaliacao" name="form" enctype="multipart/form-data" action="index.php?option=com_controledefesas&view=conceitos" >
 					<!--<div <?php if(($Defesa[0]->conceito != '') || ($Defesa[0]->data > (date('Y/m/d'))) || ($Defesa[0]->banca_id == 0)  ||   ($Defesa[0]->tipoDefesa == 'T' OR $Defesa[0]->tipoDefesa == 'D')  && ($Defesa[0]->status_banca == NULL)  ) {  ?> style="display: none;" <?php } ?> class="icon" id="toolbar-back"> -->
-					
-					<div class="icon" id="toolbar-apply">
-	                    <a href="javascript:folhaaprovacao(document.form)" class="toolbar" title = "Funcionalidade que permite: 
-	                    -Imprimir folha de aprovação">
-	                    <span class="icon-32-apply"></span>Folha<br>Aprovação<br></a>
-	                </div>
-
-
-
 					<div class="icon" id="toolbar-back">
 						<a href ="javascript:aprovar(document.form)" class = 'toolbar'>
-							
 						<span class="icon-32-apply"></span>Conceito:<br>Aprovar</a>
 					</div>
 					<!-- <div <?php if(($Defesa[0]->conceito != '') || ($Defesa[0]->data > (date('Y/m/d')))  || ($Defesa[0]->banca_id == 0)  ||  ($Defesa[0]->tipoDefesa == 'T' OR $Defesa[0]->tipoDefesa == 'D')  && ($Defesa[0]->status_banca == NULL)    ) { ?> style="display: none;"<?php } ?>  class="icon" id="indeferir"> -->
 					<div class="icon" id="indeferir">
 						<a href ="javascript:reprovar(document.form)" class = 'toolbar'>
-						<span class="icon-32-delete"></span>Conceito:<br>Reprovar</a>
+						<span class="icon-32-deny"></span>Conceito:<br>Reprovar</a>
 				   </div>
 
+				   <div class="icon" id="setarNumDefesa">
+						<a href="javascript:setarNumDefesa(document.form)">
+						<span class="icon-32-edit"></span>Por Num</br>de Defesa</a>
+				   </div>
+
+				   <div class="icon" id="gerarAta">
+						<a href="javascript:gerarAtaDefesa(document.form, <?php echo $idDefesa;?> , <?php echo $Defesa[0]->numDefesa;?> )">
+						<span class="icon-32-print"></span>Gerar</br>Ata</a>
+				   </div>
+				   
+				   <div class="icon" id="gerarConvite">
+						<a href="javascript:gerarConviteDefesa(document.form, <?php echo $idDefesa;?>)">
+						<span class="icon-32-print"></span>Gerar</br>Convite</a>
+				   </div>
+				   
 				   <div class="icon" id="toolbar-back">
 						<a href="index.php?option=com_controledefesas&view=listabancas">
 						<span class="icon-32-back"></span>Voltar</a>
@@ -184,7 +203,7 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 				   <input name='idDefesa' type='hidden' value = <?php echo $idDefesa;?>>
 				   <input name='idAluno' type='hidden' value = <?php echo $idAluno;?>>
 				   <input name='avaliacao' type='hidden' value = ''>
-				   <input id="justificativa" name='justificativa' type='hidden' value = ''>
+				   <input id="numDefesa" name='numDefesa' type='hidden' value = ''>
 				   <input id="emails" name='emails' type='hidden' value = <?php echo $emails;?>>
 				</form>   
 				
@@ -223,10 +242,6 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 		  <td bgcolor="#B0B0B0" style='font-weight: bold;'>ORIENTADOR:</td>
 		  <td colspan='3' ><?php echo $Aluno[0]->nomeProfessor; ?></td>
 		</tr>
-		<tr>
-			<td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>CURSO:</td>
-		 	<td colspan='3'><?php echo $arrayTipoDefesa[$Aluno[0]->curso];?></td>
-		</tr>
 		</tbody>
 	</table>
 
@@ -249,30 +264,19 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>RESUMO:</td>
 		  <td colspan='3'><?php echo $Defesa[0]->resumo;?></td>
 		</tr>
+		
 		<tr>
-		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>Data:</td>
-		  <td ><?php echo $Defesa[0]->data ?> </td>
-		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>Data:</td>
-		  <td colspan='3'><?php echo $Defesa[0]->horario ?> </td>
-		</tr>
-		</tr>
-		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>Local: </td>
-		  <td colspan='3'><?php echo $Defesa[0]->local ?> </td>
-		</tr>
-		<tr>
-		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>Conceito Obtido:</td>
-		  <td colspan='3'><?php if ($Defesa[0]->conceito == NULL) echo " <font color = red ><b> Conceito não Lançado </b> </font>"; 
+		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>CURSO:</td>
+		  <td width='30%'><?php echo $arrayTipoDefesa[$Aluno[0]->curso];?></td>
+		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='25%'>Conceito Obtido:</td>
+		  <td width='25%'><?php if ($Defesa[0]->conceito == NULL) echo "<b> Conceito  NÃO Lançado </b>"; 
 		  	else echo $Defesa[0]->conceito;?> </td>
-		</tr>
-		</tr>
-		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'> Prévia: </td>
-		  <td colspan='3'> <a href = "" target = "_blank">  Download </a> </td>
 		</tr>
 		
 
 	  </tbody>
 	</table>
-	<br>
+	
 	<?php
 
 	if ( $Defesa[0]->banca_id != 0 ){ 
@@ -284,11 +288,11 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 			<table style='text-align: left; width: 100%;' border='1' cellpadding='3' cellspacing='0'>
 		      <tbody>
 		        <tr bgcolor='#B0B0B0'>
-		        <td style='text-align: center; font-weight: bold;' width='5%'></td>		
-		          <td style='text-align: center; font-weight: bold;' width='5%'></td>	
-		          <td style='text-align: center; font-weight: bold;' width='55%'>MEMBROS DA BANCA</td>
-		          <td style='text-align: center; font-weight: bold;' width='20%'>FILIAÇÃO</td>
-		          <td style='text-align: center; font-weight: bold;' width='20%'>FUNÇÃO</td>
+		        <td style='text-align: center; font-weight: bold;' width='10%'>Carta de Agradecimento</td>		
+		          <td style='text-align: center; font-weight: bold;' width='10%'>Declaração de Participação</td>	
+		          <td style='text-align: center; font-weight: bold;' width='50%'>MEMBROS DA BANCA</td>
+		          <td style='text-align: center; font-weight: bold;' width='15%'>FILIAÇÃO</td>
+		          <td style='text-align: center; font-weight: bold;' width='15%'>FUNÇÃO</td>
 		        </tr>
 
 		        <?php
@@ -312,7 +316,7 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 							<a href ="javascript:observacao(6)">
 					  	<?php } 
 					  	?>
-					  		<img src="components/com_controledefesas/assets/images/carta.png" border="0" title='Carta de Agradecimento'>  
+					  		<img src="components/com_controledefesas/assets/images/carta.jpg" border="0" title='Carta de Agradecimento'>  
 					  	</a>
 					  </td>
 					  <td align='center'>
@@ -324,7 +328,7 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 							<a href ="javascript:observacao(6)">
 					  	<?php } 
 					  	?>
-					  		<img src="components/com_controledefesas/assets/images/declaracao.png" border="0" title='Declaração de Participação'> 
+					  		<img src="components/com_controledefesas/assets/images/declaracao.jpg" border="0" title='Declaração de Participação'> 
 					  	</a>
 					  </td>
 					  <td align='center'><?php echo $membro->nome;?></td>
@@ -340,5 +344,53 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
       </tbody>
     </table>
 
+
 <div id="box-toggle" class="box">
 <div class="tgl"></div></div>
+
+<div id="dialog-form" title="Digitar o número de defesa" style='display:none'>
+ 
+  <form>
+    <fieldset>	
+		<table width="100%">	
+				<label>Digite o numero da defesa:</label>
+				<!--input type="text" rows="5" cols="10" name="justicaDialog" id="justicaDialog" class="text ui-widget-content ui-corner-all" value= </?php echo $justificativa; ?> --> 
+				<textarea name="numDefesa" id="numDefesa" value= '<?php echo $numDefesa; ?>' rows="50" cols="11" style="margin: 0px; width: 250px; height: 85px;" onkeypress='return SomenteNumero(event)'></textarea>
+		</table>
+    </fieldset>
+  </form>
+  <button id="buttonIndeferir" type="button" value="Salvar" class="btn btn-primary">
+		<i class="icone-search icone-white"></i> Salvar
+  </button>
+</div>
+
+<script>
+    jQuery("#buttonIndeferir").on('click', function(e){
+        var form = $('formAvaliacao');
+		
+		
+		if(jQuery('#numDefesa').value == ''){
+			alert('Voce precisa digitar o numero de defesa.')
+		}
+		else{
+			form.avaliacao.value = indeferir;
+			form.task.value = 'setarNumDefesa';
+			form.numDefesa.value = jQuery('#numDefesa').value;
+			form.submit();		
+		}
+	});
+	
+	
+	function SomenteNumero(e){
+		var tecla=(window.event)?event.keyCode:e.which;
+		if((tecla>47 && tecla<58)) 
+			return true;
+		else{
+			if (tecla==8 || tecla==0) 
+				return true;
+			else 
+				return false;
+		}
+	}	
+		
+</script>
