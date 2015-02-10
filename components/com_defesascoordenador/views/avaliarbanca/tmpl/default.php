@@ -79,7 +79,7 @@ else if(($sucesso == false AND $sucesso !=NULL) OR ($sucesso2 == false AND $suce
 						//alert("você fechou a janela");
 					}
 				});
-				jQuery( "#process" ).dialog( "open" ).html("<p>Enviando os dados...</p>");
+				jQuery( "#process" ).dialog( "open" ).html("<p>Aguarde, enviando os dados...</p>");
 				
 				
 				form.task.value = 'deferirBanca';
