@@ -30,6 +30,7 @@ class ControledefesasModelListaBancas extends JModelItem
         
       	    
 	    public function filtroBanca($status_banca, $nome_aluno, $tipo_curso, $nome_orientador, $tipo_banca, $linha_pesquisa) {
+			
 			$database =& JFactory::getDBO();
 			$sql_standard = "SELECT d.data as data , d.idDefesa, a.curso as curso, prof.nomeProfessor, a.orientador, prof.id ,bcd.id as idBanca, a.id as idAluno, bcd.status_banca, a.nome as nome_aluno, 
 							M.nome as nome_orientador, d.tipoDefesa as tipo_banca, a.area as linha_pesquisa, d.conceito as conceito
@@ -47,7 +48,7 @@ class ControledefesasModelListaBancas extends JModelItem
 			$sql_nome_orientador = '';
 			$sql_tipo_banca = '';
 			$sql_linha_pesquisa = '';
-			$sql_tipo_curso = ''; // falta fazer o tipo CURSO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			$sql_tipo_curso = ''; //
 			
 				
 			
@@ -66,7 +67,6 @@ class ControledefesasModelListaBancas extends JModelItem
 				$sql_tipo_curso = " AND curso = 3";
 	
 
-
 			if($status_banca == 2){					
 				$sql_status_banca = " AND (bcd.status_banca = '1' OR bcd.status_banca is NULL) AND (conceito = '' OR conceito is NULL)";
 				//' AND bcd.status_banca IS NULL';
@@ -77,8 +77,8 @@ class ControledefesasModelListaBancas extends JModelItem
 			else if($status_banca == 4 ){
 				$sql_status_banca = " AND (bcd.status_banca = '0')";
 			}
-			else if($status_banca == 5){
-				$sql_status_banca = " AND (d.banca_id <> '0' AND bcd.status_banca = '1')";
+			else if($status_banca == 5 ){
+				$sql_status_banca = " AND (d.banca_id <> '0' AND bcd.status_banca = '1')"; //pendente apenas de conceito
 			}
 			else if($status_banca == 6){
 				$sql_status_banca = " AND (d.banca_id <> '0' AND bcd.status_banca is NULL )";//pendente deferimento coordenador
