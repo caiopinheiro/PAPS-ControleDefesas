@@ -186,6 +186,18 @@ else if(($sucesso == false AND $sucesso !=NULL) OR ($sucesso2 == false AND $suce
 		</tr>
 		
 		<tr>
+		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>LOCAL:</td>
+		  <td colspan='3'><?php echo $Defesa[0]->local;?></td>
+		</tr>
+		
+		<tr>
+		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>DATA:</td>
+		  <td width='30%'><?php echo formatarData($Defesa[0]->data);?></td>
+		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='25%'>HORÁRIO:</td>
+		  <td width='25%'><?php echo $Defesa[0]->horario;?></td>
+		</tr>
+		
+		<tr>
 		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>TIPO BANCA:</td>
 		  <td width='30%'><?php echo $arrayTipoDefesa[$Defesa[0]->tipoDefesa];?></td>
 		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='25%'>STATUS BANCA:</td>
