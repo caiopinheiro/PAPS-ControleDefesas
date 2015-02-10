@@ -36,11 +36,8 @@ class DefesasCoordenadorModelListaBancas extends JModelItem
 			FROM (((((j17_aluno as a JOIN j17_defesa as d ON d.aluno_id = a.id) 
 				JOIN j17_banca_controledefesas as bcd ON d.banca_id = bcd.id) JOIN j17_banca_has_membrosbanca AS MB ON bcd.id = MB.banca_id) 
                 JOIN j17_membrosbanca AS M ON MB.membrosbanca_id = M.id) join j17_professores p on a.orientador = p.id) 
-					where 1=1 ";
-	
-			// gambi bonita hein?
-
-//			 AND (d.tipoDefesa LIKE 'T' OR d.tipoDefesa LIKE 'D')
+					where (d.conceito is null or d.conceito = '') 
+			 AND (d.tipoDefesa LIKE 'T' OR d.tipoDefesa LIKE 'D')";
 			
 			$sql_status_banca = '';
 			$sql_nome_aluno = '';	
