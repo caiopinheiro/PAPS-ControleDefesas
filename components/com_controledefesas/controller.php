@@ -215,7 +215,7 @@ class ControledefesasController extends JController {
 		
 		$view = $this->getView('listabancas', 'html');
 		$model = $this->getModel('listabancas');	
-		$idDefesa = 125;//JRequest::getVar('idDefesa');
+		$idDefesa = JRequest::getVar('idDefesa');
 			
 		$view->membrosBanca = $model->visualizarMembrosBanca($idDefesa);
 		$view->defesa = $model->visualizarDefesa($idDefesa);

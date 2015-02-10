@@ -139,21 +139,18 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
         }
 
 		function gerarAtaDefesa(form,idDefesa, num_defesa){        
-       	
            if(num_defesa != null){
 				form.task.value = 'gerarAta'; 
 				form.idDefesa.value = idDefesa;
-				form.submit();
+				window.open(URL='index.php?option=com_controledefesas&task=gerarAta&idDefesa='+<?php echo $idDefesa ?>+'&lang=pt-br');
            } 
            else {
 			  alert('Defesa sem número! Por favor, coloque o número de defesa antes de gerar a ata.');
 		   }
 	    }
 	    
-	    function gerarConviteDefesa(form, idDefesa){               	
-			form.task.value = 'gerarConviteDefesa'; 
-			form.idDefesa.value = idDefesa;
-			form.submit();
+	    function gerarConviteDefesa(form, idDefesa){        			form.task.value = 'gerarConviteDefesa'; 
+			window.open(URL='index.php?option=com_controledefesas&task=gerarConviteDefesa&idDefesa='+<?php echo $idDefesa ?>+'&lang=pt-br');
 	    }
 	    
 	    function setarNumDefesa(form){        
@@ -171,7 +168,7 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 	<div class="m">
 		<div class="toolbar-list" id="toolbar">
 		  <div class="cpanel2">
-				<form method="post" id="formAvaliacao" name="form" enctype="multipart/form-data" action="index.php?option=com_controledefesas&view=conceitos" >
+				<form method="post" id="formAvaliacao" name="form" enctype="multipart/form-data" action="index.php?option=com_controledefesas&view=conceitos">
 					<!--<div <?php if(($Defesa[0]->conceito != '') || ($Defesa[0]->data > (date('Y/m/d'))) || ($Defesa[0]->banca_id == 0)  ||   ($Defesa[0]->tipoDefesa == 'T' OR $Defesa[0]->tipoDefesa == 'D')  && ($Defesa[0]->status_banca == NULL)  ) {  ?> style="display: none;" <?php } ?> class="icon" id="toolbar-back"> -->
 					<div class="icon" id="toolbar-back">
 						<a href ="javascript:aprovar(document.form)" class = 'toolbar'>
