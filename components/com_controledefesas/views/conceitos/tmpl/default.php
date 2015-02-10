@@ -149,7 +149,8 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 		   }
 	    }
 	    
-	    function gerarConviteDefesa(form, idDefesa){        			form.task.value = 'gerarConviteDefesa'; 
+	    function gerarConviteDefesa(form, idDefesa){        			
+	    	form.task.value = 'gerarConviteDefesa'; 
 			window.open(URL='index.php?option=com_controledefesas&task=gerarConviteDefesa&idDefesa='+<?php echo $idDefesa ?>+'&lang=pt-br');
 	    }
 	    
@@ -387,7 +388,7 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 </div>
 
 <script>
-    jQuery("#buttonIndeferir").on('click', function(e){
+    jQuery("#buttonIndeferir").click(function(){
         var form = $('formAvaliacao');
 		
 		
