@@ -99,7 +99,8 @@ class ControledefesasController extends JController {
 		
 		//$view = $this->getView('listabancas', 'html');
 		$model = $this->getModel('listabancas');	
-		$idDefesa = 125;//JRequest::getVar('idDefesa'); //alterar para a variaável $idDefesa depois
+		$idDefesa = JRequest::getVar('idDefesa');
+		$idAluno = JRequest::getVar('idAluno');
 			
 		$membrosBanca = $model->visualizarMembrosBanca($idDefesa);
 		$defesa = $model->visualizarDefesa($idDefesa);
@@ -195,6 +196,16 @@ class ControledefesasController extends JController {
 			$pdf->Output('components/com_controledefesas/convites/'.$chave.'.pdf','I');
 			
 			exit;	
+		}
+		else {
+			?>
+				<script>
+				alert('Não é possível Gerar Convite, pois a banca ainda não foi aprovada pelo Coordenador');
+					location.href='index.php?option=com_controledefesas&view=conceitos&idDefesa='+<?php echo $idDefesa?>+'&idAluno='+<?php echo $idAluno?>;
+				</script>
+
+			<?php
+			
 		}
 	}
 	

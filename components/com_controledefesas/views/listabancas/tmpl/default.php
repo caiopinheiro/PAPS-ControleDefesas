@@ -60,33 +60,12 @@ if(($this->status_bancas == NULL) AND
 				form.idDefesa.value = idDefesaSelecionado;
                 form.idAluno.value = idAlunoSelec;
 				//form.submit();
-                window.open(URL='index.php?option=com_controledefesas&task=conceitos&idDefesa='+idDefesaSelecionado+'&idAluno='+idAlunoSelec+'&lang=pt-br');
+                location.href='index.php?option=com_controledefesas&task=conceitos&idDefesa='+idDefesaSelecionado+'&idAluno='+idAlunoSelec+'&lang=pt-br';
            } else {
            	alert('Ao menos 1 item deve ser selecionado para visualiza\xE7\xE3o.')
            }
         }
 
-
-
-        function folhaaprovacao(form){
-           var idDefesaSelecionado = 0;
-           var idAlunoSelec = 0;
-           
-           for(i = 0;i < form.idDefesaSelec.length ;i++)
-                if(form.idDefesaSelec[i].checked){
-                    idDefesaSelecionado = form.idDefesaSelec[i].value;  
-                    idAlunoSelec = form.idAlunoSelec[i].value;
-                }
-                
-           if(idDefesaSelecionado > 0){
-                form.task.value = 'folhaaprovacao'; 
-                form.idDefesa.value = idDefesaSelecionado;
-                form.idAluno.value = idAlunoSelec;
-                window.open(URL='index.php?option=com_controledefesas&task=folhaaprovacao&idDefesa='+idDefesaSelecionado+'&idAluno='+idAlunoSelec+'&lang=pt-br');
-           } else {
-            alert('Ao menos 1 item deve ser selecionado para visualiza\xE7\xE3o.')
-           }
-        }
 
         function buscar(form){
             form.task.value = null; 
@@ -111,13 +90,6 @@ if(($this->status_bancas == NULL) AND
     <form method="post" name="form" enctype="multipart/form-data" action="index.php?option=com_controledefesas&view=listabancas" >
 		<div id="toolbar-box"><div class="m"><div class="toolbar-list" id="toolbar">
             <div class="cpanel2">
-                <div class="icon" id="toolbar-apply">
-                    <a href="javascript:folhaaprovacao(document.form)" class="toolbar" title = 
-                    "Funcionalidade que permite:
-                    -Imprimir folha de aprovação">
-                    <span class="icon-32-apply"></span>Folha<br>Aprovação<br></a>
-                </div>
-                
 
                 <div class="icon" id="toolbar-preview">
                     <a href="javascript:lancarconceito(document.form)" class="toolbar" title = 
@@ -163,7 +135,7 @@ if(($this->status_bancas == NULL) AND
                         <option value="4" <?php if($status_bancas == 4) echo 'SELECTED';?>> Indeferidas - Coordenador</option>
                         <option value="5" <?php if($status_bancas == 5) echo 'SELECTED';?>> Pendente apenas de Conceito</option>
                         <option value="6" <?php if($status_bancas == 6) echo 'SELECTED';?>> Pendente deferimento Coordenador</option>
-                     <option value="7" <?php if($status_bancas == 7) echo 'SELECTED';?>> Pendente de Banca</option>
+                        <option value="7" <?php if($status_bancas == 7) echo 'SELECTED';?>> Pendente de Banca</option>
                         <option value="3" <?php if($status_bancas == 3) echo 'SELECTED';?>> Mostrar Todos</option>
                         
                     </select>

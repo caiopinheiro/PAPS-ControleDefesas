@@ -96,6 +96,10 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 		}
 	}
 
+		function folhaaprovacao(form){
+                window.open(URL='index.php?option=com_controledefesas&task=folhaaprovacao&idDefesa='+<?php echo $idDefesa ?>+'&idAluno='+<?php echo $idAluno?>+'&lang=pt-br');
+        }
+
 
         function aprovar(form){        
            var confirmar;
@@ -176,9 +180,13 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 					<!-- <div <?php if(($Defesa[0]->conceito != '') || ($Defesa[0]->data > (date('Y/m/d')))  || ($Defesa[0]->banca_id == 0)  ||  ($Defesa[0]->tipoDefesa == 'T' OR $Defesa[0]->tipoDefesa == 'D')  && ($Defesa[0]->status_banca == NULL)    ) { ?> style="display: none;"<?php } ?>  class="icon" id="indeferir"> -->
 					<div class="icon" id="indeferir">
 						<a href ="javascript:reprovar(document.form)" class = 'toolbar'>
-						<span class="icon-32-deny"></span>Conceito:<br>Reprovar</a>
+						<span class="icon-32-delete"></span>Conceito:<br>Reprovar</a>
 				   </div>
-
+					<div class="icon" id="toolbar-apply">
+	                    <a href="javascript:folhaaprovacao(document.form)" class="toolbar" title = "Funcionalidade que permite: 
+	                    -Imprimir folha de aprovação">
+	                    <span class="icon-32-apply"></span>Folha<br>Aprovação<br></a>
+	                </div>
 				   <div class="icon" id="setarNumDefesa">
 						<a href="javascript:setarNumDefesa(document.form)">
 						<span class="icon-32-edit"></span>Por Num</br>de Defesa</a>
@@ -242,6 +250,10 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 		  <td bgcolor="#B0B0B0" style='font-weight: bold;'>ORIENTADOR:</td>
 		  <td colspan='3' ><?php echo $Aluno[0]->nomeProfessor; ?></td>
 		</tr>
+		<tr>
+			<td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>CURSO:</td>
+		 	<td colspan='3'><?php echo $arrayTipoDefesa[$Aluno[0]->curso];?></td>
+		</tr>
 		</tbody>
 	</table>
 
@@ -266,13 +278,26 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 		</tr>
 		
 		<tr>
-		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>CURSO:</td>
-		  <td width='30%'><?php echo $arrayTipoDefesa[$Aluno[0]->curso];?></td>
-		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='25%'>Conceito Obtido:</td>
-		  <td width='25%'><?php if ($Defesa[0]->conceito == NULL) echo "<b> Conceito  NÃO Lançado </b>"; 
-		  	else echo $Defesa[0]->conceito;?> </td>
+
+		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>Data:</td>
+		  <td ><?php echo $Defesa[0]->data ?> </td>
+		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>Horário:</td>
+		  <td colspan='1'><?php echo $Defesa[0]->horario ?> </td>
 		</tr>
-		
+		<tr>
+		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>Local: </td>
+		  <td ><?php echo $Defesa[0]->local ?> </td>
+		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>Conceito Obtido:</td>
+		  <td colspan='3'> <?php if ($Defesa[0]->conceito == NULL) echo "<font color = red ><b> Conceito não Lançado </b> </font>"; 
+		  	else echo $Defesa[0]->conceito; ?> 
+		  </td>
+		</tr>
+		<tr>
+		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'> Prévia: </td>
+		  <td colspan='3'> <a href = "" target = "_blank">  Download </a> </td>
+		</tr>
+
+		</tr>
 
 	  </tbody>
 	</table>
@@ -288,11 +313,11 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 			<table style='text-align: left; width: 100%;' border='1' cellpadding='3' cellspacing='0'>
 		      <tbody>
 		        <tr bgcolor='#B0B0B0'>
-		        <td style='text-align: center; font-weight: bold;' width='10%'>Carta de Agradecimento</td>		
-		          <td style='text-align: center; font-weight: bold;' width='10%'>Declaração de Participação</td>	
-		          <td style='text-align: center; font-weight: bold;' width='50%'>MEMBROS DA BANCA</td>
-		          <td style='text-align: center; font-weight: bold;' width='15%'>FILIAÇÃO</td>
-		          <td style='text-align: center; font-weight: bold;' width='15%'>FUNÇÃO</td>
+		          <td style='text-align: center; font-weight: bold;' width='5%'></td>		
+		          <td style='text-align: center; font-weight: bold;' width='5%'></td>	
+		          <td style='text-align: center; font-weight: bold;' width='55%'>MEMBROS DA BANCA</td>
+		          <td style='text-align: center; font-weight: bold;' width='20%'>FILIAÇÃO</td>
+		          <td style='text-align: center; font-weight: bold;' width='20%'>FUNÇÃO</td>
 		        </tr>
 
 		        <?php
@@ -316,7 +341,7 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 							<a href ="javascript:observacao(6)">
 					  	<?php } 
 					  	?>
-					  		<img src="components/com_controledefesas/assets/images/carta.jpg" border="0" title='Carta de Agradecimento'>  
+					  		<img src="components/com_controledefesas/assets/images/carta.png" border="0" title='Carta de Agradecimento'>  
 					  	</a>
 					  </td>
 					  <td align='center'>
@@ -328,7 +353,7 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 							<a href ="javascript:observacao(6)">
 					  	<?php } 
 					  	?>
-					  		<img src="components/com_controledefesas/assets/images/declaracao.jpg" border="0" title='Declaração de Participação'> 
+					  		<img src="components/com_controledefesas/assets/images/declaracao.png" border="0" title='Declaração de Participação'> 
 					  	</a>
 					  </td>
 					  <td align='center'><?php echo $membro->nome;?></td>

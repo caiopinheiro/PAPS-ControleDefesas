@@ -41,7 +41,7 @@ class ControledefesasViewListaBancas extends JViewLegacy
 			   ($this->nome_orientador == NULL) AND
 			   ($this->linha_pesquisa == NULL) AND
 			   ($this->tipo_curso == NULL)){
-				$status_bancas = 2;
+				$status_bancas = 5;
 				$nome_aluno = '';
 				$tipo_banca = 4;
 				$tipo_curso = 0;
