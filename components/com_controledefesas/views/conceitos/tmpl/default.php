@@ -94,6 +94,9 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 		else if (botao == 6){
 			alert ("Observação:\n\n  -Só é possivel imprimir a Carta de Agradecimento e Declaração de Participação após o DEFERIMENTO da Banca Avaliadora pelo Coordenador.");		
 		}
+		else if (botao == 7){
+			alert ("Observação:\n\n  -Só é possivel gerar a Ata, o Convite e por o Número de defesa após o DEFERIMENTO da Banca Avaliadora pelo Coordenador.");		
+		}
 	}
 
 		function folhaaprovacao(form){
@@ -178,25 +181,42 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 					<!-- <div <?php if(($Defesa[0]->conceito != '') || ($Defesa[0]->data > (date('Y/m/d')))  || ($Defesa[0]->banca_id == 0)  ||  ($Defesa[0]->tipoDefesa == 'T' OR $Defesa[0]->tipoDefesa == 'D')  && ($Defesa[0]->status_banca == NULL)    ) { ?> style="display: none;"<?php } ?>  class="icon" id="indeferir"> -->
 					<div class="icon" id="indeferir">
 						<a href ="javascript:reprovar(document.form)" class = 'toolbar'>
-						<span class="icon-32-delete"></span>Conceito:<br>Reprovar</a>
+						<span class="icon-32-deny"></span>Conceito:<br>Reprovar</a>
 				   </div>
-					<div class="icon" id="toolbar-apply">
-	                    <a href="javascript:folhaaprovacao(document.form)" class="toolbar" title = "Funcionalidade que permite: 
-	                    -Imprimir folha de aprovação">
-	                    <span class="icon-32-apply"></span>Folha<br>Aprovação<br></a>
-	                </div>
+
 				   <div class="icon" id="setarNumDefesa">
+				   	<?php if ($botao == 6) { ?>
 						<a href="javascript:setarNumDefesa(document.form)">
+					<?php
+					} else{ 
+							?> <a href ="javascript:observacao(7)"> <?php
+					} ?>
 						<span class="icon-32-edit"></span>Por Num</br>de Defesa</a>
 				   </div>
 
 				   <div class="icon" id="gerarAta">
+				   	<?php if ($botao == 6) { ?>
 						<a href="javascript:gerarAtaDefesa(document.form, <?php echo $idDefesa;?> , <?php echo $Defesa[0]->numDefesa;?> )">
+					<?php
+					} else{ 
+							?> <a href ="javascript:observacao(7)"> <?php
+					} ?>
 						<span class="icon-32-print"></span>Gerar</br>Ata</a>
 				   </div>
+
+					<div class="icon" id="toolbar-apply">
+	                    <a href="javascript:folhaaprovacao(document.form)" class="toolbar" title = "Funcionalidade que permite: 
+	                    -Imprimir folha de aprovação">
+	                    <span class="icon-32-print"></span>Folha<br>Aprovação<br></a>
+	                </div>
 				   
 				   <div class="icon" id="gerarConvite">
+				   	<?php if ($botao == 6) { ?>
 						<a href="javascript:gerarConviteDefesa(document.form, <?php echo $idDefesa;?>)">
+					<?php
+					} else{ 
+							?> <a href ="javascript:observacao(7)"> <?php
+					} ?>
 						<span class="icon-32-print"></span>Gerar</br>Convite</a>
 				   </div>
 				   
@@ -290,9 +310,9 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 		  	else echo $Defesa[0]->conceito; ?> 
 		  </td>
 		</tr>
-		<tr>
+		<tr> 
 		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'> Prévia: </td>
-		  <td colspan='3'> <a href = "" target = "_blank">  Download </a> </td>
+		  <td colspan='3'> <a href = "./index.php?option=com_defesasorientador/previas/a.pdf " target = "_blank">  Download </a> </td>
 		</tr>
 
 		</tr>
