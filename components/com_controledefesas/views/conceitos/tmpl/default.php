@@ -138,7 +138,7 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
            
         }
 
-		function gerarAtaDefesa(form,idDefesa, num_defesa){        
+		function gerarAtaDefesa(form,idDefesa){        
        	
            if(num_defesa != null){
 				form.task.value = 'gerarAta'; 
@@ -193,7 +193,7 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 				   </div>
 
 				   <div class="icon" id="gerarAta">
-						<a href="javascript:gerarAtaDefesa(document.form, <?php echo $idDefesa;?> , <?php echo $Defesa[0]->numDefesa;?> )">
+						<a href="javascript:gerarAtaDefesa(document.form, <?php echo $idDefesa;?>)">
 						<span class="icon-32-print"></span>Gerar</br>Ata</a>
 				   </div>
 				   

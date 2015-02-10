@@ -215,7 +215,7 @@ class ControledefesasController extends JController {
 		
 		$view = $this->getView('listabancas', 'html');
 		$model = $this->getModel('listabancas');	
-		$idDefesa = 125;//JRequest::getVar('idDefesa');
+		$idDefesa = JRequest::getVar('idDefesa');
 			
 		$view->membrosBanca = $model->visualizarMembrosBanca($idDefesa);
 		$view->defesa = $model->visualizarDefesa($idDefesa);
@@ -325,12 +325,15 @@ class ControledefesasController extends JController {
 			exit;
 		}
 		else{
-			echo '<script>';
-			echo 'alert("Defesa sem banca definida ainda.")';
-			echo '</script>';
-			
+			?>
+
+			<script>
+				alert("Defesa sem banca definida ainda.");
+			</script>
+			<?php
 			header('Refresh: index.php?option=com_controledefesas&view=listabancas');
 		}
 	}
 
 }
+?>
