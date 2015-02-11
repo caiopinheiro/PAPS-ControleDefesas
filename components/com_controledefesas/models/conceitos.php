@@ -29,13 +29,12 @@ class ControledefesasModelConceitos extends JModelItem
 		
 		public function visualizarDefesa($idDefesa){
 			$database =& JFactory::getDBO();
-
-			$sql = "SELECT  d.previa,horario, local, d.numDefesa, conceito, idDefesa, status_banca, titulo, d.data as data, banca_id, resumo, tipoDefesa FROM (#__defesa AS d LEFT JOIN #__banca_controledefesas AS bcd ON bcd.id = d.banca_id)  WHERE idDefesa= ".$idDefesa;
+			$sql = "SELECT  d.previa as previa, horario, local, d.numDefesa, d.conceito, idDefesa, status_banca, titulo, d.data as data, banca_id, resumo, tipoDefesa FROM (#__defesa AS d LEFT JOIN #__banca_controledefesas AS bcd ON bcd.id = d.banca_id)  WHERE idDefesa= ".$idDefesa;
 			$database->setQuery($sql); 
 			return $database->loadObjectList();
 		}
 
-		public function visualizarMembrosBanca($idDefesa){
+/*		public function visualizarMembrosBanca($idDefesa){
 			$database =& JFactory::getDBO();
 			$sql = "SELECT mb.nome, mb.id, bhmb.funcao, mb.filiacao FROM #__defesa as d JOIN #__banca_has_membrosbanca AS bhmb ON d.banca_id = bhmb.banca_id
 					JOIN #__membrosbanca AS mb ON mb.id = bhmb.membrosbanca_id 
@@ -43,7 +42,25 @@ class ControledefesasModelConceitos extends JModelItem
 			$database->setQuery($sql);
 			return $database->loadObjectList();
 		}
+*/
+		public function visualizarMembrosBanca($idDefesa){
+			$database =& JFactory::getDBO();
 
+			$sql1 = "(select concat('Prof. ', p.nomeProfessor) nome, 'P' funcao, 'PPGI/UFAM' filiacao, p.email, p.id, 'N' passagem
+			from ((#__professores p join #__aluno a on a.orientador = p.id) join #__defesa d on d.aluno_id = a.id) join #__banca_controledefesas b on b.id = d.banca_id
+			where d.idDefesa = $idDefesa )";
+			
+			
+			$sql = "(SELECT mb.nome, bhmb.funcao, mb.filiacao, mb.email, mb.id, bhmb.passagem FROM  (#__banca_has_membrosbanca AS bhmb JOIN #__membrosbanca AS mb ON mb.id = bhmb.membrosbanca_id) JOIN #__defesa AS d ON bhmb.banca_id = d.banca_id WHERE d.idDefesa = ".$idDefesa. ')';
+			
+			$sql = $sql1 . 'UNION ' . $sql;
+			
+			
+	//		var_dump(%sql)
+			$database->setQuery($sql);
+			return $database->loadObjectList();
+		}
+		
 		public function updateConceito($idAluno,$idDefesa,$escolha){
 			$database =& JFactory::getDBO();
 			$sql = "UPDATE #__defesa SET conceito='".$escolha."' WHERE aluno_id=".$idAluno." AND idDefesa = ".$idDefesa;
@@ -51,6 +68,15 @@ class ControledefesasModelConceitos extends JModelItem
 			
 			$sucesso = $database->Query();
 			return $sucesso;
+		}
+		
+		public function passagemMembrosBanca($idDefesa){
+			$database =& JFactory::getDBO();			
+			
+			$sql = "(SELECT mb.nome, bhmb.funcao, mb.filiacao, mb.email, bhmb.passagem FROM  #__banca_has_membrosbanca AS bhmb JOIN #__membrosbanca AS mb ON mb.id = bhmb.membrosbanca_id WHERE bhmb.banca_id = ".$idDefesa . ')';			
+			
+			$database->setQuery($sql);
+			return $database->loadObjectList();
 		}
 
 }

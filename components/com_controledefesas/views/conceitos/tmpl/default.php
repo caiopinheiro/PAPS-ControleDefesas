@@ -1,6 +1,3 @@
-
-
-
 <?php
 
 JHTML::_('behavior.mootools');
@@ -19,6 +16,8 @@ $Banca = $this->banca;
 $Aluno = $this->aluno;
 $Defesa = $this->defesa;
 $MembrosBanca = $this->membrosBanca;
+
+//var_dump($Defesa[0]->conceito);
 
 $idDefesa= JRequest::getVar('idDefesa'); 
 $idAluno = JRequest::getVar('idAluno'); 
@@ -53,10 +52,6 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 		$botao = 1;
 	}
 
-	else if ($Defesa[0]->conceito != ''){ 
-		$botao = 2;
-	}
-
 	else if (($Defesa[0]->banca_id == NULL || $Defesa[0]->banca_id == 0) && (($Aluno[0]->curso == 1 && $Defesa[0]->tipoDefesa == 'Q1') || ($Aluno[0]->curso == 2 && $Defesa[0]->tipoDefesa == 'Q2' )  || ($Aluno[0]->curso == 1 && $Defesa[0]->tipoDefesa == 'D')  || ($Aluno[0]->curso == 2 && $Defesa[0]->tipoDefesa == 'T' ))){ 
 		$botao = 3;
 
@@ -67,10 +62,37 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 	else if($Defesa[0]->status_banca == 0){
 		$botao = 5;
 	}
+	else if($Defesa[0]->status_banca == NULL){
+		$botao = 6;
+	}
+	else if ($Defesa[0]->conceito != ''){ 
+		$botao = 2;
+	}
 ?>
 
 
 <script type="text/javascript" src="/icomp/components/com_defesascoordenador/assets/jquery-ui-1.11.2.custom/jquery-ui.js"></script>
+
+<script type="text/javascript">
+	var dateDif = {
+	 dateDiff: function(strDate1,strDate2){
+		return (((Date.parse(strDate2))-(Date.parse(strDate1)))/(24*60*60*1000)).toFixed(0);
+		}
+	}
+
+	function diasEntreDatas(dataInicial, dataFinal) 
+	{
+	 var mes, dataAtual, dataInicial, arrDataInicial, novaDataInicial, diasEntreDatas;
+	 mes = new Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+
+	 arrDataFinal = dataFinal.split('/');
+	 arrDataInicial = dataInicial.split('/');
+	 novaDataInicial = mes[(arrDataInicial[1] - 1)] + ' ' + arrDataInicial[0] + ' ' + arrDataInicial[2];
+	 novaDataFinal = mes[(arrDataFinal[1] - 1)] + ' ' + arrDataFinal[0] + ' ' + arrDataFinal[2];
+	 diasEntreDatas = dateDif.dateDiff(novaDataInicial, novaDataFinal);
+	 return (diasEntreDatas);
+}
+</script>
 
 <script language="JavaScript">
        
@@ -109,7 +131,12 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
            var confirmar;
            var deferir = 1;
            var botao = <?php echo $botao?>;
-
+//		   var dataDefesa = '<?php echo date ('d/m/Y',(strtotime($Defesa[0]->data)));?>';		
+	//	   var date = '<?php echo date ('d/m/Y',(strtotime('new Date')));?>';
+			
+		//   var diferenca = diasEntreDatas(date,dataDefesa);
+			//alert(diferenca);
+			//return;
            	if (botao != 0){
            		observacao(botao);
            	}
@@ -158,9 +185,25 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 			window.open(URL='index.php?option=com_controledefesas&task=gerarConviteDefesa&idDefesa='+<?php echo $idDefesa ?>+'&lang=pt-br');
 	    }
 	    
-	    function setarNumDefesa(form){        
-			jQuery( "#dialog-form" ).dialog();
+	    function setarNumDefesa(form, numDefesa, conceito){ 
+		   if((conceito == null || conceito == '') && numDefesa == null ){
+				jQuery( "#dialog-form" ).dialog();
+           } 
+           else{
+			   if(conceito != null && conceito != ''){
+					alert('A defesa já possui um conceito lançado!');
+		       }
+		       else{
+				 alert('A defesa já possui um número registrado');
+			   }
+		  }
         }
+        
+        function enviarSolicitacaoPassagem(idDefesa){
+			form.task.value = 'enviarSolicitacao'; 
+			form.idDefesa.value = idDefesa;
+			form.submit();
+		}
 
 </script>
 
@@ -185,32 +228,13 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 						<span class="icon-32-deny"></span>Conceito:<br>Reprovar</a>
 				   </div>
 
-<<<<<<< HEAD
 				   <div <?php if ($Defesa[0]->tipoDefesa != 'T' AND $Defesa[0]->tipoDefesa != 'D'){ ?> style= 'display:none' <?php } ?> class="icon" id="setarNumDefesa">
-=======
-				   <div class="icon" id="setarNumDefesa">
->>>>>>> origin/master
-				   	<?php if ($botao == 6) { ?>
-						<a href="javascript:setarNumDefesa(document.form)">
-					<?php
-					} else{ 
-							?> <a href ="javascript:observacao(7)"> <?php
-					} ?>
+				   		<a href="javascript:setarNumDefesa(document.form, <?php echo $Defesa[0]->numDefesa;?>, '<?php $Defesa[0]->conceito;?>' )">
 						<span class="icon-32-edit"></span>Por Num</br>de Defesa</a>
 				   </div>
 
-<<<<<<< HEAD
 				   <div <?php if ($Defesa[0]->tipoDefesa != 'T' AND $Defesa[0]->tipoDefesa != 'D'){ ?> style= 'display:none' <?php } ?> class="icon" id="gerarAta">
-				   	<?php if ($botao != 6) { ?>
-=======
-				   <div class="icon" id="gerarAta">
-				   	<?php if ($botao == 6) { ?>
->>>>>>> origin/master
-						<a href="javascript:gerarAtaDefesa(document.form, <?php echo $idDefesa;?> , <?php echo $Defesa[0]->numDefesa;?> )">
-					<?php
-					} else{ 
-							?> <a href ="javascript:observacao(7)"> <?php
-					} ?>
+						<a href="javascript:gerarAtaDefesa(document.form, <?php echo $idDefesa;?>,<?php echo $Defesa[0]->numDefesa;?> )">
 						<span class="icon-32-print"></span>Gerar</br>Ata</a>
 				   </div>
 
@@ -221,16 +245,7 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 	                </div>
 				   
 				   <div class="icon" id="gerarConvite">
-<<<<<<< HEAD
-				   	<?php if ($botao != 6) { ?>
-=======
-				   	<?php if ($botao == 6) { ?>
->>>>>>> origin/master
 						<a href="javascript:gerarConviteDefesa(document.form, <?php echo $idDefesa;?>)">
-					<?php
-					} else{ 
-							?> <a href ="javascript:observacao(7)"> <?php
-					} ?>
 						<span class="icon-32-print"></span>Gerar</br>Convite</a>
 				   </div>
 				   
@@ -274,7 +289,7 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 		
 		<tr>
 		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>INGRESSO:</td>
-		  <td colspan='3'><?php echo $Aluno[0]->anoingresso;?></td>
+		  <td colspan='3'><?php echo date ('d/m/Y',(strtotime($Aluno[0]->anoingresso)));?></td>
 		</tr>
 		
 		
@@ -312,7 +327,7 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 		<tr>
 
 		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>Data:</td>
-		  <td ><?php echo $Defesa[0]->data ?> </td>
+		  <td > <?php echo date ('d/m/Y',(strtotime($Defesa[0]->data)));  ?> </td> 
 		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>Horário:</td>
 		  <td colspan='1'><?php echo $Defesa[0]->horario ?> </td>
 		</tr>
@@ -326,11 +341,7 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 		</tr>
 		<tr> 
 		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'> Prévia: </td>
-<<<<<<< HEAD
 		  <td colspan='3'> <a href = "components/com_defesasorientador/previas/<?php echo $Defesa[0]->previa; ?> " target = "_blank">  Download </a> </td>
-=======
-		  <td colspan='3'> <a href = "./index.php?option=com_defesasorientador/previas/a.pdf " target = "_blank">  Download </a> </td>
->>>>>>> origin/master
 		</tr>
 
 		</tr>
@@ -350,8 +361,10 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 		      <tbody>
 		        <tr bgcolor='#B0B0B0'>
 		          <td style='text-align: center; font-weight: bold;' width='5%'></td>		
+		          <td style='text-align: center; font-weight: bold;' width='5%'></td>
+		          <td style='text-align: center; font-weight: bold;' width='5%'></td>		
 		          <td style='text-align: center; font-weight: bold;' width='5%'></td>	
-		          <td style='text-align: center; font-weight: bold;' width='55%'>MEMBROS DA BANCA</td>
+		          <td style='text-align: center; font-weight: bold;' width='40%'>MEMBROS DA BANCA</td>
 		          <td style='text-align: center; font-weight: bold;' width='20%'>FILIAÇÃO</td>
 		          <td style='text-align: center; font-weight: bold;' width='20%'>FUNÇÃO</td>
 		        </tr>
@@ -368,6 +381,22 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 					?>
 					<tr>
 
+					  <td   align='center'>  
+					  	<?php if ($membro->passagem == 'S'){ ?>  
+					  	<a href="javascript:enviarSolicitacaoPassagem(document.form, <?php echo $idDefesa;?>)">
+					  	<img src="components/com_controledefesas/assets/images/emailButton.png" border="0" title='Enviar Solicitação de Passagem'>  
+					  	</a>
+					  	<?php }?>
+					  </td>
+					  
+					  <td align='center'>  
+						<?php if ($membro->passagem == 'S'){ ?>  
+					  	<a 	href ="components/com_controledefesas/relatorio_viagem/RELATORIO DE VIAGEM.doc" TARGET="_blank">
+						<img src="components/com_controledefesas/assets/images/Word-icon.png" border="0" title='Relatório de Viagem'>  
+					  	</a>
+					  	<?php }?>
+					  </td>
+					  
 					  <td align='center'>  
 					  	<?php if ($botao == 0 || $botao == 2) { ?>
 					  	<a 	href ="index.php?option=com_controledefesas&view=carta&idMembro=<?php echo $membro->id?>&idDefesa=<?php echo $Defesa[0]->idDefesa?>&funcao=<?php echo $membro->funcao?>" TARGET="_blank">
@@ -411,7 +440,7 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 
 <div id="dialog-form" title="Digitar o número de defesa" style='display:none'>
  
-  <form>
+  <form id= 'formNumDefesa'>
     <fieldset>	
 		<table width="100%">	
 				<label>Digite o numero da defesa:</label>
@@ -420,17 +449,13 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 		</table>
     </fieldset>
   </form>
-  <button id="buttonIndeferir" type="button" value="Salvar" class="btn btn-primary">
+  <button id="buttonSalvar" type="button" value="Salvar" class="btn btn-primary">
 		<i class="icone-search icone-white"></i> Salvar
   </button>
 </div>
 
 <script>
-<<<<<<< HEAD
-    jQuery("#buttonIndeferir").click(function(){
-=======
     jQuery("#buttonSalvar").click(function(){
->>>>>>> origin/master
         var form = $('formAvaliacao');
         var formNumDefesa = $('formNumDefesa');
 		

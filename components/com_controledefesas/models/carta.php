@@ -22,7 +22,7 @@ class ControledefesasModelCarta extends JModelItem
 		public function visualizarDefesa($idDefesa){
 			
 		$database =& JFactory::getDBO();
-		$sql = "SELECT a.nome, titulo,tipoDefesa,data,horario,local,curso FROM #__defesa as d JOIN #__aluno as a on a.id = d.aluno_id WHERE idDefesa = ".$idDefesa;
+		$sql = "SELECT a.nome, titulo,tipoDefesa,data,horario,local,curso, p.nomeProfessor FROM (#__defesa as d JOIN #__aluno as a on a.id = d.aluno_id) JOIN #__professores AS p ON a.orientador = p.id WHERE idDefesa = ".$idDefesa;
 		$database->setQuery($sql);
 		return $database->loadObjectList();
 

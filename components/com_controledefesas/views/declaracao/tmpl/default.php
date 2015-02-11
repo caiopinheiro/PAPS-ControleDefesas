@@ -1,5 +1,3 @@
-
-
 <?php
 
 JHTML::_('behavior.mootools');
@@ -38,8 +36,8 @@ $arrayTipoDefesa = array('1' => "Mestrado", '2' => "Doutorado");
 $array_funcao = array ('P' => "Presidente",'E' => "Membro Externo", 'I' => "Membro Interno");
 
 
-$justificativa="";
-$nome_orientador = "";
+$nome_membro = "";
+
 
 foreach( $MembrosBanca as $membro ){
 		if($membro->funcao == 'P')
@@ -174,14 +172,20 @@ function imprimirDeclaracao($alunos, $banca, $funcao) {
 	$pdf->MultiCell(0,8,"",0, 'C');
 	$pdf->MultiCell(0,8,"",0, 'C');
 	
-	if ($funcao == "P")
+	if ($funcao == "P"){
         	$participacao = "presidente/orientador(a)";
-	else if ($funcao == "I")
+        	$nome_membro = $alunos[0]->nomeProfessor;
+	}
+	else if ($funcao == "I"){
         	$participacao = "membro interno";
-	else if ($funcao == "E")
+        	$nome_membro = $banca[0]->nome;
+	}
+	else if ($funcao == "E"){
         	$participacao = "membro externo";
+        	$nome_membro = $banca[0]->nome;
+	}
 
-	$tag = "DECLARAMOS para os devidos fins que o(a) ".$banca[0]->nome." fez parte, na qualidade de ".$participacao.", da comissão julgadora da defesa de ".$complemento2." do(a) aluno(a) ".$nome.", intitulada \"".$titulo."\", do curso de ".$complemento." em Informática do Programa de Pós-Graduação em Informática da Universidade Federal do Amazonas, realizada no dia ".date('d',(strtotime($data[0])))." de ". $mes[date('m',(strtotime($data[0])))]." de ".date('Y',(strtotime($data[0])))." às ".$hora.".";
+	$tag = "DECLARAMOS para os devidos fins que o(a) ".$nome_membro." fez parte, na qualidade de ".$participacao.", da comissão julgadora da defesa de ".$complemento2." do(a) aluno(a) ".$nome.", intitulada \"".$titulo."\", do curso de ".$complemento." em Informática do Programa de Pós-Graduação em Informática da Universidade Federal do Amazonas, realizada no dia ".date('d',(strtotime($data[0])))." de ". $mes[date('m',(strtotime($data[0])))]." de ".date('Y',(strtotime($data[0])))." às ".$hora.".";
 	$pdf->SetFont("Helvetica",'', 12);
 	$pdf->MultiCell(0,10,utf8_decode($tag),0, 'J');
 
