@@ -31,12 +31,13 @@ class ControledefesasModelListaBancas extends JModelItem
       	    
 	    public function filtroBanca($status_banca, $nome_aluno, $tipo_curso, $nome_orientador, $tipo_banca, $linha_pesquisa) {
 			$database =& JFactory::getDBO();
-			$sql_standard = "SELECT d.numDefesa, d.data as data , d.idDefesa, a.curso as curso, prof.nomeProfessor, a.orientador, prof.id ,bcd.id as idBanca, a.id as idAluno, bcd.status_banca, a.nome as nome_aluno, 
-							M.nome as nome_orientador, d.tipoDefesa as tipo_banca, a.area as linha_pesquisa, d.conceito as conceito
+			$sql_standard = "SELECT  distinct d.idDefesa, d.numDefesa, d.data as data , a.curso as curso, prof.nomeProfessor, a.orientador, prof.id ,bcd.id as idBanca, a.id as idAluno, bcd.status_banca, a.nome as nome_aluno, 
+					d.tipoDefesa as tipo_banca, a.area as linha_pesquisa, d.conceito as conceito
 					FROM ((((( j17_defesa as d JOIN  j17_aluno as a  ON d.aluno_id = a.id) LEFT JOIN j17_banca_controledefesas as bcd 
 					ON d.banca_id = bcd.id) LEFT JOIN j17_banca_has_membrosbanca AS MB ON bcd.id = MB.banca_id) LEFT JOIN j17_membrosbanca 
 					AS M ON MB.membrosbanca_id = M.id) JOIN #__professores as prof ON prof.id = a.orientador)
-					WHERE (MB.funcao LIKE 'P' OR MB.funcao is null)";
+					WHERE 1=1";
+					//	)";
 					//AND (a.status = 0 OR a.status = 1 OR a.status = 5)
 					//essa ultima condicao referente ao a.status é para eliminar os alunos jubilados, desligados e desistente
 
@@ -78,11 +79,7 @@ class ControledefesasModelListaBancas extends JModelItem
 				$sql_status_banca = " AND (bcd.status_banca = '0')";
 			}
 			else if($status_banca == 5){
-<<<<<<< HEAD
-				$sql_status_banca = " AND (d.banca_id <> '0' AND bcd.status_banca = '1' AND (conceito is not null ))";
-=======
 				$sql_status_banca = " AND (d.banca_id <> '0' AND bcd.status_banca = '1' AND (conceito = '' ))";
->>>>>>> origin/master
 			}
 			else if($status_banca == 6){
 				$sql_status_banca = " AND (d.banca_id <> '0' AND bcd.status_banca is NULL )";//pendente deferimento coordenador
