@@ -408,17 +408,18 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 </div>
 
 <script>
-    jQuery("#buttonIndeferir").click(function(){
+    jQuery("#buttonSalvar").click(function(){
         var form = $('formAvaliacao');
+        var formNumDefesa = $('formNumDefesa');
 		
 		
-		if(jQuery('#numDefesa').value == ''){
+		if(formNumDefesa.numDefesa.value == ""){
 			alert('Voce precisa digitar o numero de defesa.')
 		}
 		else{
 			form.avaliacao.value = indeferir;
 			form.task.value = 'setarNumDefesa';
-			form.numDefesa.value = jQuery('#numDefesa').value;
+			form.numDefesa.value = formNumDefesa.numDefesa.value;
 			form.submit();		
 		}
 	});
