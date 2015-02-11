@@ -78,7 +78,11 @@ class ControledefesasModelListaBancas extends JModelItem
 				$sql_status_banca = " AND (bcd.status_banca = '0')";
 			}
 			else if($status_banca == 5){
+<<<<<<< HEAD
 				$sql_status_banca = " AND (d.banca_id <> '0' AND bcd.status_banca = '1' AND (conceito is not null ))";
+=======
+				$sql_status_banca = " AND (d.banca_id <> '0' AND bcd.status_banca = '1' AND (conceito = '' ))";
+>>>>>>> origin/master
 			}
 			else if($status_banca == 6){
 				$sql_status_banca = " AND (d.banca_id <> '0' AND bcd.status_banca is NULL )";//pendente deferimento coordenador

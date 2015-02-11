@@ -185,7 +185,11 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 						<span class="icon-32-deny"></span>Conceito:<br>Reprovar</a>
 				   </div>
 
+<<<<<<< HEAD
 				   <div <?php if ($Defesa[0]->tipoDefesa != 'T' AND $Defesa[0]->tipoDefesa != 'D'){ ?> style= 'display:none' <?php } ?> class="icon" id="setarNumDefesa">
+=======
+				   <div class="icon" id="setarNumDefesa">
+>>>>>>> origin/master
 				   	<?php if ($botao == 6) { ?>
 						<a href="javascript:setarNumDefesa(document.form)">
 					<?php
@@ -195,8 +199,13 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 						<span class="icon-32-edit"></span>Por Num</br>de Defesa</a>
 				   </div>
 
+<<<<<<< HEAD
 				   <div <?php if ($Defesa[0]->tipoDefesa != 'T' AND $Defesa[0]->tipoDefesa != 'D'){ ?> style= 'display:none' <?php } ?> class="icon" id="gerarAta">
 				   	<?php if ($botao != 6) { ?>
+=======
+				   <div class="icon" id="gerarAta">
+				   	<?php if ($botao == 6) { ?>
+>>>>>>> origin/master
 						<a href="javascript:gerarAtaDefesa(document.form, <?php echo $idDefesa;?> , <?php echo $Defesa[0]->numDefesa;?> )">
 					<?php
 					} else{ 
@@ -212,7 +221,11 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 	                </div>
 				   
 				   <div class="icon" id="gerarConvite">
+<<<<<<< HEAD
 				   	<?php if ($botao != 6) { ?>
+=======
+				   	<?php if ($botao == 6) { ?>
+>>>>>>> origin/master
 						<a href="javascript:gerarConviteDefesa(document.form, <?php echo $idDefesa;?>)">
 					<?php
 					} else{ 
@@ -313,7 +326,11 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 		</tr>
 		<tr> 
 		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'> Prévia: </td>
+<<<<<<< HEAD
 		  <td colspan='3'> <a href = "components/com_defesasorientador/previas/<?php echo $Defesa[0]->previa; ?> " target = "_blank">  Download </a> </td>
+=======
+		  <td colspan='3'> <a href = "./index.php?option=com_defesasorientador/previas/a.pdf " target = "_blank">  Download </a> </td>
+>>>>>>> origin/master
 		</tr>
 
 		</tr>
@@ -409,17 +426,22 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 </div>
 
 <script>
+<<<<<<< HEAD
     jQuery("#buttonIndeferir").click(function(){
+=======
+    jQuery("#buttonSalvar").click(function(){
+>>>>>>> origin/master
         var form = $('formAvaliacao');
+        var formNumDefesa = $('formNumDefesa');
 		
 		
-		if(jQuery('#numDefesa').value == ''){
+		if(formNumDefesa.numDefesa.value == ""){
 			alert('Voce precisa digitar o numero de defesa.')
 		}
 		else{
 			form.avaliacao.value = indeferir;
 			form.task.value = 'setarNumDefesa';
-			form.numDefesa.value = jQuery('#numDefesa').value;
+			form.numDefesa.value = formNumDefesa.numDefesa.value;
 			form.submit();		
 		}
 	});
