@@ -18,7 +18,6 @@ $Defesa = $this->defesa;
 $MembrosBanca = $this->membrosBanca;
 
 //var_dump($Defesa[0]->conceito);
-
 $idDefesa= JRequest::getVar('idDefesa'); 
 $idAluno = JRequest::getVar('idAluno'); 
 
@@ -230,7 +229,7 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 				   </div>
 
 				   <div <?php if ($Defesa[0]->tipoDefesa != 'T' AND $Defesa[0]->tipoDefesa != 'D'){ ?> style= 'display:none' <?php } ?> class="icon" id="setarNumDefesa">
-				   		<a href="javascript:setarNumDefesa(document.form, <?php echo $Defesa[0]->numDefesa;?>, '<?php $Defesa[0]->conceito;?>' )">
+				   		<a href="javascript:setarNumDefesa(document.form, <?php if ($Defesa[0]->numDefesa!==NULL && $Defesa[0]->numDefesa != 0) {echo $Defesa[0]->numDefesa;} else echo 'null';?>, '<?php $Defesa[0]->conceito;?>' )">
 						<span class="icon-32-edit"></span>Por Num</br>de Defesa</a>
 				   </div>
 
@@ -260,7 +259,7 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 				   <input name='idAluno' type='hidden' value = '<?php echo $idAluno;?>'>
 				   <input name='avaliacao' type='hidden' value = ''>
 				   <input id="numDefesa" name='numDefesa' type='hidden' value = ''>
-				   <input id="emails" name='emails' type='hidden' value = <?php echo $emails;?>>
+				   <input id="emails" name='emails' type='hidden' value ="<?php echo $emails;?>">
 				</form>   
 				
 		</div>
