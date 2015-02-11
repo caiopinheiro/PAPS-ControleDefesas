@@ -315,24 +315,23 @@ class ControledefesasController extends JController {
 		exit;
 	}
 	
-	public function enviarSolicitacaoPassagem(){
+	public function enviarSolicitacaoPassagem($idDefesa){
 		$view = $this->getView('conceitos', 'html');
 		$model = $this->getModel('conceitos');	
-		$idDefesa = JRequest::getVar('idDefesa');
+//		$idDefesa = JRequest::getVar('idDefesa');
 		
 		$view->membrosBanca = $model->visualizarMembrosBanca($idDefesa);
     	
 		$membrosBanca = $view->membrosBanca;
-		
+		$sucesso = false;
 		$emails = null;	
 			
 		$formSolicitacao = "Form_passagem_diarias.doc";
 			
 		foreach( $membrosBanca as $membro ){	
-			if($membro->passagem === 'S')
+			if($membro->passagem == 'S')
 				$emails[] = $membro->email;
 		}
-		var_dump($emails);
 	/*	echo "<pre>";
 		print_r($membrosBanca);
 		print_r($emails);	
@@ -372,16 +371,18 @@ class ControledefesasController extends JController {
 			
 			$path = "components/com_defesascoordenador/forms/".$formSolicitacao;
 			
-			return JUtility::sendMail($user->email, "IComp: Controle de Defesas", $email, utf8_decode($subject), utf8_decode($message), false, NULL, NULL, $path);
+			$sucesso= JUtility::sendMail($user->email, "IComp: Controle de Defesas", $email, utf8_decode($subject), utf8_decode($message), false, NULL, NULL, $path);
 		}
-
+		
+		return $sucesso;		
 	}
 	
 	public function enviarSolicitacao(){				
 		$idDefesa = JRequest::getVar('idDefesa');
 		$idAluno = JRequest::getVar('idAluno');
-		$status = $this->enviarSolicitacaoPassagem();				
-		//header('Location: index.php?option=com_controledefesas&view=conceitos&idAluno='.$idAluno.'&idDefesa='.$idDefesa.'&status='.$status);
+		$status = $this->enviarSolicitacaoPassagem($idDefesa);				
+	
+		header('Location: index.php?option=com_controledefesas&view=conceitos&idAluno='.$idAluno.'&idDefesa='.$idDefesa.'&status='.$status);
 	}
 	
 }

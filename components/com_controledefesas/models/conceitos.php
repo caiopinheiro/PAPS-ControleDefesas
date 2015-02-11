@@ -51,7 +51,7 @@ class ControledefesasModelConceitos extends JModelItem
 			where d.idDefesa = $idDefesa )";
 			
 			
-			$sql = "(SELECT mb.nome, bhmb.funcao, mb.filiacao, mb.email, mb.id, bhmb.passagem FROM  (#__banca_has_membrosbanca AS bhmb JOIN #__membrosbanca AS mb ON mb.id = bhmb.membrosbanca_id) JOIN #__defesa AS d ON bhmb.banca_id = d.banca_id WHERE d.idDefesa = ".$idDefesa. ')';
+			$sql = "(SELECT mb.nome, bhmb.funcao, mb.filiacao, mb.email, mb.id, bhmb.passagem FROM  (#__banca_has_membrosbanca AS bhmb JOIN #__membrosbanca AS mb ON mb.id = bhmb.membrosbanca_id) JOIN #__defesa AS d ON bhmb.banca_id = d.banca_id WHERE d.idDefesa = ".$idDefesa.")";
 			
 			$sql = $sql1 . 'UNION ' . $sql;
 			

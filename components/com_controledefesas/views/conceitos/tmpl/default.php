@@ -199,9 +199,10 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 		  }
         }
         
-        function enviarSolicitacaoPassagem(idDefesa){
+        function enviarSolicitacaoPassagem(form, idDefesa, idAluno){
 			form.task.value = 'enviarSolicitacao'; 
 			form.idDefesa.value = idDefesa;
+			form.idAluno.value = idAluno;
 			form.submit();
 		}
 
@@ -255,8 +256,8 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 				   </div>
 				   
 				   <input name='task' type='hidden' value='display'>
-				   <input name='idDefesa' type='hidden' value = <?php echo $idDefesa;?>>
-				   <input name='idAluno' type='hidden' value = <?php echo $idAluno;?>>
+				   <input name='idDefesa' type='hidden' value = '<?php echo $idDefesa;?>'>
+				   <input name='idAluno' type='hidden' value = '<?php echo $idAluno;?>'>
 				   <input name='avaliacao' type='hidden' value = ''>
 				   <input id="numDefesa" name='numDefesa' type='hidden' value = ''>
 				   <input id="emails" name='emails' type='hidden' value = <?php echo $emails;?>>
@@ -383,7 +384,7 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 
 					  <td   align='center'>  
 					  	<?php if ($membro->passagem == 'S'){ ?>  
-					  	<a href="javascript:enviarSolicitacaoPassagem(document.form, <?php echo $idDefesa;?>)">
+					  	<a href="javascript:enviarSolicitacaoPassagem(document.form, <?php echo $idDefesa;?>, <?php echo $idAluno;?>)">
 					  	<img src="components/com_controledefesas/assets/images/emailButton.png" border="0" title='Enviar Solicitação de Passagem'>  
 					  	</a>
 					  	<?php }?>
