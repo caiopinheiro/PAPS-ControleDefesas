@@ -325,15 +325,12 @@ class ControledefesasController extends JController {
 			exit;
 		}
 		else{
-			?>
-
-			<script>
-				alert("Defesa sem banca definida ainda.");
-			</script>
-			<?php
+			echo '<script>';
+			echo 'alert("Defesa sem banca definida ainda.")';
+			echo '</script>';
+			
 			header('Refresh: index.php?option=com_controledefesas&view=listabancas');
 		}
 	}
 
 }
-?>

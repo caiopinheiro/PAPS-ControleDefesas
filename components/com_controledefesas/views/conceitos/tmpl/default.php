@@ -1,5 +1,6 @@
 
 
+
 <?php
 
 JHTML::_('behavior.mootools');
@@ -94,6 +95,9 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 		else if (botao == 6){
 			alert ("Observação:\n\n  -Só é possivel imprimir a Carta de Agradecimento e Declaração de Participação após o DEFERIMENTO da Banca Avaliadora pelo Coordenador.");		
 		}
+		else if (botao == 7){
+			alert ("Observação:\n\n  -Só é possivel gerar a Ata, o Convite e por o Número de defesa após o DEFERIMENTO da Banca Avaliadora pelo Coordenador.");		
+		}
 	}
 
 		function folhaaprovacao(form){
@@ -138,22 +142,20 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
            
         }
 
-		function gerarAtaDefesa(form,idDefesa){        
-       	
+		function gerarAtaDefesa(form,idDefesa, num_defesa){        
            if(num_defesa != null){
 				form.task.value = 'gerarAta'; 
 				form.idDefesa.value = idDefesa;
-				form.submit();
+				window.open(URL='index.php?option=com_controledefesas&task=gerarAta&idDefesa='+<?php echo $idDefesa ?>+'&lang=pt-br');
            } 
            else {
 			  alert('Defesa sem número! Por favor, coloque o número de defesa antes de gerar a ata.');
 		   }
 	    }
 	    
-	    function gerarConviteDefesa(form, idDefesa){               	
-			form.task.value = 'gerarConviteDefesa'; 
-			form.idDefesa.value = idDefesa;
-			form.submit();
+	    function gerarConviteDefesa(form, idDefesa){        			
+	    	form.task.value = 'gerarConviteDefesa'; 
+			window.open(URL='index.php?option=com_controledefesas&task=gerarConviteDefesa&idDefesa='+<?php echo $idDefesa ?>+'&lang=pt-br');
 	    }
 	    
 	    function setarNumDefesa(form){        
@@ -171,7 +173,7 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 	<div class="m">
 		<div class="toolbar-list" id="toolbar">
 		  <div class="cpanel2">
-				<form method="post" id="formAvaliacao" name="form" enctype="multipart/form-data" action="index.php?option=com_controledefesas&view=conceitos" >
+				<form method="post" id="formAvaliacao" name="form" enctype="multipart/form-data" action="index.php?option=com_controledefesas&view=conceitos">
 					<!--<div <?php if(($Defesa[0]->conceito != '') || ($Defesa[0]->data > (date('Y/m/d'))) || ($Defesa[0]->banca_id == 0)  ||   ($Defesa[0]->tipoDefesa == 'T' OR $Defesa[0]->tipoDefesa == 'D')  && ($Defesa[0]->status_banca == NULL)  ) {  ?> style="display: none;" <?php } ?> class="icon" id="toolbar-back"> -->
 					<div class="icon" id="toolbar-back">
 						<a href ="javascript:aprovar(document.form)" class = 'toolbar'>
@@ -180,25 +182,42 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 					<!-- <div <?php if(($Defesa[0]->conceito != '') || ($Defesa[0]->data > (date('Y/m/d')))  || ($Defesa[0]->banca_id == 0)  ||  ($Defesa[0]->tipoDefesa == 'T' OR $Defesa[0]->tipoDefesa == 'D')  && ($Defesa[0]->status_banca == NULL)    ) { ?> style="display: none;"<?php } ?>  class="icon" id="indeferir"> -->
 					<div class="icon" id="indeferir">
 						<a href ="javascript:reprovar(document.form)" class = 'toolbar'>
-						<span class="icon-32-delete"></span>Conceito:<br>Reprovar</a>
+						<span class="icon-32-deny"></span>Conceito:<br>Reprovar</a>
 				   </div>
-					<div class="icon" id="toolbar-apply">
-	                    <a href="javascript:folhaaprovacao(document.form)" class="toolbar" title = "Funcionalidade que permite: 
-	                    -Imprimir folha de aprovação">
-	                    <span class="icon-32-apply"></span>Folha<br>Aprovação<br></a>
-	                </div>
-				   <div class="icon" id="setarNumDefesa">
+
+				   <div <?php if ($Defesa[0]->tipoDefesa != 'T' AND $Defesa[0]->tipoDefesa != 'D'){ ?> style= 'display:none' <?php } ?> class="icon" id="setarNumDefesa">
+				   	<?php if ($botao == 6) { ?>
 						<a href="javascript:setarNumDefesa(document.form)">
+					<?php
+					} else{ 
+							?> <a href ="javascript:observacao(7)"> <?php
+					} ?>
 						<span class="icon-32-edit"></span>Por Num</br>de Defesa</a>
 				   </div>
 
-				   <div class="icon" id="gerarAta">
-						<a href="javascript:gerarAtaDefesa(document.form, <?php echo $idDefesa;?>)">
+				   <div <?php if ($Defesa[0]->tipoDefesa != 'T' AND $Defesa[0]->tipoDefesa != 'D'){ ?> style= 'display:none' <?php } ?> class="icon" id="gerarAta">
+				   	<?php if ($botao != 6) { ?>
+						<a href="javascript:gerarAtaDefesa(document.form, <?php echo $idDefesa;?> , <?php echo $Defesa[0]->numDefesa;?> )">
+					<?php
+					} else{ 
+							?> <a href ="javascript:observacao(7)"> <?php
+					} ?>
 						<span class="icon-32-print"></span>Gerar</br>Ata</a>
 				   </div>
+
+					<div class="icon" id="toolbar-apply">
+	                    <a href="javascript:folhaaprovacao(document.form)" class="toolbar" title = "Funcionalidade que permite: 
+	                    -Imprimir folha de aprovação">
+	                    <span class="icon-32-print"></span>Folha<br>Aprovação<br></a>
+	                </div>
 				   
 				   <div class="icon" id="gerarConvite">
+				   	<?php if ($botao != 6) { ?>
 						<a href="javascript:gerarConviteDefesa(document.form, <?php echo $idDefesa;?>)">
+					<?php
+					} else{ 
+							?> <a href ="javascript:observacao(7)"> <?php
+					} ?>
 						<span class="icon-32-print"></span>Gerar</br>Convite</a>
 				   </div>
 				   
@@ -292,9 +311,9 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 		  	else echo $Defesa[0]->conceito; ?> 
 		  </td>
 		</tr>
-		<tr>
+		<tr> 
 		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'> Prévia: </td>
-		  <td colspan='3'> <a href = "" target = "_blank">  Download </a> </td>
+		  <td colspan='3'> <a href = "components/com_defesasorientador/previas/<?php echo $Defesa[0]->previa; ?> " target = "_blank">  Download </a> </td>
 		</tr>
 
 		</tr>
@@ -390,7 +409,7 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 </div>
 
 <script>
-    jQuery("#buttonIndeferir").on('click', function(e){
+    jQuery("#buttonIndeferir").click(function(){
         var form = $('formAvaliacao');
 		
 		

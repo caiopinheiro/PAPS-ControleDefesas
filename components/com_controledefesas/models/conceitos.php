@@ -29,7 +29,8 @@ class ControledefesasModelConceitos extends JModelItem
 		
 		public function visualizarDefesa($idDefesa){
 			$database =& JFactory::getDBO();
-			$sql = "SELECT  horario, local, d.numDefesa, conceito, idDefesa, status_banca, titulo, d.data as data, banca_id, resumo, tipoDefesa FROM (#__defesa AS d LEFT JOIN #__banca_controledefesas AS bcd ON bcd.id = d.banca_id)  WHERE idDefesa= ".$idDefesa;
+
+			$sql = "SELECT  d.previa,horario, local, d.numDefesa, conceito, idDefesa, status_banca, titulo, d.data as data, banca_id, resumo, tipoDefesa FROM (#__defesa AS d LEFT JOIN #__banca_controledefesas AS bcd ON bcd.id = d.banca_id)  WHERE idDefesa= ".$idDefesa;
 			$database->setQuery($sql); 
 			return $database->loadObjectList();
 		}
