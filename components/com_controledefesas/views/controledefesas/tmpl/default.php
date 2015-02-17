@@ -37,9 +37,9 @@ $document->addScript("includes/js/joomla.javascript.js");
 		
 		<div class="icon-wrapper">
 			<div class="icon">
-				<a href="index.php?option=com_controledefesas&view=listabancas">
-				<img width="32" height="32" border="0" src="components/com_controledefesas/assets/images/aprovarcandidatos.png">
-				<span><?php echo JText::_( 'Relatórios' ); ?></span></a>
+				<a href="index.php?option=com_controledefesas&view=relatoriodefesas">
+				<img width="32" height="32" border="0" src="components/com_controledefesas/assets/images/relatorio.png">
+				<span><?php echo JText::_( 'Relatório de Defesas' ); ?></span></a>
 			</div>
 		</div>
 		
