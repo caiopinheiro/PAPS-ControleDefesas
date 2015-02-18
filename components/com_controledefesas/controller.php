@@ -384,5 +384,118 @@ class ControledefesasController extends JController {
 	
 		header('Location: index.php?option=com_controledefesas&view=conceitos&idAluno='.$idAluno.'&idDefesa='.$idDefesa.'&status='.$status);
 	}
+
+	public function emitirRelatorioDefesas(){
+	
+		//configura??es iniciais
+		require('./components/com_controledefesas/pdf/pdf.php');
+	
+		$data_inicial = JRequest::getVar('dataInicial', false);
+		$data_final = JRequest::getVar('dataFinal', false);
+		$nome_professor = JRequest::getVar('nomeProfessor', false);
+	
+		$view = $this->getView('relatoriodefesas', 'html');
+		$model = $this->getModel('relatoriodefesas');
+	
+		$view->defesas = NULL;
+	
+		if($nome_professor == NULL || $nome_professor == false || $nome_professor == '')
+			$view->defesas = $model->getDefesasPorPeriodo($data_inicial, $data_final);
+		else
+			$view->defesas = $model->getDefesasPorPeriodoProfessor($data_inicial, $data_final, $nome_professor);
+	
+		$defesas = $view->defesas;
+	
+		if($defesas != NULL){
+	
+			$chave = 'RelatorioDefesas';
+	
+			$pdf = new PDF();
+			$pdf->Open();
+			$pdf->AddPage();
+	
+			//titulos de configura??o do documento
+			$pdf->SetTitle("Relatorio de Defesas");
+			$pdf->SetFillColor(105,105,105);
+	
+			$pdf->SetFont("Helvetica",'B', 14);
+			$pdf->MultiCell(0,7,"",0, 'C');
+			$pdf->MultiCell(0,5,utf8_decode('RELAT?RIO DE DEFESAS'),0, 'C');
+			$pdf->MultiCell(0,5,"",0, 'C');
+	
+	
+			if($nome_professor == NULL || $nome_professor == false || $nome_professor == ''){
+					
+				$pdf->SetFont("Helvetica",'B', 11);
+	
+				if (($data_inicial != NULL && $data_inicial != false && $data_inicial != '') && ($data_final != NULL && $data_final != false && $data_final != '')){
+					$pdf->MultiCell(0,5,utf8_decode("Per?odo: ").utf8_decode($data_inicial)." a ".utf8_decode($data_final),0, 'C');
+				}
+				else
+				{
+					if ($data_final == NULL || $data_final == false || $data_final == '')
+						$pdf->MultiCell(0,5,utf8_decode("Data Inicial: ").utf8_decode($data_inicial),0, 'C');
+					else if ($data_inicial == NULL || $data_inicial == false || $data_inicial == '')
+						$pdf->MultiCell(0,5,utf8_decode("Data Final: ").utf8_decode($data_final),0, 'C');
+				}
+	
+				$pdf->MultiCell(0,5,"",0, 'C');
+	
+				$pdf->Cell(70,5,utf8_decode('Nome Aluno'), 1, 0, 'J', true);
+				$pdf->Cell(20,5,utf8_decode('Curso'), 1, 0, 'J', true);
+				$pdf->Cell(25,5,utf8_decode('Tipo Defesa'), 1, 0, 'J', true);
+				$pdf->Cell(25,5,utf8_decode('Conceito'), 1, 0, 'J', true);
+				$pdf->Cell(20,5,utf8_decode('Data'), 1, 1, 'J', true);
+	
+				$pdf->SetFont("Helvetica",'', 8);
+	
+				foreach ($defesas as $defesa) {
+					$pdf->Cell(70,5,utf8_decode($defesa->nome_aluno), 0, 0, 'J');
+					$pdf->Cell(20,5,utf8_decode($defesa->desc_curso), 0, 0, 'J');
+					$pdf->Cell(25,5,utf8_decode($defesa->desc_tipo_defesa), 0, 0, 'J');
+					$pdf->Cell(25,5,utf8_decode($defesa->conceito_defesa), 0, 0, 'J');
+					$pdf->Cell(20,5,utf8_decode($defesa->data_defesa), 0, 1, 'J');
+				}
+			}
+			else{
+	
+				$pdf->SetFont("Helvetica",'B', 11);
+	
+				$pdf->MultiCell(0,5,utf8_decode("Filtro: ").utf8_decode($defesas[0]->nome_membro_banca),0, 'C');
+				$pdf->MultiCell(0,5,"",0, 'C');
+					
+				$pdf->Cell(70,5,utf8_decode('Nome Aluno'), 1, 0, 'J', true);
+				$pdf->Cell(20,5,utf8_decode('Curso'), 1, 0, 'J', true);
+				$pdf->Cell(25,5,utf8_decode('Tipo Defesa'), 1, 0, 'J', true);
+				$pdf->Cell(25,5,utf8_decode('Conceito'), 1, 0, 'J', true);
+				$pdf->Cell(20,5,utf8_decode('Data'), 1, 0, 'J', true);
+				$pdf->Cell(25,5,utf8_decode('Fun??o'), 1, 1, 'J', true);
+	
+				$pdf->SetFont("Helvetica",'', 8);
+					
+				foreach ($defesas as $defesa) {
+					$pdf->Cell(70,5,utf8_decode($defesa->nome_aluno), 0, 0, 'J');
+					$pdf->Cell(20,5,utf8_decode($defesa->desc_curso), 0, 0, 'J');
+					$pdf->Cell(25,5,utf8_decode($defesa->desc_tipo_defesa), 0, 0, 'J');
+					$pdf->Cell(25,5,utf8_decode($defesa->conceito_defesa), 0, 0, 'J');
+					$pdf->Cell(20,5,utf8_decode($defesa->data_defesa), 0, 0, 'J');
+					$pdf->Cell(25,5,utf8_decode($defesa->funcao_membro), 0, 1, 'J');
+				}
+			}
+	
+			ob_clean(); // Limpa o buffer de sa?da
+	
+			//cria o arquivo pdf e exibe no navegador
+			$pdf->Output('components/com_controledefesas/relatorios/'.$chave.'.pdf','I');
+			exit;
+		}
+		else{
+			echo '<script>';
+			echo 'alert("Nenhuma defesa foi encontrada!")';
+			echo '</script>';
+	
+			header('Refresh: index.php?option=com_controledefesas&view=relatoriodefesas');
+		}
+	}
 	
 }
