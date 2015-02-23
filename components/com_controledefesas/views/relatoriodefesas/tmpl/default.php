@@ -1,23 +1,16 @@
 <?php
-
 JHTML::_('behavior.mootools');
 JHTML::_('script','modal.js', 'media/system/js', true);
 JHTML::_('stylesheet','modal.css');
 JHTML::_('behavior.modal', 'a.modal');
-
 // No direct access to this file
-
 $user =& JFactory::getUser();
 if(!$user->username) die( 'Acesso Restrito.' );
-
 defined('_JEXEC') or die('Restricted access');
-
 $document = &JFactory::getDocument();
 $document->addScript("includes/js/joomla.javascript.js");
 
-
 $defesas = $this->defesas;
-
 $data_inicial = $this->data_inicial;
 $data_final = $this->data_final;
 $nome_professor = $this->nome_professor;
@@ -25,28 +18,29 @@ $nome_professor = $this->nome_professor;
 if(($this->data_inicial == NULL) AND 
    ($this->data_final == NULL) AND 
    ($this->nome_professor == NULL)){
-
     $data_inicial = '';
     $data_final = '';
     $nome_professor = '';
 }
-
 ?>
 
 <script type="text/javascript" src="/icomp/components/com_defesascoordenador/assets/jquery-ui-1.11.2.custom/jquery-ui.js"></script>
 
 <script language="JavaScript">
-
     function emitirRelatorio(form){
-
         var dataInicial = document.getElementById('dataInicial').value;
         var dataFinal = document.getElementById('dataFinal').value;
         var nomeProfessor = document.getElementById('nomeProfessor').value;
 
+        var dataIniAux = dataInicial.split("/");
+        dataInicial = dataIniAux[0]+'-'+dataIniAux[1]+'-'+dataIniAux[2];
+
+        var dataFinalAux = dataFinal.split("/");
+        dataFinal = dataFinalAux[0]+'-'+dataFinalAux[1]+'-'+dataFinalAux[2];
+
         form.task.value = 'emitirRelatorioDefesas'; 
         window.open(URL='index.php?option=com_controledefesas&task=emitirRelatorioDefesas&dataInicial='+dataInicial+'&dataFinal='+dataFinal+'&nomeProfessor='+nomeProfessor+'&lang=pt-br');
     }
-
 </script>
 
 <link rel="stylesheet" type="text/css" href="components/com_portalprofessor/template.css">
@@ -59,7 +53,7 @@ if(($this->data_inicial == NULL) AND
 
 <form method="post" name="form" enctype="multipart/form-data" action="index.php?option=com_controledefesas&view=relatoriodefesas">
 
-	<div id="toolbar-box">
+    <div id="toolbar-box">
         <div class="m">
             <div class="toolbar-list" id="toolbar">
                 <div class="cpanel2">
@@ -74,14 +68,14 @@ if(($this->data_inicial == NULL) AND
         </div>
     </div>
 
-	<!-- FILTRO DA BUSCA -->
-	<fieldset>
-    	<legend>Filtros para consulta</legend>
+    <!-- FILTRO DA BUSCA -->
+    <fieldset>
+        <legend>Filtros para consulta</legend>
         </br>
         <table width="100%">
             <tr>
-				<td>Data Inicial</td>
-				<td>Data Final</td>
+                <td>Data Inicial</td>
+                <td>Data Final</td>
                 <td>Nome Professor</td>
             </tr>
             <tr>                
@@ -94,8 +88,8 @@ if(($this->data_inicial == NULL) AND
                 <td><a href="javascript:emitirRelatorio(document.form)" title="Visualizar o Relatório em PDF"><span class="btn btn-primary"><i class="icone-search icone-white"></i>  Emitir Relatório</span></a></td>
             </tr>
 
-		</table>
-	</fieldset>
+        </table>
+    </fieldset>
 
     <br />
      
