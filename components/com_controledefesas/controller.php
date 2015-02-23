@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @version     1.0.0
  * @package     com_defesascoordenador
@@ -9,11 +8,8 @@
  */
 // No direct access
 defined('_JEXEC') or die;
-
 jimport('joomla.application.component.controller');
-
 class ControledefesasController extends JController {
-
     /**
      * Method to display a view.
      *
@@ -35,7 +31,6 @@ class ControledefesasController extends JController {
 		$idDefesa = JRequest::getVar('idDefesa');
 		$idAluno = JRequest::getVar('idAluno');
 		header('Location: index.php?option=com_controledefesas&view=conceitos&idDefesa='.$idDefesa.'&idAluno='.$idAluno);
-
 	}
 	
 	public function aprovar(){
@@ -47,7 +42,6 @@ class ControledefesasController extends JController {
 		header('Location: index.php?option=com_controledefesas&view=conceitos&idAluno='.$idAluno.'&idDefesa='.$idDefesa.'&status='.$status);
 		
 	}
-
 	public function reprovar(){
 		$idDefesa = JRequest::getVar('idDefesa');
 		$idAluno = JRequest::getVar('idAluno');
@@ -58,12 +52,10 @@ class ControledefesasController extends JController {
 		
 	}
 	 
-
 	public function folhaaprovacao(){
 		$idDefesa = JRequest::getVar('idDefesa');
 		$idAluno = JRequest::getVar('idAluno');
 		header('Location: index.php?option=com_controledefesas&view=folhaaprovacao&idDefesa='.$idDefesa.'&idAluno='.$idAluno);
-
 	} 
 	
 	public function gerarAta(){	
@@ -71,15 +63,12 @@ class ControledefesasController extends JController {
 		$idAluno = JRequest::getVar('idAluno');
 		header('Location: index.php?option=com_controledefesas&view=gerarata&idDefesa='.$idDefesa.'&idAluno='.$idAluno);
 	}
-
-
 	public function carta(){
 		$idDefesa = JRequest::getVar('idDefesa');
 		$idAluno = JRequest::getVar('idAluno');
 		header('Location: index.php?option=com_controledefesas&view=carta&idDefesa='.$idDefesa.'&idAluno='.$idAluno);
 		
 	}
-
 	public function declaracao(){
 		$idDefesa = JRequest::getVar('idDefesa');
 		$idAluno = JRequest::getVar('idAluno');
@@ -133,7 +122,6 @@ class ControledefesasController extends JController {
 			$pdf = new PDF();
 			$pdf->Open();
 			$pdf->AddPage();
-
 			//titulos de configuraÃ§Ã£o do documento
 			$pdf->SetTitle("Convite de Defesa");
 			
@@ -145,7 +133,6 @@ class ControledefesasController extends JController {
 			$pdf->MultiCell(0,5,"",0, 'C');
 			
 			$tag = " A Coordenação do Programa de Pós-Graduação em Informática PPGI/UFAM tem o prazer de convidar toda a comunidade para a sessção pública de apresentação de defesa de";
-
 			if ($defesa[0]->tipoDefesa == 'Q1' OR $defesa[0]->tipoDefesa == 'Q2' ) {
 				if ($aluno[0]->curso == 2){
 					$tag = $tag . " exame de qualificação de doutorado:";
@@ -165,7 +152,6 @@ class ControledefesasController extends JController {
 					$chave .= "_defesa_dissertacao_mestrado_convite";
 				}
 			}
-
 			$pdf->SetFont("Helvetica",'', 10);
 			$pdf->MultiCell(0,6,utf8_decode($tag),0, 'J');
 			$pdf->MultiCell(0,5,"",0, 'C');
@@ -180,14 +166,12 @@ class ControledefesasController extends JController {
 			$pdf->MultiCell(0,6,"CANDIDATO(A): " . utf8_decode($aluno[0]->nome_aluno),0, 'J');
 			$pdf->MultiCell(0,5,"",0, 'C');
 			$pdf->MultiCell(0,6,"BANCA EXAMINADORA: ",0, 'J');
-
 			foreach ($membrosBanca as $membro) {
 				$tag = "                        " . utf8_decode($membro->nome) . " - " . utf8_decode($membro->filiacao);
 				if ($membro->funcao == "P")
 					$tag = $tag . " (Presidente)";
 				$pdf->MultiCell(0,6,$tag,0, 'J');
 			}
-
 			$pdf->MultiCell(0,5,"",0, 'C');
 			
 			$pdf->MultiCell(0,6,"LOCAL: " . utf8_decode($defesa[0]->local),0, 'J');
@@ -196,20 +180,17 @@ class ControledefesasController extends JController {
 			$pdf->MultiCell(0,5,"",0, 'C');
 			$pdf->MultiCell(0,6,utf8_decode("HORÁRIO: ") . utf8_decode($defesa[0]->horario),0, 'J');
 			$pdf->MultiCell(0,5,"",0, 'C');
-
 			$pdf->MultiCell(0,5,"",0, 'C');
 			$pdf->SetFont("Helvetica",'', 10);
 			$pdf->MultiCell(0,4,"Professora Dra. Eulanda Miranda dos Santos",0, 'C');
 			$pdf->SetFont("Helvetica",'', 8);
 			$pdf->MultiCell(0,4,utf8_decode("Coordenadora do Programa de Pós-Graduação em Informática PPGI/UFAM"),0, 'C');
-
 			ob_clean(); // Limpa o buffer de saÃ­da
 			
 			//cria o arquivo pdf e exibe no navegador
 			$pdf->Output('components/com_controledefesas/convites/'.$chave.'.pdf','I');
 			
 			exit;	
-
 		}
 	
 	public function enviarSolicitacaoPassagem($idDefesa){
@@ -244,14 +225,12 @@ class ControledefesasController extends JController {
 			// message
 			$message .= "A CoordenaÃƒÂ§ÃƒÂ£o do Programa de PÃƒÂ³s-graduaÃƒÂ§ÃƒÂ£o em InformÃƒÂ¡tica PPGI/UFAM tem o prazer de tÃƒÂª-lo para a sessÃƒÂ£o pÃƒÂºblica de apresentaÃƒÂ§ÃƒÂ£o da Defesa de DissertaÃƒÂ§ÃƒÂ£o/Tese de Mestrado/Doutorado.\r\n\n";
 			
-			$message .= "Considerando a sua participaÃƒÂ§ÃƒÂ£o, pedimos o preenchimento do FormulÃƒÂ¡rio de SolicitaÃƒÂ§ÃƒÂ£o de Passagens e DiÃƒÂ¡rias, que estÃƒÂ¡ em anexo ÃƒÂ  este email. Rogamos, ainda, o fornecimento dos seguintes dados, para fins de cadastro em nosso sistema de gerenciamento da PÃƒÂ³s-GraduaÃƒÂ§ÃƒÂ£o:\r\n\n";
-
+			$message .= "Considerando a sua participaÃƒÂ§ÃƒÂ£o, pedimos o preenchimento do FormulÃƒÂ¡rio de SolicitaÃƒÂ§ÃƒÂ£o de Passagens e DiÃƒÂ¡rias, que estÃƒÂ¡ em anexo ÃƒÂ  este email. Rogamos, ainda, o fornecimento dos seguintes dados, para fins de cadastro em nosso sistema de gerenciamento da PÃƒÂ³s-GraduaÃƒÂ§ÃƒÂ£o:\r\n\n";
 			$message .= "a. Nome completo;\n";
 			$message .=	"b. Data de nascimento;\n";
 			$message .= "c. Data de sua diplomaÃƒÂ§ÃƒÂ£o em PÃƒÂ³s-GraduaÃƒÂ§ÃƒÂ£o, e nome da InstituiÃƒÂ§ÃƒÂ£o em que diplomou-se;\n";
 			$message .=	"d. Data de inÃƒÂ­cio do vÃƒÂ­nculo com sua IES;\n";
 			$message .= "e. SugestÃƒÂ£o de Voo.\r\n\n";
-
 			$message .= "Solicitamos que, apÃƒÂ³s o preenchimento do FormulÃƒÂ¡rio de SolicitaÃƒÂ§ÃƒÂ£o de Passagens e DiÃƒÂ¡rias, bem como dos demais dados solicitados, os mesmos sejam encaminhados ao email de nossa Secretaria: secretariappgi@icomp.ufam.edu.br.\r\n\n";
 				
 			$message .= "Por fim, reiteramos o nosso prazer em tÃƒÂª-lo como participante de um momento tÃƒÂ£o importante, e esperamos, sinceramente, que outros mais venham.\r\n\n";
@@ -370,15 +349,21 @@ class ControledefesasController extends JController {
 	
 				$pdf->SetFont("Helvetica",'B', 11);
 	
-				$pdf->MultiCell(0,5,utf8_decode("Filtro: ").utf8_decode($defesas[0]->nome_membro_banca),0, 'C');
+				if (!empty($defesas[0]->nome_membro_banca))
+					$pdf->MultiCell(0,5,utf8_decode("Filtro: ").utf8_decode($defesas[0]->nome_membro_banca),0, 'C');
+				else if (!empty($defesas[0]->nome_orientador))
+					$pdf->MultiCell(0,5,utf8_decode("Filtro: ").utf8_decode($defesas[0]->nome_orientador),0, 'C');
+				else if (!empty($defesas[0]->examinador))
+					$pdf->MultiCell(0,5,utf8_decode("Filtro: ").utf8_decode($defesas[0]->examinador),0, 'C');
+
 				$pdf->MultiCell(0,5,"",0, 'C');
 					
 				$pdf->Cell(70,5,utf8_decode('Nome Aluno'), 1, 0, 'J', true);
 				$pdf->Cell(20,5,utf8_decode('Curso'), 1, 0, 'J', true);
 				$pdf->Cell(25,5,utf8_decode('Tipo Defesa'), 1, 0, 'J', true);
 				$pdf->Cell(25,5,utf8_decode('Conceito'), 1, 0, 'J', true);
-				$pdf->Cell(20,5,utf8_decode('Data'), 1, 0, 'J', true);
-				$pdf->Cell(25,5,utf8_decode('Função'), 1, 1, 'J', true);
+				$pdf->Cell(20,5,utf8_decode('Data'), 1, 1, 'J', true);
+				//$pdf->Cell(25,5,utf8_decode('Função'), 1, 1, 'J', true);
 	
 				$pdf->SetFont("Helvetica",'', 8);
 					
@@ -387,8 +372,8 @@ class ControledefesasController extends JController {
 					$pdf->Cell(20,5,utf8_decode($defesa->desc_curso), 0, 0, 'J');
 					$pdf->Cell(25,5,utf8_decode($defesa->desc_tipo_defesa), 0, 0, 'J');
 					$pdf->Cell(25,5,utf8_decode($defesa->conceito_defesa), 0, 0, 'J');
-					$pdf->Cell(20,5,utf8_decode($defesa->data_defesa), 0, 0, 'J');
-					$pdf->Cell(25,5,utf8_decode($defesa->funcao_membro), 0, 1, 'J');
+					$pdf->Cell(20,5,utf8_decode($defesa->data_defesa), 0, 1, 'J');
+					//$pdf->Cell(25,5,utf8_decode($defesa->funcao_membro), 0, 1, 'J');
 				}
 				
 				$pdf->SetFont("Helvetica",'B', 9);
@@ -411,7 +396,6 @@ class ControledefesasController extends JController {
 		}
 	}
 	
-
 	public function sendNotification(){
 		$idAluno = JRequest::getVar('idAluno');
 		$exame = JRequest::getVar('exame');
@@ -426,8 +410,6 @@ class ControledefesasController extends JController {
 		$model = $this->getModel('listapendente');	
 //		$idAluno = JRequest::getVar('idAluno');
 //		$exame = JRequest::getVar('exame');
-
-
 		if ($exame == 'Q1'){
 			$tipoexame = "Qualificação I";
 		}
@@ -450,7 +432,6 @@ class ControledefesasController extends JController {
 			$emailOrientador = $aluno[0]->profemail;	
 			$emailAluno = $aluno[0]->alunoemail;	
 			$nomeOrientador = $aluno[0]->nomeProfessor;	
-
 			$emails[] = $emailOrientador;
 			$emails[] = $emailAluno;
 			$emails[] = "secretaria@icomp.ufam.edu.br";
@@ -521,7 +502,6 @@ class ControledefesasController extends JController {
 	
     public function detalhesAluno(){
     	$idAluno = JRequest::getVar('idAluno');
-
     	header('Location: index.php?option=com_controledefesas&view=detalhesaluno&idAluno='.$idAluno);
     }
 }
