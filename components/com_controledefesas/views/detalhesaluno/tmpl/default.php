@@ -2,56 +2,68 @@
 // No direct access to this file
 $user =& JFactory::getUser();
 if(!$user->username) die( 'Acesso Restrito.' );
-
 defined('_JEXEC') or die('Restricted access');
-
 $document = &JFactory::getDocument();
 //$document->addScript("includes/js/joomla.javascript.js");
-
 function formatarData($data){
-	$data = explode("-", $data);
-	$aux = $data[2] . "/" . $data[1] . "/" .$data[0] ;
-	return $aux;	
+  $data = explode("-", $data);
+  $aux = $data[2] . "/" . $data[1] . "/" .$data[0] ;
+  return $aux;  
 }
-
 $idAluno = $this->idAluno;
-
 $Aluno = $this->aluno;
 $Defesas = $this->defesas;
 $MembrosBanca = $this->membrosBanca;
-
 $arrayCurso = array (1 => "Mestrado", 2 => "Doutorado", 3 => "Especial");
 $arrayTipoDefesa = array('Q1' => "Qualificação 1", 'Q2' => "Qualificação 2", 'D' => "Dissertação", 'T' => "Tese");
-$arrayFuncaoMembro = array ('P' => "Presidente",'E' => "Membro Externo", 'I' => "Membro Interno");
+$arrayFuncaoMembro = array('P' => "Presidente",'E' => "Membro Externo", 'I' => "Membro Interno");
+
+$possuiQ1=false;
+$possuiQ2=false;
+$possuiDissertacao=false;
+$possuiTese=false;
+
+if(isset ($Defesas)){      
+  foreach($Defesas as $defesa ){ 
+    if($defesa->tipoDefesa == 'Q1')
+      $possuiQ1=true;
+    if($defesa->tipoDefesa == 'Q2')
+      $possuiQ2=true;
+    if($defesa->tipoDefesa == 'D')
+      $possuiDissertacao=true;
+    if($defesa->tipoDefesa == 'T')
+      $possuiTese=true;
+  }
+}
 
 ?>
 
 <script type="text/javascript" src= "/icomp/components/com_controledefesas/assets/jquery-ui-1.11.2.custom/jquery-ui.js"></script>
 
-<link rel="stylesheet" type="text/css" href="components/com_portalprofessor/template.css"> 	
+<link rel="stylesheet" type="text/css" href="components/com_portalprofessor/template.css">  
 <link rel="stylesheet" type="text/css" href="components/com_controledefesas/assets/jquery-ui-1.11.2.custom/jquery-ui.css">
 
 <form method="post" id="formDadosAluno" name="form" enctype="multipart/form-data" action="index.php?option=com_controledefesas&view=detalhesaluno" >
 
 <div id="toolbar-box">
-	<div class="m">
-		<div class="toolbar-list" id="toolbar">
-		  <div class="cpanel2">
+  <div class="m">
+    <div class="toolbar-list" id="toolbar">
+      <div class="cpanel2">
 
-			<div class="icon" id="toolbar-back">
-				<a href="index.php?option=com_controledefesas&view=listaalunos">
-				<span class="icon-32-back"></span>Voltar</a>
-			</div>
-		   
-			<input name='task' type='hidden' value='display'>
-			<input name='idAluno' type='hidden' value = <?php echo $idAluno;?>>
+      <div class="icon" id="toolbar-back">
+        <a href="index.php?option=com_controledefesas&view=listaalunos">
+        <span class="icon-32-back"></span>Voltar</a>
+      </div>
+       
+      <input name='task' type='hidden' value='display'>
+      <input name='idAluno' type='hidden' value = <?php echo $idAluno;?>>
 
-		</div>
-		<div class="clr"></div>
-		</div>
+    </div>
+    <div class="clr"></div>
+    </div>
 
-		<div class="pagetitle icon-48-user"><h2><?php echo $this->msg; ?></h2></div>
-	</div>
+    <div class="pagetitle icon-48-user"><h2><?php echo $this->msg; ?></h2></div>
+  </div>
 </div>
 
 <link rel="stylesheet" type="text/css" href="components/com_portalsecretaria/assets/css/estilo.css" />
@@ -71,6 +83,10 @@ $arrayFuncaoMembro = array ('P' => "Presidente",'E' => "Membro Externo", 'I' => 
           <td width='30%'><?php echo $Aluno[0]->cidade;?><br><?php echo $Aluno[0]->pais;?></td>
           <td style='font-weight: bold;' width='25%'>DATA DE NASCIMENTO:</td>
           <td width='25%'><?php echo $Aluno[0]->datanascimento;?></td>
+        </tr>
+        <tr>
+          <td style='font-weight: bold;'>ORIENTADOR:</td>
+          <td colspan='3'><?php if(isset($Aluno[0]->nomeProfessor) && !empty($Aluno[0]->nomeProfessor)) echo $Aluno[0]->nomeProfessor; ?></td>
         </tr>
         <tr>
           <td style='font-weight: bold;'>LINHA DE PESQUISA:</td>
@@ -119,7 +135,9 @@ $arrayFuncaoMembro = array ('P' => "Presidente",'E' => "Membro Externo", 'I' => 
   <tbody>
     <?php
     if(isset ($Defesas)){
-        foreach($Defesas as $defesa ){ if($defesa->tipoDefesa == 'Q1'){ ?>
+      if ($possuiQ1){
+        foreach($Defesas as $defesa ){ 
+          if($defesa->tipoDefesa == 'Q1'){ ?>
             <tr>
               <td style='font-weight: bold;'>TEMA:</td>
               <td colspan='3' rowspan='1'><?php echo $defesa->titulo;?></td>
@@ -136,7 +154,7 @@ $arrayFuncaoMembro = array ('P' => "Presidente",'E' => "Membro Externo", 'I' => 
                  <?php
                     if(isset ($MembrosBanca)){
                         foreach($MembrosBanca as $membro ){ 
-                            if($membro->tipoDefesa == 'D' || $membro->tipoDefesa == 'T' || $membro->funcao == 'P'){
+                            if($membro->funcao == 'P' || ($membro->banca_id == $defesa->banca_id && $membro->tipoDefesa == 'Q1')){
                                 echo $membro->nome;
                                 echo " (".$arrayFuncaoMembro[$membro->funcao].")";
                                 echo " - ".$membro->filiacao."<br />";
@@ -146,10 +164,18 @@ $arrayFuncaoMembro = array ('P' => "Presidente",'E' => "Membro Externo", 'I' => 
                  ?>
                 </td>
             </tr>
-        <?php
+          <?php
+          }
         }
-        }
-    } ?>
+      }
+      else{ ?>
+        <tr>
+          <td colspan='4' rowspan='1'>Defesa não realizada/informada.</td>
+        </tr>
+    <?php
+    }
+    } 
+    ?>
   </tbody>
 </table>
 <br />
@@ -164,6 +190,7 @@ $arrayFuncaoMembro = array ('P' => "Presidente",'E' => "Membro Externo", 'I' => 
   <tbody>
     <?php
     if(isset ($Defesas)){
+      if ($possuiQ1){
         foreach($Defesas as $defesa ){ if($defesa->tipoDefesa == 'Q1'){ ?>
             <tr>
               <td style='font-weight: bold;'>TEMA:</td>
@@ -182,7 +209,15 @@ $arrayFuncaoMembro = array ('P' => "Presidente",'E' => "Membro Externo", 'I' => 
         <?php
         }
         }
-    } ?>
+      }
+      else{ ?>
+        <tr>
+          <td colspan='4' rowspan='1'>Defesa não realizada/informada.</td>
+        </tr>
+    <?php
+    }
+    }
+    ?>
   </tbody>
 </table>
 <br />
@@ -197,6 +232,7 @@ $arrayFuncaoMembro = array ('P' => "Presidente",'E' => "Membro Externo", 'I' => 
   <tbody>
     <?php
     if(isset ($Defesas)){
+      if ($possuiQ2){
         foreach($Defesas as $defesa ){ if($defesa->tipoDefesa == 'Q2'){ ?>
             <tr>
               <td style='font-weight: bold;'>TEMA:</td>
@@ -214,7 +250,7 @@ $arrayFuncaoMembro = array ('P' => "Presidente",'E' => "Membro Externo", 'I' => 
                  <?php
                     if(isset ($MembrosBanca)){
                         foreach($MembrosBanca as $membro ){ 
-                            if($membro->tipoDefesa == 'D' || $membro->tipoDefesa == 'T' || $membro->funcao == 'P'){
+                            if($membro->funcao == 'P' || ($membro->banca_id == $defesa->banca_id && $membro->tipoDefesa == 'Q2')){
                                 echo $membro->nome;
                                 echo " (".$arrayFuncaoMembro[$membro->funcao].")";
                                 echo " - ".$membro->filiacao."<br />";
@@ -227,7 +263,15 @@ $arrayFuncaoMembro = array ('P' => "Presidente",'E' => "Membro Externo", 'I' => 
         <?php
         }
         }
-    } ?>
+      }
+      else{ ?>
+        <tr>
+          <td colspan='4' rowspan='1'>Defesa não realizada/informada.</td>
+        </tr>
+    <?php
+    }
+    } 
+    ?>
   </tbody>
 </table>
 <br />
@@ -241,6 +285,7 @@ $arrayFuncaoMembro = array ('P' => "Presidente",'E' => "Membro Externo", 'I' => 
   <tbody>
     <?php
     if(isset ($Defesas)){
+      if ($possuiDissertacao || $possuiTese){
         foreach($Defesas as $defesa ){ if($defesa->tipoDefesa == 'D' || $defesa->tipoDefesa == 'T'){ ?>
             <tr>
               <td style='font-weight: bold;'>T&Iacute;TULO:</td>
@@ -258,7 +303,7 @@ $arrayFuncaoMembro = array ('P' => "Presidente",'E' => "Membro Externo", 'I' => 
                  <?php
                     if(isset ($MembrosBanca)){
                         foreach($MembrosBanca as $membro ){ 
-                            if($membro->tipoDefesa == 'D' || $membro->tipoDefesa == 'T' || $membro->funcao == 'P'){
+                            if($membro->funcao == 'P' || ($membro->banca_id == $defesa->banca_id && ($membro->tipoDefesa == 'D' || $membro->tipoDefesa == 'T'))){
                                 echo $membro->nome;
                                 echo " (".$arrayFuncaoMembro[$membro->funcao].")";
                                 echo " - ".$membro->filiacao."<br />";
@@ -271,7 +316,15 @@ $arrayFuncaoMembro = array ('P' => "Presidente",'E' => "Membro Externo", 'I' => 
         <?php
         }
         }
-    } ?>
+      }
+      else{ ?>
+        <tr>
+          <td colspan='4' rowspan='1'>Defesa não realizada/informada.</td>
+        </tr>
+    <?php
+    }
+    } 
+    ?>
   </tbody>
 </table>
 </div>
