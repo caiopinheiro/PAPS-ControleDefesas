@@ -1,2 +1,0 @@
-1 - Poder incluir outras agências
-2 - Alocação com data da bolsa fora do período previsto pra bolsa, o sistema está deixando.
