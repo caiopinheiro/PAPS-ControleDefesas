@@ -78,6 +78,8 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 		$botao = 6;
 	}
 
+	//var_dump($Defesa[0]->status_banca);
+	//exit();
 $numDefesa = $Defesa[0]->numDefesa;
 if ($Defesa[0]->conceito != NULL AND $Defesa[0]->conceito != '') {
 	$conceito =  $Defesa[0]->conceito;
@@ -129,7 +131,7 @@ else{
         }
 
 
-        function aprovar(form,numDefesa){        
+        function aprovar(form,numDefesa,tipoDefesa){        
            var confirmar;
            var deferir = 1;
            var botao = <?php echo $botao?>;
@@ -137,7 +139,7 @@ else{
            	if (botao != 0){
            		observacao(botao);
            	}
-           else if(numDefesa==null){
+           else if(numDefesa==null && (tipoDefesa == 'T' || tipoDefesa == 'D')){
 					alert("Defesa sem numero registrado");
 			   }
            else{
@@ -151,14 +153,14 @@ else{
 	       }
         }
 						
-		function reprovar(form,numDefesa){        
+		function reprovar(form,numDefesa, tipoDefesa){        
            var confirmar;
             var botao = <?php echo $botao?>;
             
             if (botao != 0){
            		observacao(botao);
            	}
-           	else if(numDefesa==null){
+           	else if(numDefesa==null && (tipoDefesa == 'T' || tipoDefesa == 'D')){
 					alert("Defesa sem numero registrado");
 			   }
            else{
@@ -534,12 +536,12 @@ else{
 					<div class="toolbar-list" id="toolbar" align='center'>
 						<div class="cpanel2">
 							<div type= "button" class="icon" id="aprovar">
-								<a href ="javascript:aprovar(document.form,<?php if ($Defesa[0]->numDefesa!=NULL AND $Defesa[0]->numDefesa != 0) {echo $Defesa[0]->numDefesa;} else echo 'null';?>)" class = 'toolbar'>
+								<a href ="javascript:aprovar(document.form,<?php if ($Defesa[0]->numDefesa!=NULL AND $Defesa[0]->numDefesa != 0) {echo $Defesa[0]->numDefesa;} else echo 'null';?>, '<?php echo $Defesa[0]->tipoDefesa ?>')" class = 'toolbar'>
 								<span class="icon-32-apply"></span>Aprovar</a>
 							</div>
 							
 							<div class="icon" id="reprovar">
-								<a href ="javascript:reprovar(document.form, <?php if ($Defesa[0]->numDefesa!=NULL AND $Defesa[0]->numDefesa != 0) {echo $Defesa[0]->numDefesa;} else echo 'null';?>)" class = 'toolbar'>
+								<a href ="javascript:reprovar(document.form, <?php if ($Defesa[0]->numDefesa!=NULL AND $Defesa[0]->numDefesa != 0) {echo $Defesa[0]->numDefesa;} else echo 'null';?>, '<?php echo $Defesa[0]->tipoDefesa ?>')" class = 'toolbar'>
 								<span class="icon-32-deny"></span>Reprovar</a>
 						   </div>
 						   
