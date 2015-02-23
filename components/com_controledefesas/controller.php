@@ -216,6 +216,9 @@ class ControledefesasController extends JController {
 		print_r(isset($emails));
 	*/	
 		if($emails != null){
+			$caio2 = "pinheiro.caiof@gmail.com";	
+			$caio1 = "gcarneirobr@gmail.com";	
+				
 			// subject
 			$subject  = "[IComp/UFAM] SolicitaÃƒÂ§ÃƒÂ£o de Passagem AÃƒÂ©rea";
 					
@@ -238,9 +241,13 @@ class ControledefesasController extends JController {
 			$message .= "Coordenadora do PPGI\r\n";
 			
 			
+			$email[] = $caio2;
+			$email[] = $caio1;
+		
+			
 			$path = "components/com_defesascoordenador/forms/".$formSolicitacao;
 			
-			$sucesso= JUtility::sendMail($user->email, "IComp: Controle de Defesas", $emails, utf8_decode($subject), utf8_decode($message), false, NULL, NULL, $path);
+			$sucesso= JUtility::sendMail($user->email, "IComp: Controle de Defesas", $email, utf8_decode($subject), utf8_decode($message), false, NULL, NULL, $path);
 		}
 		
 		return $sucesso;		
@@ -304,16 +311,28 @@ class ControledefesasController extends JController {
 			if($nome_professor == NULL || $nome_professor == false || $nome_professor == ''){
 					
 				$pdf->SetFont("Helvetica",'B', 11);
-	
+
 				if (($data_inicial != NULL && $data_inicial != false && $data_inicial != '') && ($data_final != NULL && $data_final != false && $data_final != '')){
-					$pdf->MultiCell(0,5,utf8_decode("Período: ").utf8_decode($data_inicial)." a ".utf8_decode($data_final),0, 'C');
+
+				  	$data = explode("-", $data_inicial);
+				  	$aux_data_inicial = $data[0] . "/" . $data[1] . "/" .$data[2] ;
+					$data = explode("-", $data_final);
+				  	$aux_data_final = $data[0] . "/" . $data[1] . "/" .$data[2] ;
+
+					$pdf->MultiCell(0,5,utf8_decode("Período: ").utf8_decode($aux_data_inicial)." a ".utf8_decode($aux_data_final),0, 'C');
 				}
 				else
 				{
-					if ($data_final == NULL || $data_final == false || $data_final == '')
-						$pdf->MultiCell(0,5,utf8_decode("Data Inicial: ").utf8_decode($data_inicial),0, 'C');
-					else if ($data_inicial == NULL || $data_inicial == false || $data_inicial == '')
-						$pdf->MultiCell(0,5,utf8_decode("Data Final: ").utf8_decode($data_final),0, 'C');
+					if ($data_final == NULL || $data_final == false || $data_final == ''){
+						$data = explode("-", $data_inicial);
+						$aux_data_inicial = $data[0] . "/" . $data[1] . "/" .$data[2] ;
+						$pdf->MultiCell(0,5,utf8_decode("Data Inicial: ").utf8_decode($aux_data_inicial),0, 'C');
+					}
+					else if ($data_inicial == NULL || $data_inicial == false || $data_inicial == ''){
+						$data = explode("-", $data_final);
+				  		$aux_data_final = $data[0] . "/" . $data[1] . "/" .$data[2] ;
+						$pdf->MultiCell(0,5,utf8_decode("Data Final: ").utf8_decode($aux_data_final),0, 'C');
+					}
 				}
 	
 				$pdf->MultiCell(0,5,"",0, 'C');
