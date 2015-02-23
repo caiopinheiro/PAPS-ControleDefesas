@@ -21,7 +21,7 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	
 	public function visualizarAluno($idDefesa){
 			$database =& JFactory::getDBO();
-			$sql = "SELECT a.nome as nome, a.curso FROM #__defesa AS d JOIN #__aluno AS a ON d.aluno_id = a.id WHERE d.idDefesa= ".$idDefesa;
+			$sql = "SELECT a.nome as nome_aluno, a.curso FROM #__defesa AS d JOIN #__aluno AS a ON d.aluno_id = a.id WHERE d.idDefesa= ".$idDefesa;
 			$database->setQuery($sql);
 			return $database->loadObjectList();
 		}
@@ -35,7 +35,7 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	
 	public function visualizarDefesa($idDefesa){
 			$database =& JFactory::getDBO();
-			$sql = "SELECT conceito, status_banca, titulo, d.data as data, banca_id, resumo, tipoDefesa FROM (#__defesa AS d LEFT JOIN #__banca_controledefesas AS bcd ON bcd.id = d.banca_id)  WHERE idDefesa= ".$idDefesa;
+			$sql = "SELECT conceito, status_banca, previa, titulo, d.data as data, banca_id, resumo, tipoDefesa FROM (#__defesa AS d LEFT JOIN #__banca_controledefesas AS bcd ON bcd.id = d.banca_id)  WHERE idDefesa= ".$idDefesa;
 			$database->setQuery($sql); // TIREI O RIGHT DO JOIN
 			return $database->loadObjectList();
 		}
@@ -348,9 +348,16 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	 		if (!$this->validaEmail($defesa['emailexaminador'])) {
 	 			$mensagens['emailexaminador'] =  true;
 	 		} else $mensagens['emailexaminador'] = false;
+	 		
+	 		$mensagens['local'] = false;
+	 		$mensagens['horario'] = false;
+	 	} else {
+	 		
+	 		$mensagens['local'] = (!strlen($defesa['localDescricao']) || is_null($defesa['localDescricao']));
+	 		$mensagens['horario'] = !$this->validaHora($defesa['localHorario']);
 	 	}
 	 	
-	 	if (!$mensagens['semArquivo'] && !$mensagens['arquivoTamanho'] && !$mensagens['arquivoFormato'] && $defesa['flagPrevia'])
+	 	if (!$mensagens['semArquivo'] && !$mensagens['arquivoTamanho'] && !$mensagens['arquivoFormato'] && !$defesa['flagPrevia'])
 	 		$this->moverArquivoTemp($defesa['previa']);
 
 	 	

@@ -79,7 +79,7 @@ class DefesasorientadorController extends JController {
     	
     	// dados form
     	$view->mensagens = $this->get('mensagens');
-    	$view->titulo = $this->get('titulo');
+    	$view->titulo = $this->get('titulodefesa');
     	$view->resumo = $this->get('resumo');
     	$view->datadefesa = $this->get('datadefesa');
     	$view->membrosBancaTabela = $this->get('membrosBancaTabela'); 
@@ -202,6 +202,9 @@ class DefesasorientadorController extends JController {
 			if (!$resultado['semArquivo'] && !$resultado['arquivoTamanho'] && !$resultado['arquivoFormato'])
 				$this->set('previa', $defesa['previa']);
 			
+			var_dump($resultado);
+			
+			$this->set('titulodefesa', $defesa['titulo']);
 			$this->set('membrosBancaTabela', $defesa['membrosBanca']);
 			$this->set('tipoLocal', $defesa['tipoLocal']);
 			$this->set('localDescricao', $defesa['localDescricao']);
@@ -221,6 +224,10 @@ class DefesasorientadorController extends JController {
 			
 			$this->set('idaluno', $idAluno);
 			
+			$aluno = $model->getAluno($idAluno);
+			
+			// enviar e-mail apenas se for qualifica��o 1 de doutorado
+			if ($aluno->curso == 2 && $defesa['tipoDefesa'])
 			$this->enviarEmailExaminador($defesa['examinador'], $defesa['emailexaminador'], $resultado);
 			
 			$this->set('aluno', $model->getAluno($idAluno));
@@ -299,10 +306,10 @@ class DefesasorientadorController extends JController {
     	if($emailExaminador != null){
     			
     		// subject
-    		$subject  = "[IComp/UFAM] Convite de Participa��o de Defesa";
+    		$subject  = "[IComp/UFAM] Convite de Participação de Defesa";
     			
     		// message
-    		$message = "A Coordenação do Programa de Pós-graduação em Informática PPGI/UFAM tem o prazer de convidá-lo para examinar a Qualifica��o de Doutorado:\r\n\n";
+    		$message = "A Coordenação do Programa de Pós-graduação em Informática PPGI/UFAM tem o prazer de convidá-lo para examinar a Qualificação de Doutorado:\r\n\n";
     		$message .= "$titulo\r\n\n";
     		$message .= "CANDIDATO: ".$aluno[0]->nome_aluno."\r\n\n";
     		$message .= "EXAMINADOR(A): \r\n";
@@ -321,8 +328,8 @@ class DefesasorientadorController extends JController {
     		$message .= "Coordenadora do PPGI\r\n";
     			
     		$path []= "components/com_defesasorientador/previas/".$previaDefesa;
-    
-    		return JUtility::sendMail($this->user->email, "IComp: Controle de Defesas", $emailExaminador, utf8_decode($subject), utf8_decode($message), false, NULL, NULL, $path);
+    	
+    		return JUtility::sendMail(null, "IComp: Controle de Defesas", $emailExaminador, utf8_decode($subject), utf8_decode($message), false, NULL, NULL, $path);
     	}
     }
     

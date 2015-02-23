@@ -1,6 +1,10 @@
 <?php
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+
+$user =& JFactory::getUser();
+if(!$user->username) die( 'Acesso Restrito.' );
+
 $document = &JFactory::getDocument();
 $document->addStyleSheet('components/com_defesasorientador/template.css','text/css');
 $document->addStyleSheet('components/com_defesasorientador/assets/css/estilo.css','text/css');
