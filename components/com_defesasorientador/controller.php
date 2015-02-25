@@ -62,8 +62,9 @@ class DefesasorientadorController extends JController {
     	$view->aluno = $model->getAluno();
     	
     	//membros da banca
+    	$presidente = $model->getPresidente();
     	
-    	$view->presidente = $model->getPresidente();
+    	$view->presidente = $presidente;
     	$view->membrosExternos = $model->getMembrosExternos();
     	$view->membrosInternos = $model->getMembrosInternos();
     	
@@ -149,6 +150,13 @@ class DefesasorientadorController extends JController {
 		$view->localDescricao = $this->get('localDescricao');
 		$view->localSala = $this->get('localSala');
 		$view->localHorario = $this->get('localHorario');
+
+		//validação se orientador está com id de membro de banca
+		if (isset($presidente)) {
+			if (is_null($presidente)) {
+				$view->orientadorSemMembroBanca = true;
+			} else $view->orientadorSemMembroBanca = false;
+		} else $view->orientadorSemMembroBanca = true;
 		
     	$view->display();
     		

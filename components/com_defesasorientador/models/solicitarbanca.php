@@ -62,7 +62,8 @@ class DefesasOrientadorModelSolicitarBanca extends JModelItem
 		$database =& JFactory::getDBO();
 		$idAluno = JRequest::getVar("idaluno");
 		
-		$sql = "select nomeProfessor nome, 'PPGI/UFAM' filiacao from #__aluno a, #__professores p where a.orientador = p.id and a.id=$idAluno" ;
+		$sql = "select mb.nome	, mb.filiacao, mb.id from #__aluno a, #__professores p, #__membrosbanca mb
+				where a.orientador = p.id and a.id=$idAluno and mb.idProfessor = p.id";
 		
 		$database->setQuery($sql);
 		
@@ -295,7 +296,6 @@ where a.orientador = p.id and a.id = $idAluno";
 		
 		$orientador = $database->loadObjectList();
 		
-	
 		return $orientador;
 	}
 	

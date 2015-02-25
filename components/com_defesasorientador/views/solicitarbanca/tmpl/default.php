@@ -25,7 +25,7 @@ location.href = 'index.php?option=com_portalprofessor&task=alunos&Itemid=317';
 
 </script>
 
-<?php }?>
+<?php }?> 
 
 <?php if (($this->aluno[0]->curso == 1) && ($this->faseDefesa[0] == 'D') && ($this->creditos < 24)) {?>
 <script>
@@ -90,7 +90,18 @@ location.href = 'index.php?option=com_portalprofessor&task=alunos&Itemid=317';
 		
 </script>
 
-<?php } ?>
+<?php } else if ($this->orientadorSemMembroBanca) { ?>
+
+<script>
+
+alert ('<?php echo mb_convert_encoding('Orientador sem correspondente em registros de membros de banca. Favor contatar a secretaria.', 'UTF-8', 'ISO-8859-1');?>');
+location.href = 'index.php?option=com_portalprofessor&task=alunos&Itemid=317';
+
+</script>
+
+<?php }?>
+
+
 
 <script> 
 
@@ -696,12 +707,13 @@ return total;
         	<?php 
         	if (isset($this->membrosBancaTabela['id']))
         	for($count = 0; $count < count($this->membrosBancaTabela['id']); $count++) {
+
+
+				if ($this->membrosBancaTabela['tipoMembro'][$count] == 'P')  continue;
         	
         		$cols = "<tr>";
         	
         		switch ($this->membrosBancaTabela['tipoMembro'][$count]){
-        			case 'P': $tipoMembroBanca = 'Presidente';
-        			break;
         			case 'I': $tipoMembroBanca = 'Membro Interno';
         			break;
         			case 'E': $tipoMembroBanca = 'Membro Externo';
@@ -819,7 +831,6 @@ return total;
 
  </script>
  
- 
  <script>
 
  (function($) {
@@ -831,16 +842,20 @@ return total;
 		var presidente = '<?php echo $this->presidente->nome;?>';
 		var filiacao = '<?php echo $this->presidente->filiacao;?>';
 		var tipoMembroBanca = 'Presidente';
-
-		
 		
 	    cols += '<td>';
 	    cols += '</td>';
-
-		
+	
 		cols += '<td>' + presidente+ '</td>' ; 		
 		cols += '<td>' + filiacao + '</td>' ; 
 		cols += '<td>' + tipoMembroBanca + '</td>';
+		cols += '<input type="hidden" name="idMembroBanca[]" value="<?php echo $this->presidente->id?>" />';
+		cols += '<input type="hidden" name="tipoMembroBanca[]" value="P" />';
+		cols = cols + '<select name="passagem[]" style="display:none; width:100%">';
+		cols = cols + '<option value="N" ' +  'selected="selected"' + '>' + '</option>';
+		cols = cols + '<option value="S" >Sim</option>';
+		cols = cols + '</select>';
+		
 		cols += '<td>';
 		cols += '</td>'; 
 		
