@@ -162,7 +162,7 @@ function gerarAta($Defesa,$Membros,$Aluno){
 		$pdf->MultiCell(0,5,"____________________________________
 		Secretaria",0, 'C');	
 		$pdf->MultiCell(0,5,"",0, 'C');			
-		$pdf->MultiCell(0,5,"Manaus, ".$data[2]." de ". $mes[$data[1]]." de ".$data[0],0, 'C');	
+		$pdf->MultiCell(0,5,"Manaus, ".$data[2]." de ".utf8_decode($mes[$data[1]])." de ".$data[0],0, 'C');	
 
 		ob_clean(); // Limpa o buffer de saída
 		//cria o arquivo pdf e exibe no navegador
