@@ -127,7 +127,7 @@ class DefesascoordenadorController extends JController {
 			$message .= "Coordenadora do PPGI\r\n";
 			
 			
-			$emails[] = $ascom;
+		//	$emails[] = $ascom;
 			
 			
 			$path []= "components/com_defesasorientador/previas/".$previaDefesa;
