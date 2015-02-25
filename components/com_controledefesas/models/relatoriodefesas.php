@@ -125,7 +125,7 @@ class ControledefesasModelRelatorioDefesas extends JModelItem
 		}
 
 		if ($id_professor != NULL && $id_professor != false && $id_professor != ''){
-			$sql = "SELECT * FROM (". $sqlOrientador . ' UNION ' . $sql_standard.$sql_data_inicial.$sql_data_final.$sql_id_membro_banca.$sql_nome_professor.") a ORDER BY nome_aluno";
+			$sql = "SELECT * FROM (". $sqlOrientador . $sql_data_inicial.$sql_data_final . ' UNION ' . $sql_standard.$sql_data_inicial.$sql_data_final.$sql_id_membro_banca.$sql_nome_professor.") a ORDER BY nome_aluno";
 		}
 		else{
 			$sql = $sql_standard.$sql_data_inicial.$sql_data_final.$sql_id_membro_banca.$sql_nome_professor.$sql_orderby;
