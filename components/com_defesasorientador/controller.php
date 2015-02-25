@@ -202,8 +202,6 @@ class DefesasorientadorController extends JController {
 			if (!$resultado['semArquivo'] && !$resultado['arquivoTamanho'] && !$resultado['arquivoFormato'])
 				$this->set('previa', $defesa['previa']);
 			
-			var_dump($resultado);
-			
 			$this->set('titulodefesa', $defesa['titulo']);
 			$this->set('membrosBancaTabela', $defesa['membrosBanca']);
 			$this->set('tipoLocal', $defesa['tipoLocal']);
@@ -302,11 +300,10 @@ class DefesasorientadorController extends JController {
     	$titulo = $defesa[0]->titulo;	// e o titulo
     	$previaDefesa = $defesa[0]->previa; //pega a previa
     		
-    
     	if($emailExaminador != null){
     			
     		// subject
-    		$subject  = "[IComp/UFAM] Convite de ParticipaÃ§Ã£o de Defesa";
+    		$subject  = "[IComp/UFAM] Convite de Participação de Defesa";
     			
     		// message
     		$message = "A CoordenaÃ§Ã£o do Programa de PÃ³s-graduaÃ§Ã£o em InformÃ¡tica PPGI/UFAM tem o prazer de convidÃ¡-lo para examinar a QualificaÃ§Ã£o de Doutorado:\r\n\n";
@@ -327,12 +324,214 @@ class DefesasorientadorController extends JController {
     		$message .= "Profa. Eulanda M. dos Santos\r\n"  ;
     		$message .= "Coordenadora do PPGI\r\n";
     			
+
     		$path []= "components/com_defesasorientador/previas/".$previaDefesa;
     	
-    		return JUtility::sendMail(null, "IComp: Controle de Defesas", $emailExaminador, utf8_decode($subject), utf8_decode($message), false, NULL, NULL, $path);
+    		return JUtility::sendMail(null, "IComp: Controle de Defesas", $emailExaminador, mb_convert_encoding($subject, 'UTF-8', 'ISO-8859-1'), utf8_decode($message), false, NULL, NULL, $path);
     	}
     }
     
+    /**
+     * função usada para migrar os dados
+     * 
+     * para migrar os dados colocar como public
+     * para bloquear acessos externos colocar como private
+     */
+    public function migrardados() {
+    	
+    	$database =& JFactory::getDBO();
+
+    	// migração defesas de qualificação 1 de mestrado
+    	$sqlmestrado = "select * from #__aluno where curso = 1";
+		$database->setQuery($sqlmestrado);
+		
+		$aluno = $database->loadObjectList();
+		
+    	foreach ($aluno as $alunomestrado) {
+    		
+    		if (strlen($alunomestrado->tituloQual2)) {
+				
+	    		$sqlbanca = "select * from #__banca where idAluno = $alunomestrado->id and tipoDefesa = 'Q'";
+	    		$database->setQuery($sqlbanca);
+	    		
+	    		$bancas = $database->loadObjectList();
+	    		
+	    		$insertBanca = "insert into #__banca_controledefesas (status_banca, justificativa) VALUES (1, '')";
+	    		
+	    		$database->setQuery($insertBanca);
+	    		$database->execute();
+				$idBanca = $database->insertid();
+
+				
+				if (sizeof($bancas))
+				foreach ($bancas as $banca) {
+					
+					if ($banca->idMembro != '0' && $banca->funcao != 'P') {
+						$insertBanca = "insert into #__banca_hasmembrosbanca (banca_id, membrosbanca_id, funcao, passagem) VALUES ($idBanca, $banca->idMembro, '$banca->funcao', 'N')";
+						$database->setQuery($insertBanca);
+						$database->execute();
+					}
+				}
+				
+				$insertDefesa = "insert into #__defesa (aluno_id, banca_id, resumo, data, local, horario, tipoDefesa, titulo, conceito) values 
+								($alunomestrado->id, $idBanca, '$alunomestrado->resumoQual2', str_to_date('$alunomestrado->dataQual2', '%d/%m/%Y'), '$alunomestrado->localQual2', '$alunomestrado->horarioQual2', 'Q1', '$alunomestrado->tituloQual2', '$alunomestrado->conceitoQual2')";
+				
+				$database->setQuery($insertDefesa);
+				$database->execute();
+				
+    		}
+    	}
+    	
+    	
+    	// migração dos dados de dissertação
+    	
+    	foreach ($aluno as $alunomestrado) {
+    		
+    		if (strlen($alunomestrado->tituloTese)) {
+    		
+    			$sqlbanca = "select * from #__banca where idAluno = $alunomestrado->id and tipoDefesa = 'D'";
+    			$database->setQuery($sqlbanca);
+    			 
+    			$bancas = $database->loadObjectList();
+    			 
+    			$insertBanca = "insert into #__banca_controledefesas (status_banca, justificativa) VALUES (1, '')";
+    			 
+    			$database->setQuery($insertBanca);
+    			 
+    			$database->execute();
+    			
+    			$idBanca = $database->insertid();
+    			
+    			if (sizeof($bancas))
+    			foreach ($bancas as $banca) {
+    				if ($banca->idMembro != '0' && $banca->funcao != 'P') {
+    					$insertBanca = "insert into #__banca_hasmembrosbanca (banca_id, membrosbanca_id, funcao, passagem) VALUES ($idBanca, $banca->idMembro, '$banca->funcao', 'N')";
+	    				$database->setQuery($insertBanca);
+	    				
+	    				$database->execute();
+    				}
+    			}
+    			
+    			$insertDefesa = "insert into #__defesa (numDefesa, aluno_id, banca_id, resumo, data, local, horario, tipoDefesa, titulo, conceito) values
+    			(" . (!is_null($alunomestrado->numDefesa) ? $alunomestrado->numDefesa : 'NULL') . ", $alunomestrado->id, $idBanca, '$alunomestrado->resumoTese', 
+    				 str_to_date('$alunomestrado->dataTese', '%d/%m/%Y'), '$alunomestrado->localTese', '$alunomestrado->horarioTese', 'D', '$alunomestrado->tituloTese',
+    			 '$alunomestrado->conceitoTese')";	
+    			$database->setQuery($insertDefesa);
+    			$database->execute();
+    		}
+    	}
+
+    	// migração defesas de doutorado
+    	$sqldoutorado = "select * from #__aluno where curso = 2";
+
+    	$database->setQuery($sqldoutorado);
+    	
+    	$aluno = $database->loadObjectList();
+    	
+    	
+    	//migração de qualificação 2 de doutorado
+    	foreach ($aluno as $alunomestrado) {
+    	
+    	
+    		if (strlen($alunomestrado->tituloQual2)) {
+    			 
+    	
+    			$sqlbanca = "select * from #__banca where idAluno = $alunomestrado->id and tipoDefesa = 'Q2";
+    			$database->setQuery($sqlbanca);
+    			 
+    			$bancas = $database->loadObjectList();
+    			 
+    			$insertBanca = "insert into #__banca_controledefesas (status_banca, justificativa) VALUES (1, '')";
+    			 
+  	  			$database->setQuery($insertBanca);
+				$database->execute();
+  	  			
+  	  			
+    			$idBanca = $database->insertid();
+    			if (sizeof($bancas))
+    			foreach ($bancas as $banca) {
+    				if ($banca->idMembro != '0' && $banca->funcao != 'P') {
+    					$insertBanca = "insert into #__banca_hasmembrosbanca (banca_id, membrosbanca_id, funcao, passagem) VALUES ($idBanca, $banca->idMembro, '$banca->funcao', 'N')";
+    					$database->setQuery($insertBanca);
+    					$database->execute();
+    				}
+    			}
+    			
+    			$insertDefesa = "insert into #__defesa (aluno_id, banca_id, resumo, data, local, horario, tipoDefesa, titulo, conceito) values
+    			($alunomestrado->id, $idBanca, '$alunomestrado->resumoQual2', str_to_date('$alunomestrado->dataQual2, 'd/m/Y')', '$alunomestrado->localQual2',
+    			'$alunomestrado->horarioQual2', 'Q2', '$alunomestrado->tituloQual2', '$alunomestrado->conceitoQual2')";
+    		
+    			$database->setQuery($insertDefesa);
+    			 
+    			$database->execute();
+    		}
+    	}
+    		 
+    		// migração dos dados de tese
+    		 
+    		foreach ($aluno as $alunomestrado) {
+    	
+	    		if (strlen($alunomestrado->tituloTese)) {
+	    	
+		    		$sqlbanca = "select * from #__banca where idAluno = $alunomestrado->id and tipoDefesa = 'T'";
+		    		$database->setQuery($sqlbanca);
+		    	
+		    				$bancas = $database->loadObjectList();
+		    	
+		    				$insertBanca = "insert into #__banca_controledefesas (status_banca, justificativa) VALUES (1, '')";
+		    	
+		    			$database->setQuery($insertBanca);
+		    			
+		    			$database->execute();
+		    	
+		    			$idBanca = $database->insertid();
+		    	
+		    		if (sizeof($bancas))
+		    		foreach ($bancas as $banca) {
+		    		if ($banca->idMembro != '0' && $banca->funcao != 'P')
+		    			$insertBanca = "insert into #__banca_hasmembrosbanca (banca_id, membrosbanca_id, funcao, passagem) VALUES ($idBanca, $banca->idMembro, '$banca->funcao', 'N')";
+		    		  	 $database->setQuery($insertBanca);
+						$database->execute();
+		    		}
+		    		
+		    		$insertDefesa = "insert into #__defesa (numDefesa, aluno_id, banca_id, resumo, data, local, horario, tipoDefesa, titulo, conceito) values
+	    					(" . (!is_null($alunomestrado->numDefesa) ? $alunomestrado->numDefesa : 'NULL') . ", $alunomestrado->id, $idBanca, '$alunomestrado->resumoTese',
+		    			    					str_to_date('$alunomestrado->dataTese', '%d/%m/%Y'), '$alunomestrado->localTese', '$alunomestrado->horarioTese', 'T', '$alunomestrado->tituloTese',
+		    			    					'$alunomestrado->conceitoTese')";
+		    		
+		    		$database->setQuery($insertDefesa);
+		    		
+		    		$database->execute();
+		    	}
+    	
+    		}
+			
+    		// migração dos dados de qualificação 1 de doutorado
+    		 
+    		foreach ($aluno as $alunomestrado) {
+    			 
+    			if (strlen(trim($alunomestrado->tituloQual1))) {
+    				 
+    				$insertBanca = "insert into #__banca_controledefesas (status_banca, justificativa) VALUES (1, '')";
+    				 
+    				$database->setQuery($insertBanca);
+					$database->execute();    				 
+    				
+					$idBanca = $database->insertid();
+    				 
+    				$insertDefesa = "insert into #__defesa (aluno_id, banca_id, resumo, data, tipoDefesa, titulo, conceito, examinador) values
+	    					(" . "$alunomestrado->id, $idBanca, '',
+    			    					str_to_date('$alunomestrado->dataQual1', '%d/%m/%Y'), 'Q1', '$alunomestrado->tituloQual1',
+    			    					'$alunomestrado->conceitoQual1', '$alunomestrado->examinadorQual1')";
+    				
+    				$database->setQuery($insertDefesa);
+    				
+    				$database->execute();
+    			}	
+    			 
+    		}
+    
+    }
     
 }
 	
