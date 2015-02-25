@@ -174,7 +174,7 @@ if(($this->nome_aluno == NULL) AND
          
         <tbody>
         <?php
-        $arrayCurso = array (1 => "Mestrado", 2 => "Doutorado", 3 => "Especial");
+        $arrayCurso = array (1 => "mestrado", 2 => "doutorado", 3 => "especial");
         
         $arrayTipoDefesa = array('Q1' => "Qualificação 1", 'Q2' => "Qualificação 2", 'D' => "Dissertação", 'T' => "Tese");
         
