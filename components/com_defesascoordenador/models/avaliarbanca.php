@@ -126,7 +126,7 @@ class DefesasCoordenadorModelAvaliarBanca extends JModelItem
 			
 			return $sucesso;
 			*/	
-			return $sucesso;
+			return $result;
 		}
         
 }
