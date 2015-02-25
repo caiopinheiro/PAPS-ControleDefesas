@@ -170,6 +170,7 @@ if(($this->data_inicial == NULL) AND
             var index = -1;
             var idProfessor = '';
             var nomeProfessor = document.getElementById('professor').value;
+            var nomeProfessorJS;
 
             if (nomeProfessor != '') {
                 <?php foreach ($this->professores as $professor ) {
@@ -177,7 +178,11 @@ if(($this->data_inicial == NULL) AND
                     // Remover acentos do nome e mudá-lo para maiúsculo
                     $nome = strtoupper(preg_replace('/[`^~\'"]/', null, iconv( 'UTF-8', 'ASCII//TRANSLIT', $professor->nomeProfessor)));
 
-                    echo "listaProfessores.push('" .$nome. "');";
+                    echo "nomeProfessorJS = removerAcentos('" . $professor->nomeProfessor . "');";
+                    echo "listaProfessores.push(nomeProfessorJS);";
+                    
+
+                    //echo "listaProfessores.push('" .$nome. "');";
                     echo "ids.push('" . $professor->id . "');";
                 }?>
                 
