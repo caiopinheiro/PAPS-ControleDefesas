@@ -95,8 +95,8 @@ if(($this->status_bancas == NULL) AND
                     <a href="javascript:lancarconceito(document.form)" class="toolbar" title = 
                     "Funcionalidade que permite:
                     -Lançar Conceito;
-                    -Imprimir Carta de Agradecimento e 
-                    -Declaração de Participação">
+                    -Definir número de Defesa;
+                    -Imprimir Ata de Defesa, Folha de Qualificação, Folha de Aprovação, Carta de Agradecimento e Declaração de Participação">
                     <span class="icon-32-preview"></span>Detalhes</a>
                 </div>
 
@@ -120,7 +120,7 @@ if(($this->status_bancas == NULL) AND
             </br>
             <table width="100%">
                <tr>
-                    <td> Status Exame </td>
+                    <td>Status Defesa </td>
 					<td>Nome Aluno</td>
                     <td>Tipo Curso </td>
 					
@@ -131,9 +131,9 @@ if(($this->status_bancas == NULL) AND
                     <td>
                     <select id="buscaStatusBanca" name="buscaStatusBanca">    
                         <option value="2" <?php if($status_bancas == 2) echo 'SELECTED';?>>Pendentes</option>
-                        <option value="1" <?php if($status_bancas == 1) echo 'SELECTED';?>>Conceituadas</option>
+                        <option value="1" <?php if($status_bancas == 1) echo 'SELECTED';?>>Aprovadas</option>
+                        <option value="5" <?php if($status_bancas == 5) echo 'SELECTED';?>> Reprovadas</option>
                         <option value="4" <?php if($status_bancas == 4) echo 'SELECTED';?>> Indeferidas - Coordenador</option>
-                        <<!--  <option value="5" <?php if($status_bancas == 5) echo 'SELECTED';?>> Pendente apenas de Conceito</option>  -->
                         <option value="6" <?php if($status_bancas == 6) echo 'SELECTED';?>> Pendente deferimento Coordenador</option>
                         <option value="3" <?php if($status_bancas == 3) echo 'SELECTED';?>> Mostrar Todos</option>
                         
@@ -155,7 +155,7 @@ if(($this->status_bancas == NULL) AND
                 </tr>
 
                 <tr>
-                    <td>Tipo de Exame</td>
+                    <td>Tipo de Defesa</td>
                     <td>Nome Orientador</td>
                     <td>Linha de Pesquisa</td>
                 </tr>
@@ -221,9 +221,9 @@ if(($this->status_bancas == NULL) AND
              
      		<tbody>
 			<?php
-            $status = array (0 => "Sem Conceito", 1 => "Conceituada");
+            $status = array (0 => "Sem Conceito", 1 => "Aprovado", 5 => "Reprovado");
 			
-            $statusImg = array (0 => "desativar.png" ,1 => "sim.gif");
+            $statusImg = array (0 => "desativar.png" ,1 => "ativar.png",5 => "ativar.png");
 			
 			$linhaPesquisa = array (1 => "bd_ri",2 => "se_es",3 => "ia",4 => "visao",5 => "redes",6 => "otimizacao");
 			
@@ -232,13 +232,15 @@ if(($this->status_bancas == NULL) AND
 			if(isset ($defesas)){
 				foreach($defesas as $defesa ) { 
 
-                    if($defesa->conceito == "")
-                        $valor_status2 = 0;
-                    else
+                    if ($defesa->conceito == "Aprovado"){
                         $valor_status2 = 1;
-
-
-
+                    }
+                    else if ($defesa->conceito == "Reprovado"){
+                        $valor_status2 = 5;
+                    }
+                    else if ($defesa->conceito == ""){
+                        $valor_status2 = 0;
+                    }
                     ?>
 	
 				<tr>

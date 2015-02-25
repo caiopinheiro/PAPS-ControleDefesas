@@ -73,13 +73,13 @@ class ControledefesasModelListaBancas extends JModelItem
 				//' AND bcd.status_banca IS NULL';
 			}
 			else if($status_banca == 1 ){
-				$sql_status_banca = " AND (conceito = 'Aprovado' OR conceito = 'Reprovado')";
+				$sql_status_banca = " AND ( conceito LIKE 'Aprovado' ) ";
 			}
 			else if($status_banca == 4 ){
-				$sql_status_banca = " AND (bcd.status_banca = '0')";
+				$sql_status_banca = " AND (bcd.status_banca = '0') ";
 			}
 			else if($status_banca == 5){
-				$sql_status_banca = " AND (d.banca_id <> '0' AND bcd.status_banca = '1' AND (conceito = '' ))";
+				$sql_status_banca = " AND ( conceito LIKE 'Reprovado' )";
 			}
 			else if($status_banca == 6){
 				$sql_status_banca = " AND (d.banca_id <> '0' AND bcd.status_banca is NULL and (conceito = ''))";//pendente deferimento coordenador
