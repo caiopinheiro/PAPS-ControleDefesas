@@ -491,12 +491,22 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 
 			if (!strcmp($defesa['tipoDefesa'], 'Q1') || !strcmp($defesa['tipoDefesa'], 'Q2')) {
 				$statusBanca = 1;
-			} else $statusBanca = 'null';
+			} else $statusBanca = NULL;
 			
-			$sql = "insert into #__banca_controledefesas (justificativa, status_banca) values ('', " . $statusBanca . ")" ;
+			// inserir banca 
+			$query = $database->getQuery(true);
+			$columns = array('justificativa', 'status_banca');
+			$values = array('', $statusBanca);
 			
-			//var_dump($sql);
-			$database->setQuery($sql);
+			//$sql = "insert into #__banca_controledefesas (justificativa, status_banca) values ('', " . $statusBanca . ")" ;
+			
+			$query
+			->insert($database->quoteName('#__banca_controledefesas'))
+			->columns($database->quoteName($columns))
+			->values(implode(',', $values));
+				
+			
+			$database->setQuery($query);
 				
 			$database->execute();
 				
@@ -505,8 +515,30 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 			
 			$arquivoPrevia = $this->moverArquivo($defesa['previa'], $defesa['tipoDefesa']);
 			$this->inserirMembroBanca($defesa['membrosBanca'], $idBanca);
+
 			
+			//inserir defesa
+			
+			$query = $database->getQuery(true);
+			$columns = array('aluno_id', 'titulo', 'resumo', 'tipoDefesa', 'data', 'banca_id',
+							 'previa', 'local', 'horario', 'examinador', 'emailexaminador');
+			
+			
+			$values = array($defesa['aluno'], $database->quote($defesa['titulo'], true), 
+							$database->quote($defesa['resumo'], true), $database->quote($defesa['tipoDefesa']),
+							$database->quote($defesa['data']), $idBanca, $database->quote($arquivoPrevia), 
+							$database->quote($defesa['localDescricao'], true), $database->quote($defesa['localHorario'], true), 
+							$database->quote($defesa['examinador'], true), $database->quote($defesa['emailexaminador'], true));
 				
+			//$sql = "insert into #__banca_controledefesas (justificativa, status_banca) values ('', " . $statusBanca . ")" ;
+				
+			$query
+			->insert($database->quoteName('#__defesa'))
+			->columns($database->quoteName($columns))
+			->values(implode(',', $values));
+			
+			$database->setQuery($query);
+			
 			$sql = "insert into #__defesa (aluno_id, titulo, resumo, tipoDefesa, data, banca_id, previa, local, horario, examinador, emailexaminador) values (" . $defesa['aluno'].  ", '" . $defesa["titulo"] . "', '" . $defesa["resumo"] . "', " .
 					"'" . $defesa['tipoDefesa'] . "', " . "str_to_date('" . $defesa['data'] .  "', '%d/%m/%Y'), $idBanca, '" .  
 					$arquivoPrevia . "', '" . $defesa['localDescricao'] . "', '" . $defesa['localHorario'] . "', '" . 
@@ -526,14 +558,6 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	
 	/**
 	 * 
-	 * Move o arquivo da pasta tmp, para a pasta de arquivos de prévia
-	 * 
-	 * @param unknown $arquivoPrevia
-	 * @return boolean
-	 */
-	
-	/**
-	 * 
 	 * Função que retorna um único membro de banca
 	 * 
 	 * @param unknown $id
@@ -543,6 +567,7 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	public function getMembroBanca($id) {
 
 		$database =& JFactory::getDBO();
+		
 		
 		$sql = 'select nome, filiacao, id from #__membrosbanca where id=' . $id;
 		
@@ -563,19 +588,31 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 		
 		$database =& JFactory::getDBO();
 		
+		
 		for ($count = 0; $count < count($membroBanca['id']); $count++) {
 
-			$sql = "insert into #__banca_has_membrosbanca (banca_id, membrosbanca_id, funcao, passagem) " .
-					"values ($idBanca, " . $membroBanca['id'][$count] . ", '" . $membroBanca['tipoMembro'][$count] . "', '" . $membroBanca['passagem'][$count] . "')";
+			$query = $database->getQuery(true);
+
+			$columns = array('banca_id', 'membrosbanca_id', 'funcao', 'passagem');
 			
-			//var_dump($sql);
+			$values = array($idBanca, $membroBanca['id'][$count], $database->quote($membroBanca['tipoMembro'][$count], true),  $database->quote($membroBanca['passagem'][$count], true));
 			
-			$database->setQuery($sql);
+			//$sql = "insert into #__banca_has_membrosbanca (banca_id, membrosbanca_id, funcao, passagem) " .
+					//"values ($idBanca, " . $membroBanca['id'][$count] . ", '" . $database->quote($membroBanca['tipoMembro'][$count]) . "', '" . $database->quote($membroBanca['passagem'][$count]) . "')";
+
+			
+			$query
+			->insert($database->quoteName('#__banca_has_membrosbanca'))
+			->columns($database->quoteName($columns))
+			->values(implode(',', $values));
+			
+			$database->setQuery($query);
 			
 			$database->execute();
-
-			// decidir o que fazer com isso
+			
 			$result = $database->insertid();
+			
+			var_dump($result);
 			
 		}
 		
