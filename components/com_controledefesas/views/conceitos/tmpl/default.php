@@ -66,17 +66,18 @@ $tipoDefesa = array('Q1' => "Exame de Qualificação I", 'Q2' => "Exame de Quali
 		$botao = 2;
 	}
 	else if (($Defesa[0]->banca_id == NULL || $Defesa[0]->banca_id == 0) && (($Aluno[0]->curso == 1 && $Defesa[0]->tipoDefesa == 'Q1') || ($Aluno[0]->curso == 2 && $Defesa[0]->tipoDefesa == 'Q2' )  || ($Aluno[0]->curso == 1 && $Defesa[0]->tipoDefesa == 'D')  || ($Aluno[0]->curso == 2 && $Defesa[0]->tipoDefesa == 'T' ))){ 
-		$botao = 3;
+		//$botao = 3; //-Ainda não é possivel lançar o conceito, pois não consta no Banco de Dados a existência de uma Banca Avaliadora.
 	}
-	else if(($Defesa[0]->tipoDefesa == 'T' || $Defesa[0]->tipoDefesa == 'D')  && ($Defesa[0]->status_banca == NULL && ($Defesa[0]->banca_id != 0 || $Defesa[0]->banca_id != NULL ))){
-		$botao = 4;
+	else if(($Defesa[0]->tipoDefesa == 'T' || $Defesa[0]->tipoDefesa == 'D')  && (  ($Defesa[0]->status_banca == NULL) && ($Defesa[0]->banca_id != 0 && $Defesa[0]->banca_id != NULL ))){
+		$botao = 4; //-Ainda não é possivel lançar o conceito, pois a Banca Avaliadora ainda não foi avaliada pelo Coordenador.
 	}
-	else if($Defesa[0]->status_banca == 0){
-		$botao = 5;
+	else if($Defesa[0]->banca_id != 0  && $Defesa[0]->status_banca == 0 && ($Defesa[0]->tipoDefesa == 'T' || $Defesa[0]->tipoDefesa == 'D')){
+		$botao = 5; //Não é possivel lançar o conceito, pois a Banca Avaliadora foi INDEFERIDA pelo Coordenador.	
 	}
-	else if($Defesa[0]->status_banca == NULL){
-		$botao = 6;
+	else if(($Defesa[0]->banca_id != 0 && $Defesa[0]->status_banca == NULL) && ($Defesa[0]->tipoDefesa == 'T' || $Defesa[0]->tipoDefesa == 'D')){
+		$botao = 6; //Banca NÃO avaliada pelo Coordenador
 	}
+
 
 	//var_dump($Defesa[0]->status_banca);
 	//exit();
@@ -98,25 +99,22 @@ else{
 	function observacao(botao){
 
 		if (botao == 1){
-			alert ("Observação:\n\n  -Não é possivel lançar o conceito, pois a defesa ainda não foi realizada.");
+			alert ("Observação:\n\n  -Não é possivel realizar essa operação, pois a defesa ainda não foi realizada. Verifique a data da Defesa.");
 		}
 		else if (botao == 2){
-			alert ("Observação:\n\n  -Conceito já foi devidamente Lançado.");
+			alert ("Observação:\n\n  -Não é possivel realizar essa operação, pois o conceito já foi devidamente lançado.");
 		}
 		else if (botao == 3){
-			alert ("Observação:\n\n  -Ainda não é possivel lançar o conceito, pois não consta no Banco de Dados a existência de uma Banca Avaliadora.");
+			//alert ("Observação:\n\n  -Ainda não é possivel lançar o conceito, pois não consta no Banco de Dados a existência de uma Banca Avaliadora.");
 		}
 		else if (botao == 4){
-			alert ("Observação:\n\n  -Ainda não é possivel lançar o conceito, pois a Banca Avaliadora ainda não foi aprovada pelo Coordenador.");
+			alert ("Observação:\n\n  -Ainda não é possivel realizar essa operação, pois a Banca Avaliadora ainda não foi avaliada pelo Coordenador.");
 		}
 		else if (botao == 5) {
-			alert ("Observação:\n\n  -Não é possivel lançar o conceito, pois a Banca Avaliadora foi INDEFERIDA pelo Coordenador.");	
+			alert ("Observação:\n\n  -Não é possivel realizar essa operação, pois a Banca Avaliadora foi INDEFERIDA pelo Coordenador.");	
 		}
 		else if (botao == 6){
-			alert ("Observação:\n\n  -Só é possivel imprimir a Carta de Agradecimento e Declaração de Participação após o DEFERIMENTO da Banca Avaliadora pelo Coordenador.");		
-		}
-		else if (botao == 7){
-			alert ("Observação:\n\n  -Só é possivel gerar a Ata, o Convite e por o Número de defesa após o DEFERIMENTO da Banca Avaliadora pelo Coordenador.");		
+			alert ("Observação:\n\n  -Banca NÃO avaliada pelo Coordenador");		
 		}
 	}
 
@@ -126,7 +124,7 @@ else{
 			if(conceito != null && conceito.toLowerCase() == 'aprovado')			
                 window.open(URL='index.php?option=com_controledefesas&task=folhaaprovacao&idDefesa='+<?php echo $idDefesa ?>+'&idAluno='+<?php echo $idAluno?>+'&lang=pt-br');
             else{
-				alert("Defesa reprovada ou sem conceito ");
+				alert("Não é possível realizar essa operação, pois a Defesa foi reprovada ou não possui conceito.");
 			}    
         }
 
@@ -140,7 +138,7 @@ else{
            		observacao(botao);
            	}
            else if(numDefesa==null && (tipoDefesa == 'T' || tipoDefesa == 'D')){
-					alert("Defesa sem numero registrado");
+					alert("Não é possivel realizar essa operação, pois a defesa não possui número registrado.");
 			   }
            else{
 	           confirmar = window.confirm('Você tem certeza que deseja APROVAR esse(a) aluno(a)?');
@@ -161,7 +159,7 @@ else{
            		observacao(botao);
            	}
            	else if(numDefesa==null && (tipoDefesa == 'T' || tipoDefesa == 'D')){
-					alert("Defesa sem numero registrado");
+					alert("Não é possivel realizar essa operação, pois a defesa não possui número registrado.");
 			   }
            else{
 	           confirmar = window.confirm('Você tem certeza que deseja REPROVAR esse(a) aluno(a)?');
@@ -176,16 +174,23 @@ else{
 
 		function gerarAtaDefesa(form,numDefesa,tipoDefesa){
 			if((numDefesa == null) && (tipoDefesa == 'T' || tipoDefesa == 'D' )){
-				alert("Defesa sem número registrado."); 
+				alert("Não é possivel realizar essa operação, pois a defesa não possui número registrado."); 
 			}
 			else{
 				window.open(URL='index.php?option=com_controledefesas&task=gerarAta&idDefesa='+<?php echo $idDefesa ?>+'&idAluno='+<?php echo $idAluno?>);
 			}
 	    }
 	    
-	    function gerarConviteDefesa(form, idDefesa){        			
+	    function gerarConviteDefesa(form, idDefesa){
+	        var botao = <?php echo $botao?>;
+            
+            if (botao != 0 && botao !=2){
+           		observacao(botao);
+           	}
+           	else {        			
 	    	form.task.value = 'gerarConviteDefesa'; 
 			window.open(URL='index.php?option=com_controledefesas&task=gerarConviteDefesa&idDefesa='+<?php echo $idDefesa ?>+'&lang=pt-br');
+	    	}
 	    }
 	    
 	    function setarNumDefesa(form, numDefesa, status_banca){ 
