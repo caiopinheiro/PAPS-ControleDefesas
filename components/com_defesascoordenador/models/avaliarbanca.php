@@ -60,28 +60,73 @@ class DefesasCoordenadorModelAvaliarBanca extends JModelItem
 		}
 		
 		public function updateStatusBanca($idBanca,$avaliacao){
+			$db =& JFactory::getDbo();
+			 
+			$query = $db->getQuery(true);
+			 
+			// Fields to update.
+			$fields = array(
+				$db->quoteName('status_banca') . ' = ' . $db->quote($db->escape($avaliacao))
+			);
+			 
+			// Conditions for which records should be updated.
+			$conditions = array(
+				$db->quoteName('id') . ' = '.$idBanca 
+			);
+			 
+			$query->update($db->quoteName('#__banca_controledefesas'))->set($fields)->where($conditions);
+			 
+			$db->setQuery($query);
+			 
+			$result = $db->execute();
+
+
+			
+			/*
 			$database =& JFactory::getDBO();
 			$sql = "UPDATE #__banca_controledefesas SET status_banca = ".$avaliacao." WHERE id = ".$idBanca;
 			
 			$database->setQuery($sql);
 			
 			$sucesso = $database->Query();
+			*/
 			
-			
-			return $sucesso;
+			//return $sucesso;
+			return $result;
 				
 		}
 		
 		public function setJustificativa($idBanca,$justificativa){
-			$database =& JFactory::getDBO();
-			$sql = "UPDATE #__banca_controledefesas SET justificativa = '".$justificativa."' WHERE id = ".$idBanca;
+			$db =& JFactory::getDBO();
+			
+			$query = $db->getQuery(true);
+			 
+			// Fields to update.
+			$fields = array(
+				$db->quoteName('justificativa') . ' = ' . $db->quote($db->escape($justificativa))
+			);
+			 
+			// Conditions for which records should be updated.
+			$conditions = array(
+				$db->quoteName('id') . ' = '.$idBanca 
+			);
+			 
+			$query->update($db->quoteName('#__banca_controledefesas'))->set($fields)->where($conditions);
+			 
+			$db->setQuery($query);
+			 
+			$result = $db->execute();
+			
+			
+			/*$sql = "UPDATE #__banca_controledefesas SET justificativa = '".$justificativa."' WHERE id = ".$idBanca;
 			
 			$database->setQuery($sql);
 			
 			$sucesso = $database->Query();
 			
 			return $sucesso;
-				
+			*/	
+			return $sucesso;
 		}
         
 }
