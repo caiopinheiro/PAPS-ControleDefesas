@@ -216,8 +216,6 @@ class ControledefesasController extends JController {
 		print_r(isset($emails));
 	*/	
 		if($emails != null){
-			$caio2 = "pinheiro.caiof@gmail.com";	
-			$caio1 = "gcarneirobr@gmail.com";	
 				
 			// subject
 			$subject  = "[IComp/UFAM] SolicitaÃƒÂ§ÃƒÂ£o de Passagem AÃƒÂ©rea";
@@ -241,13 +239,9 @@ class ControledefesasController extends JController {
 			$message .= "Coordenadora do PPGI\r\n";
 			
 			
-			$email[] = $caio2;
-			$email[] = $caio1;
-		
-			
 			$path = "components/com_defesascoordenador/forms/".$formSolicitacao;
 			
-			$sucesso= JUtility::sendMail($user->email, "IComp: Controle de Defesas", $email, utf8_decode($subject), utf8_decode($message), false, NULL, NULL, $path);
+			$sucesso= JUtility::sendMail($user->email, "IComp: Controle de Defesas", $emails, utf8_decode($subject), utf8_decode($message), false, NULL, NULL, $path);
 		}
 		
 		return $sucesso;		
@@ -442,7 +436,7 @@ class ControledefesasController extends JController {
 			$nomeOrientador = $aluno[0]->nomeProfessor;	
 			$emails[] = $emailOrientador;
 			$emails[] = $emailAluno;
-			$emails[] = "secretaria@icomp.ufam.edu.br";
+			$emails[] = "secretariappgi@icomp.ufam.edu.br";
 			//$emails[] = "coordpesquisa@icomp.ufam.edu.br";
 			
 			
