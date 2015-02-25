@@ -118,14 +118,8 @@ else{
 		}
 	}
 
-		function folhaaprovacao(form){
-			var conceito = '<?php echo strtolower($conceito);?>';
-			
-			if(conceito != null && conceito.toLowerCase() == 'aprovado')			
-                window.open(URL='index.php?option=com_controledefesas&task=folhaaprovacao&idDefesa='+<?php echo $idDefesa ?>+'&idAluno='+<?php echo $idAluno?>+'&lang=pt-br');
-            else{
-				alert("Não é possível realizar essa operação, pois a Defesa foi reprovada ou não possui conceito.");
-			}    
+	function folhaaprovacao(form){
+		window.open(URL='index.php?option=com_controledefesas&task=folhaaprovacao&idDefesa='+<?php echo $idDefesa ?>+'&idAluno='+<?php echo $idAluno?>+'&lang=pt-br');
         }
 
 
