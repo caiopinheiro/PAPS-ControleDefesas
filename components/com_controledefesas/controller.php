@@ -218,7 +218,7 @@ class ControledefesasController extends JController {
 		if($emails != null){
 				
 			// subject
-			$subject  = "[IComp/UFAM] Solicitação de Passagem Aérea";
+			$subject  = "[IComp/UFAM] SolicitaÃ§Ã£o de Passagem Aérea";
 					
 			// message
 			$message .= "A Coordenação do Programa de Pós-graduação em Informática PPGI/UFAM tem o prazer de tê-lo para a sessão pública de apresentação da Defesa de Dissertação/Tese de Mestrado/Doutorado.\r\n\n";
