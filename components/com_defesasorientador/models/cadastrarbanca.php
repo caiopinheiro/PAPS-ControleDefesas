@@ -491,22 +491,24 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 
 			if (!strcmp($defesa['tipoDefesa'], 'Q1') || !strcmp($defesa['tipoDefesa'], 'Q2')) {
 				$statusBanca = 1;
-			} else $statusBanca = NULL;
+			} else $statusBanca = 'NULL';
 			
 			// inserir banca 
-			$query = $database->getQuery(true);
-			$columns = array('justificativa', 'status_banca');
-			$values = array('', $statusBanca);
+			//$query = $database->getQuery(true);
+			//$columns = array('justificativa', 'status_banca');
+			//$values = array($database->quote(''), $statusBanca);
 			
-			//$sql = "insert into #__banca_controledefesas (justificativa, status_banca) values ('', " . $statusBanca . ")" ;
+			$sql = "insert into #__banca_controledefesas (justificativa, status_banca) values ('', " . $statusBanca . ")" ;
 			
-			$query
-			->insert($database->quoteName('#__banca_controledefesas'))
-			->columns($database->quoteName($columns))
-			->values(implode(',', $values));
-				
+		//	$query
+			//->insert($database->quoteName('#__banca_controledefesas'))
+			//->columns($database->quoteName($columns))
+			-//>values(implode(',', $values));
+					
 			
-			$database->setQuery($query);
+		//	var_dump($query);
+			
+			$database->setQuery($sql);
 				
 			$database->execute();
 				
@@ -611,8 +613,6 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 			$database->execute();
 			
 			$result = $database->insertid();
-			
-			var_dump($result);
 			
 		}
 		
