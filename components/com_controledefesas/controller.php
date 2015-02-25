@@ -132,7 +132,7 @@ class ControledefesasController extends JController {
 			$pdf->MultiCell(0,5,utf8_decode('CONVITE À COMUNIDADE'),0, 'C');
 			$pdf->MultiCell(0,5,"",0, 'C');
 			
-			$tag = " A Coordenação do Programa de Pós-Graduação em Informática PPGI/UFAM tem o prazer de convidar toda a comunidade para a sessção pública de apresentação de defesa de";
+			$tag = " A Coordenação do Programa de Pós-Graduação em Informática PPGI/UFAM tem o prazer de convidar toda a comunidade para a sessão pública de apresentação de defesa de";
 			if ($defesa[0]->tipoDefesa == 'Q1' OR $defesa[0]->tipoDefesa == 'Q2' ) {
 				if ($aluno[0]->curso == 2){
 					$tag = $tag . " exame de qualificação de doutorado:";
