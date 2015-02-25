@@ -218,20 +218,20 @@ class ControledefesasController extends JController {
 		if($emails != null){
 				
 			// subject
-			$subject  = "[IComp/UFAM] SolicitaÃƒÂ§ÃƒÂ£o de Passagem AÃƒÂ©rea";
+			$subject  = "[IComp/UFAM] Solicitação de Passagem Aérea";
 					
 			// message
-			$message .= "A CoordenaÃƒÂ§ÃƒÂ£o do Programa de PÃƒÂ³s-graduaÃƒÂ§ÃƒÂ£o em InformÃƒÂ¡tica PPGI/UFAM tem o prazer de tÃƒÂª-lo para a sessÃƒÂ£o pÃƒÂºblica de apresentaÃƒÂ§ÃƒÂ£o da Defesa de DissertaÃƒÂ§ÃƒÂ£o/Tese de Mestrado/Doutorado.\r\n\n";
+			$message .= "A Coordenação do Programa de Pós-graduação em Informática PPGI/UFAM tem o prazer de tê-lo para a sessão pública de apresentação da Defesa de Dissertação/Tese de Mestrado/Doutorado.\r\n\n";
 			
-			$message .= "Considerando a sua participaÃƒÂ§ÃƒÂ£o, pedimos o preenchimento do FormulÃƒÂ¡rio de SolicitaÃƒÂ§ÃƒÂ£o de Passagens e DiÃƒÂ¡rias, que estÃƒÂ¡ em anexo ÃƒÂ  este email. Rogamos, ainda, o fornecimento dos seguintes dados, para fins de cadastro em nosso sistema de gerenciamento da PÃƒÂ³s-GraduaÃƒÂ§ÃƒÂ£o:\r\n\n";
+			$message .= "Considerando a sua participação, pedimos o preenchimento do Formulário de Solicitação de Passagens e Diárias, que está em anexo à este email. Rogamos, ainda, o fornecimento dos seguintes dados, para fins de cadastro em nosso sistema de gerenciamento da Pós-Graduação:\r\n\n";
 			$message .= "a. Nome completo;\n";
-			$message .=	"b. Data de nascimento;\n";
-			$message .= "c. Data de sua diplomaÃƒÂ§ÃƒÂ£o em PÃƒÂ³s-GraduaÃƒÂ§ÃƒÂ£o, e nome da InstituiÃƒÂ§ÃƒÂ£o em que diplomou-se;\n";
-			$message .=	"d. Data de inÃƒÂ­cio do vÃƒÂ­nculo com sua IES;\n";
-			$message .= "e. SugestÃƒÂ£o de Voo.\r\n\n";
-			$message .= "Solicitamos que, apÃƒÂ³s o preenchimento do FormulÃƒÂ¡rio de SolicitaÃƒÂ§ÃƒÂ£o de Passagens e DiÃƒÂ¡rias, bem como dos demais dados solicitados, os mesmos sejam encaminhados ao email de nossa Secretaria: secretariappgi@icomp.ufam.edu.br.\r\n\n";
+			$message .= "b. Data de nascimento;\n";
+			$message .= "c. Data de sua diplomação em Pós-Graduação, e nome da Instituição em que diplomou-se;\n";
+			$message .= "d. Data de início do vínculo com sua IES;\n";
+			$message .= "e. Sugestão de Voo.\r\n\n";
+			$message .= "Solicitamos que, após o preenchimento do Formulário de Solicitação de Passagens e Diárias, bem como dos demais dados solicitados, os mesmos sejam encaminhados ao email de nossa Secretaria: secretariappgi@icomp.ufam.edu.br.\r\n\n";
 				
-			$message .= "Por fim, reiteramos o nosso prazer em tÃƒÂª-lo como participante de um momento tÃƒÂ£o importante, e esperamos, sinceramente, que outros mais venham.\r\n\n";
+			$message .= "Por fim, reiteramos o nosso prazer em tê-lo como participante de um momento tão importante, e esperamos, sinceramente, que outros mais venham.\r\n\n";
 			
 			$message .= "Atenciosamente,\r\n\n";
 			
