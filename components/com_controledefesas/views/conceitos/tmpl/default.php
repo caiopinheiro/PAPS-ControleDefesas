@@ -444,9 +444,9 @@ else{
 
 					foreach( $MembrosBanca as $membro )
 					{
-						if($membro->funcao == 'P')
+				//		if($membro->funcao == 'P')
 
-							$nome_orientador = $membro->nome;
+				//			$nome_orientador = $membro->nome;
 					?>
 					<tr>
 
