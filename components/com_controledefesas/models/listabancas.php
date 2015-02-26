@@ -68,25 +68,22 @@ class ControledefesasModelListaBancas extends JModelItem
 	
 
 
-			if($status_banca == 2){					
-				$sql_status_banca = " AND (bcd.status_banca = '1' OR bcd.status_banca is NULL) AND (conceito = '' OR conceito is NULL)";
-				//' AND bcd.status_banca IS NULL';
-			}
-			else if($status_banca == 1 ){
-				$sql_status_banca = " AND ( conceito LIKE 'Aprovado' ) ";
-			}
-			else if($status_banca == 4 ){
-				$sql_status_banca = " AND (bcd.status_banca = '0') ";
-			}
-			else if($status_banca == 5){
-				$sql_status_banca = " AND ( conceito LIKE 'Reprovado' )";
-			}
-			else if($status_banca == 6){
-				$sql_status_banca = " AND (d.banca_id <> '0' AND bcd.status_banca is NULL and (conceito = ''))";//pendente deferimento coordenador
-			}
-			else if($status_banca == 7){
-				$sql_status_banca = " AND (d.banca_id = '0' AND tipoDefesa <> 'Q1')"; //pendente de banca
-			}
+			 if($status_banca == 2){                    
+        		 	$sql_status_banca = " AND (bcd.status_banca = '1') AND (conceito = '' OR conceito is NULL)"; //pendente de conceito
+		                //' AND bcd.status_banca IS NULL';
+		            }
+		            else if($status_banca == 1 ){
+		                $sql_status_banca = " AND ( conceito LIKE 'Aprovado' ) "; //aprovado
+		            }
+		            else if($status_banca == 4 ){
+		                $sql_status_banca = " AND ( bcd.status_banca = '0') "; //indeferida
+		            }
+		            else if($status_banca == 5){
+		                $sql_status_banca = " AND ( conceito LIKE 'Reprovado' )"; //reprovada
+		            }
+		            else if($status_banca == 6){
+		                $sql_status_banca = " AND (d.banca_id <> '0' AND bcd.status_banca is NULL and (conceito = '' OR conceito is NULL))";//pendente deferimento coordenador
+		            }
 
 
 
