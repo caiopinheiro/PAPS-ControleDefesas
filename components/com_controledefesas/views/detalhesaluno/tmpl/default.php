@@ -36,6 +36,13 @@ if(isset ($Defesas)){
   }
 }
 
+$nome_orientador= '';
+
+foreach($MembrosBanca as $membros){
+	if($membros->funcao == 'P')
+		$nome_orientador = $membros->nome;
+}
+
 ?>
 
 <script type="text/javascript" src= "/icomp/components/com_controledefesas/assets/jquery-ui-1.11.2.custom/jquery-ui.js"></script>
@@ -86,7 +93,7 @@ if(isset ($Defesas)){
         </tr>
         <tr>
           <td style='font-weight: bold;'>ORIENTADOR:</td>
-          <td colspan='3'><?php if(isset($Aluno[0]->nomeProfessor) && !empty($Aluno[0]->nomeProfessor)) echo $Aluno[0]->nomeProfessor; ?></td>
+          <td colspan='3'><?php echo $nome_orientador; ?></td>
         </tr>
         <tr>
           <td style='font-weight: bold;'>LINHA DE PESQUISA:</td>
