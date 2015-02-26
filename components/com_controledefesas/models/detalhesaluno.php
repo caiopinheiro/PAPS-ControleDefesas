@@ -26,17 +26,18 @@ class ControledefesasModelDetalhesAluno extends JModelItem
 		$database =& JFactory::getDBO();
 		
 		// setar orientador como Presidente da banca
-		$sqlOrientador = "select concat('Prof.(a) ', p.nomeProfessor) nome, 'P' funcao , 'PPGI/UFAM' filiacao, p.email, '' tipoDefesa, d.banca_id 
+	/*	$sqlOrientador = "select concat('Prof.(a) ', p.nomeProfessor) nome, 'P' funcao , 'PPGI/UFAM' filiacao, p.email, '' tipoDefesa, d.banca_id 
 		from j17_professores p, j17_banca_controledefesas b, j17_defesa d, j17_aluno a where
 		d.banca_id = b.id and d.aluno_id = a.id and p.id = a.orientador and a.id = $idAluno";
-	
+	*/
 		$sql = "SELECT mb.nome, bhmb.funcao, mb.filiacao, mb.email, d.tipoDefesa, d.banca_id FROM #__banca_controledefesas AS b 
 		JOIN #__defesa AS d ON d.banca_id = b.id 
 		JOIN #__banca_has_membrosbanca AS bhmb ON bhmb.banca_id = b.id 
 		JOIN #__membrosbanca AS mb ON mb.id = bhmb.membrosbanca_id 
-		WHERE d.aluno_id = '$idAluno' AND b.status_banca = '1'";
+		WHERE d.aluno_id = '$idAluno'";
 		
-		$sql = $sqlOrientador . ' UNION ' . $sql;
+	//	WHERE d.aluno_id = '$idAluno' AND b.status_banca = '1'";
+	//	$sql = $sqlOrientador . ' UNION ' . $sql;
 		$database->setQuery($sql);
 		return $database->loadObjectList();
 	}
