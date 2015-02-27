@@ -468,8 +468,6 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	 */
 	public function insertDefesa($defesa) {
 	
-		
-		
 		$validacao = $this->validaDefesa($defesa);
 		
 		// usado para operação lógica com array de booleanos
@@ -504,16 +502,12 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 			//->insert($database->quoteName('#__banca_controledefesas'))
 			//->columns($database->quoteName($columns))
 			-//>values(implode(',', $values));
-					
-			
 		//	var_dump($query);
-			
 			$database->setQuery($sql);
 				
 			$database->execute();
 				
 			$idBanca = $database->insertid();
-			
 			
 			$arquivoPrevia = $this->moverArquivo($defesa['previa'], $defesa['tipoDefesa']);
 			$this->inserirMembroBanca($defesa['membrosBanca'], $idBanca);
@@ -546,7 +540,7 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 					$arquivoPrevia . "', '" . $defesa['localDescricao'] . "', '" . $defesa['localHorario'] . "', '" . 
 					$defesa['examinador'] . "', '" . $defesa['emailexaminador'] . "')";
 				
-			$database->setQuery($sql);
+			//s$database->setQuery($sql);
 			
 			$database->execute();
 			
@@ -589,7 +583,6 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	private function inserirMembroBanca($membroBanca, $idBanca) {
 		
 		$database =& JFactory::getDBO();
-		
 		
 		for ($count = 0; $count < count($membroBanca['id']); $count++) {
 

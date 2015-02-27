@@ -349,6 +349,8 @@ class DefesasorientadorController extends JController {
     	
     	$database =& JFactory::getDBO();
 
+    	$model = $this->getModel('solicitarbanca');
+    	
     	// migração defesas de qualificação 1 de mestrado
     	$sqlmestrado = "select * from #__aluno where curso = 1";
 		$database->setQuery($sqlmestrado);
@@ -356,6 +358,7 @@ class DefesasorientadorController extends JController {
 		$aluno = $database->loadObjectList();
 		
     	foreach ($aluno as $alunomestrado) {
+
     		
     		if (strlen($alunomestrado->tituloQual2)) {
 				
@@ -369,17 +372,20 @@ class DefesasorientadorController extends JController {
 	    		$database->setQuery($insertBanca);
 	    		$database->execute();
 				$idBanca = $database->insertid();
-
-				
+				$presidente = $model->getPresidenteId($alunomestrado->id);
 				if (sizeof($bancas))
 				foreach ($bancas as $banca) {
 					
 					if ($banca->idMembro != '0' && $banca->funcao != 'P') {
-						$insertBanca = "insert into #__banca_hasmembrosbanca (banca_id, membrosbanca_id, funcao, passagem) VALUES ($idBanca, $banca->idMembro, '$banca->funcao', 'N')";
+						$insertBanca = "insert into #__banca_has_membrosbanca (banca_id, membrosbanca_id, funcao, passagem) VALUES ($idBanca, $banca->idMembro, '$banca->funcao', 'N')";
 						$database->setQuery($insertBanca);
 						$database->execute();
 					}
 				}
+				
+				$insertBanca = "insert into #__banca_has_membrosbanca (banca_id, membrosbanca_id, funcao, passagem) VALUES ($idBanca, $presidente->id, 'P', 'N')";
+				$database->setQuery($insertBanca);
+				$database->execute();
 				
 				$insertDefesa = "insert into #__defesa (aluno_id, banca_id, resumo, data, local, horario, tipoDefesa, titulo, conceito) values 
 								($alunomestrado->id, $idBanca, '$alunomestrado->resumoQual2', str_to_date('$alunomestrado->dataQual2', '%d/%m/%Y'), '$alunomestrado->localQual2', '$alunomestrado->horarioQual2', 'Q1', '$alunomestrado->tituloQual2', '$alunomestrado->conceitoQual2')";
@@ -408,18 +414,28 @@ class DefesasorientadorController extends JController {
     			 
     			$database->execute();
     			
+    			
+    			
     			$idBanca = $database->insertid();
+    			
+    			$presidente = $model->getPresidenteId($alunomestrado->id);
+    			 
     			
     			if (sizeof($bancas))
     			foreach ($bancas as $banca) {
     				if ($banca->idMembro != '0' && $banca->funcao != 'P') {
-    					$insertBanca = "insert into #__banca_hasmembrosbanca (banca_id, membrosbanca_id, funcao, passagem) VALUES ($idBanca, $banca->idMembro, '$banca->funcao', 'N')";
+    					$insertBanca = "insert into #__banca_has_membrosbanca (banca_id, membrosbanca_id, funcao, passagem) VALUES ($idBanca, $banca->idMembro, '$banca->funcao', 'N')";
 	    				$database->setQuery($insertBanca);
 	    				
 	    				$database->execute();
     				}
     			}
     			
+    			// insere o presidente
+    			$insertBanca = "insert into #__banca_has_membrosbanca (banca_id, membrosbanca_id, funcao, passagem) VALUES ($idBanca, $presidente->id, 'P', 'N')";
+				$database->setQuery($insertBanca);
+				$database->execute();
+				
     			$insertDefesa = "insert into #__defesa (numDefesa, aluno_id, banca_id, resumo, data, local, horario, tipoDefesa, titulo, conceito) values
     			(" . (!is_null($alunomestrado->numDefesa) ? $alunomestrado->numDefesa : 'NULL') . ", $alunomestrado->id, $idBanca, '$alunomestrado->resumoTese', 
     				 str_to_date('$alunomestrado->dataTese', '%d/%m/%Y'), '$alunomestrado->localTese', '$alunomestrado->horarioTese', 'D', '$alunomestrado->tituloTese',
@@ -442,7 +458,6 @@ class DefesasorientadorController extends JController {
     	
     	
     		if (strlen($alunomestrado->tituloQual2)) {
-    			 
     	
     			$sqlbanca = "select * from #__banca where idAluno = $alunomestrado->id and tipoDefesa = 'Q2";
     			$database->setQuery($sqlbanca);
@@ -456,14 +471,22 @@ class DefesasorientadorController extends JController {
   	  			
   	  			
     			$idBanca = $database->insertid();
+    			
+    			$presidente = $model->getPresidenteId($alunomestrado->id);
+    			 
     			if (sizeof($bancas))
     			foreach ($bancas as $banca) {
     				if ($banca->idMembro != '0' && $banca->funcao != 'P') {
-    					$insertBanca = "insert into #__banca_hasmembrosbanca (banca_id, membrosbanca_id, funcao, passagem) VALUES ($idBanca, $banca->idMembro, '$banca->funcao', 'N')";
+    					$insertBanca = "insert into #__banca_has_membrosbanca (banca_id, membrosbanca_id, funcao, passagem) VALUES ($idBanca, $banca->idMembro, '$banca->funcao', 'N')";
     					$database->setQuery($insertBanca);
     					$database->execute();
     				}
     			}
+    			
+    			
+    			$insertBanca = "insert into #__banca_has_membrosbanca (banca_id, membrosbanca_id, funcao, passagem) VALUES ($idBanca, $presidente->id, 'P', 'N')";
+    			$database->setQuery($insertBanca);
+    			$database->execute();
     			
     			$insertDefesa = "insert into #__defesa (aluno_id, banca_id, resumo, data, local, horario, tipoDefesa, titulo, conceito) values
     			($alunomestrado->id, $idBanca, '$alunomestrado->resumoQual2', str_to_date('$alunomestrado->dataQual2, 'd/m/Y')', '$alunomestrado->localQual2',
@@ -492,15 +515,22 @@ class DefesasorientadorController extends JController {
 		    			
 		    			$database->execute();
 		    	
-		    			$idBanca = $database->insertid();
+		    			$idBanca = $database->insertid();		
+		    			
+		    			$presidente = $model->getPresidenteId($alunomestrado->id);
 		    	
 		    		if (sizeof($bancas))
 		    		foreach ($bancas as $banca) {
 		    		if ($banca->idMembro != '0' && $banca->funcao != 'P')
-		    			$insertBanca = "insert into #__banca_hasmembrosbanca (banca_id, membrosbanca_id, funcao, passagem) VALUES ($idBanca, $banca->idMembro, '$banca->funcao', 'N')";
+		    			$insertBanca = "insert into #__banca_has_membrosbanca (banca_id, membrosbanca_id, funcao, passagem) VALUES ($idBanca, $banca->idMembro, '$banca->funcao', 'N')";
 		    		  	 $database->setQuery($insertBanca);
 						$database->execute();
 		    		}
+		    		
+		    		$insertBanca = "insert into #__banca_has_membrosbanca (banca_id, membrosbanca_id, funcao, passagem) VALUES ($idBanca, $presidente->id, 'P', 'N')";
+		    		$database->setQuery($insertBanca);
+		    		$database->execute();
+		    		
 		    		
 		    		$insertDefesa = "insert into #__defesa (numDefesa, aluno_id, banca_id, resumo, data, local, horario, tipoDefesa, titulo, conceito) values
 	    					(" . (!is_null($alunomestrado->numDefesa) ? $alunomestrado->numDefesa : 'NULL') . ", $alunomestrado->id, $idBanca, '$alunomestrado->resumoTese',
@@ -529,12 +559,15 @@ class DefesasorientadorController extends JController {
     				 
     				$insertDefesa = "insert into #__defesa (aluno_id, banca_id, resumo, data, tipoDefesa, titulo, conceito, examinador) values
 	    					(" . "$alunomestrado->id, $idBanca, '',
-    			    					str_to_date('$alunomestrado->dataQual1', '%d/%m/%Y'), 'Q1', '$alunomestrado->tituloQual1',
+    			    					str_to_date('$alunomestrado->dataQual1', '%d/%m/%Y'), 'Q2', '$alunomestrado->tituloQual1',
     			    					'$alunomestrado->conceitoQual1', '$alunomestrado->examinadorQual1')";
     				
-    				$database->setQuery($insertDefesa);
     				
-    				$database->execute();
+    				var_dump($insertDefesa);
+    				echo ('<br>');
+    				$database->setQuery($insertDefesa);
+    				$insert = $database->execute();
+    				var_dump($insert);
     			}	
     			 
     		}

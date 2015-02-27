@@ -54,7 +54,7 @@ class DefesasOrientadorModelSolicitarBanca extends JModelItem
 	}
 	
 	/**
-	 * função que retorna orientador do aluno para colocá-lo como presidente da banca
+	 * função que retorna o presidente da banca com base no orientador do aluno
 	 * 
 	 * @return number
 	 */
@@ -72,6 +72,27 @@ class DefesasOrientadorModelSolicitarBanca extends JModelItem
 		return $presidente[0];
 		
 	}
+
+	/**
+	 * Função idêntica, mas sem parâmetros a função de recuperar presidente
+	 * 
+	 * @param unknown $idAluno
+	 * @return Ambigous <unknown, mixed>
+	 */
+	public function getPresidenteId($idAluno) {
+		$database =& JFactory::getDBO();
+			
+		$sql = "select mb.nome	, mb.filiacao, mb.id from #__aluno a, #__professores p, #__membrosbanca mb
+		where a.orientador = p.id and a.id=$idAluno and mb.idProfessor = p.id";
+	
+		$database->setQuery($sql);
+	
+		$presidente = $database->loadObjectList();
+	
+		return $presidente[0];
+	
+	}
+	
 	
 	/**
 	 * Funcao que retorna um único membro da banca
