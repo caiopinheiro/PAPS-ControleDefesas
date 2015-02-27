@@ -10,10 +10,11 @@ function formatarData($data){
   $aux = $data[2] . "/" . $data[1] . "/" .$data[0] ;
   return $aux;  
 }
-$idAluno = $this->idAluno;
+
 $Aluno = $this->aluno;
 $Defesas = $this->defesas;
 $MembrosBanca = $this->membrosBanca;
+
 $arrayCurso = array (1 => "Mestrado", 2 => "Doutorado", 3 => "Especial");
 $arrayTipoDefesa = array('Q1' => "Qualificação 1", 'Q2' => "Qualificação 2", 'D' => "Dissertação", 'T' => "Tese");
 $arrayFuncaoMembro = array('P' => "Presidente",'E' => "Membro Externo", 'I' => "Membro Interno");
@@ -22,7 +23,6 @@ $possuiQ1=false;
 $possuiQ2=false;
 $possuiDissertacao=false;
 $possuiTese=false;
-
 if(isset ($Defesas)){      
   foreach($Defesas as $defesa ){ 
     if($defesa->tipoDefesa == 'Q1')
@@ -35,14 +35,11 @@ if(isset ($Defesas)){
       $possuiTese=true;
   }
 }
-
 $nome_orientador= '';
-
 foreach($MembrosBanca as $membros){
-	if($membros->funcao == 'P')
-		$nome_orientador = $membros->nome;
+  if($membros->funcao == 'P')
+    $nome_orientador = $membros->nome;
 }
-
 ?>
 
 <script type="text/javascript" src= "/icomp/components/com_controledefesas/assets/jquery-ui-1.11.2.custom/jquery-ui.js"></script>
@@ -63,7 +60,6 @@ foreach($MembrosBanca as $membros){
       </div>
        
       <input name='task' type='hidden' value='display'>
-      <input name='idAluno' type='hidden' value = <?php echo $idAluno;?>>
 
     </div>
     <div class="clr"></div>
@@ -161,7 +157,7 @@ foreach($MembrosBanca as $membros){
                  <?php
                     if(isset ($MembrosBanca)){
                         foreach($MembrosBanca as $membro ){ 
-                            if($membro->funcao == 'P' || ($membro->banca_id == $defesa->banca_id && $membro->tipoDefesa == 'Q1')){
+                            if($membro->banca_id == $defesa->banca_id && $membro->tipoDefesa == 'Q1'){
                                 echo $membro->nome;
                                 echo " (".$arrayFuncaoMembro[$membro->funcao].")";
                                 echo " - ".$membro->filiacao."<br />";
@@ -257,7 +253,7 @@ foreach($MembrosBanca as $membros){
                  <?php
                     if(isset ($MembrosBanca)){
                         foreach($MembrosBanca as $membro ){ 
-                            if($membro->funcao == 'P' || ($membro->banca_id == $defesa->banca_id && $membro->tipoDefesa == 'Q2')){
+                            if($membro->banca_id == $defesa->banca_id && $membro->tipoDefesa == 'Q2'){
                                 echo $membro->nome;
                                 echo " (".$arrayFuncaoMembro[$membro->funcao].")";
                                 echo " - ".$membro->filiacao."<br />";
@@ -310,7 +306,7 @@ foreach($MembrosBanca as $membros){
                  <?php
                     if(isset ($MembrosBanca)){
                         foreach($MembrosBanca as $membro ){ 
-                            if($membro->funcao == 'P' || ($membro->banca_id == $defesa->banca_id && ($membro->tipoDefesa == 'D' || $membro->tipoDefesa == 'T'))){
+                            if($membro->banca_id == $defesa->banca_id && ($membro->tipoDefesa == 'D' || $membro->tipoDefesa == 'T')){
                                 echo $membro->nome;
                                 echo " (".$arrayFuncaoMembro[$membro->funcao].")";
                                 echo " - ".$membro->filiacao."<br />";
