@@ -114,12 +114,9 @@ class DefesascoordenadorController extends JController {
 				}
 			}
 			
-			$data = explode("-", $defesa[0]->data);
-			$data = $data[2] . "/" . $data[1] . "/" .$data[0] ;	
-			
 			$message .= "\n";
 			$message .= "LOCAL: ".$defesa[0]->local."\r\n";
-			$message .= "DATA: ".$data."\r\n";
+			$message .= "DATA: ".$defesa[0]->data."\r\n";
 			$message .= "HORÁRIO: ".$defesa[0]->horario."\r\n\n";
 			$message .= "Reiteramos o nosso prazer em tê-lo como participante de um momento tão importantes.\r\n\n";
 			$message .= "Atenciosamente,\r\n\n";
@@ -213,8 +210,7 @@ class DefesascoordenadorController extends JController {
 		$defesa = $view->defesa;
 		
 		$chave = $aluno[0]->nome_aluno;
-		$data = explode("-", $defesa[0]->data);
-		$data = $data[2] . "/" . $data[1] . "/" .$data[0] ;	 
+			 
 		//$pdf = new FPDF('P','cm','A4');
 		$pdf = new PDF();
 		$pdf->Open();
@@ -278,7 +274,7 @@ class DefesascoordenadorController extends JController {
 		
 		$pdf->MultiCell(0,6,"LOCAL: " . utf8_decode($defesa[0]->local),0, 'J');
 		$pdf->MultiCell(0,5,"",0, 'C');
-		$pdf->MultiCell(0,6,"DATA: " . utf8_decode($data),0, 'J');
+		$pdf->MultiCell(0,6,"DATA: " . utf8_decode($defesa[0]->data),0, 'J');
 		$pdf->MultiCell(0,5,"",0, 'C');
 		$pdf->MultiCell(0,6,utf8_decode("HORÁRIO: ") . utf8_decode($defesa[0]->horario),0, 'J');
 		$pdf->MultiCell(0,5,"",0, 'C');
