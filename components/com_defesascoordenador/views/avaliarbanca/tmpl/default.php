@@ -218,7 +218,7 @@ else if(($sucesso == false AND $sucesso != NULL) OR ($sucesso2 == false AND $suc
 		
 		<tr>
 		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='20%'>DATA:</td>
-		  <td width='30%'><?php echo $Defesa[0]->data;?></td>
+		  <td width='30%'><?php echo formatarData($Defesa[0]->data);?></td>
 		  <td bgcolor="#B0B0B0" style='font-weight: bold;' width='25%'>HORÁRIO:</td>
 		  <td width='25%'><?php echo $Defesa[0]->horario;?></td>
 		</tr>
