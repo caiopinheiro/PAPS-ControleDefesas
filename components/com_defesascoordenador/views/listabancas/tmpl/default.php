@@ -153,9 +153,9 @@ if(($this->status_bancas == NULL) AND
             <thead>
               <tr>
                 <th></th>
-                <th>Status Banca</th>
+                <th>Status</th>
                 <th>Nome Aluno</th>
-                <th>Tipo Banca</th>
+                <th>Tipo</th>
                 <th>Orientador</th>
                 <th>Linha de Pesquisa</th>
               </tr>
