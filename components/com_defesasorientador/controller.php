@@ -4,7 +4,7 @@
  * @version     1.0.0
  * @package     com_defesasorientador
  * @copyright   Copyright (C) 2014. Todos os direitos reservados.
- * @license     GNU General Public License vers√£o 2 ou posterior; consulte o arquivo License. txt
+ * @license     GNU General Public License vers√É¬£o 2 ou posterior; consulte o arquivo License. txt
  * @author      Caio <pinheiro.caiof@gmail.com> - http://
  */
 // No direct access
@@ -92,12 +92,12 @@ class DefesasorientadorController extends JController {
     	$view->localHorario = $this->get('localHorario');
     
     	
-    	// examinador para qualificaÁ„o 2 de doutorado
+    	// examinador para qualifica√ß√£o 2 de doutorado
     	$view->emailexaminador = $this->get('emailexaminador');
     	$view->examinador = $this->get('examinador');
     	
     	
-    	// dados para validaÁ„o de tese e doutorado - crÈditos cumpridos
+    	// dados para valida√ß√£o de tese e doutorado - cr√©ditos cumpridos
     	$view->creditos = $model->getCreditos();
 
     	
@@ -125,9 +125,9 @@ class DefesasorientadorController extends JController {
     	$view->membrosBancaTabela['nome'] = $arrayNome;
     	$view->membrosBancaTabela['filiacao'] = $arrayFiliacao;
     	
-    	$view->nomeFase = array("P" => "ProeficiÍncia","Q1" => "QualificaÁ„o 1", 'Q2' => "QualificaÁ„o 2", 'D' => 'DissertaÁ„o', 'T' => 'Tese', 'Q' => 'QualificaÁ„o');
+    	$view->nomeFase = array("P" => "Proefici√™ncia","Q1" => "Qualifica√ß√£o 1", 'Q2' => "Qualifica√ß√£o 2", 'D' => 'Disserta√ß√£o', 'T' => 'Tese', 'Q' => 'Qualifica√ß√£o');
     	
-    	// verificaÁ„o È possÌvel cadastrar defesa
+    	// verifica√ß√£o √© poss√≠vel cadastrar defesa
     	if (!strcmp($view->faseDefesa[0], $view->mapaFases[0]) && !$view->faseDefesa[1]) {
     		$view->semProeficiencia = true;
     	} else if (!$view->faseDefesa[1] && strcmp($view->faseDefesa[0], $view->mapaFases[0])) {
@@ -151,7 +151,7 @@ class DefesasorientadorController extends JController {
 		$view->localSala = $this->get('localSala');
 		$view->localHorario = $this->get('localHorario');
 
-		//validaÁ„o se orientador est· com id de membro de banca
+		//valida√ß√£o se orientador est√° com id de membro de banca
 		if (isset($presidente)) {
 			if (is_null($presidente)) {
 				$view->orientadorSemMembroBanca = true;
@@ -180,7 +180,7 @@ class DefesasorientadorController extends JController {
     	$defesa['emailexaminador'] = JRequest::getVar('emailexaminador');
     	$defesa['previaanterior'] = JRequest::getVar('previaanterior');
     	
-    	// flag para indicar que a previa j· foi validada
+    	// flag para indicar que a previa j√° foi validada
     	$defesa['flagPrevia'] = false;
     	
     	if (!($defesa['previa']['size']) && strlen($defesa['previaanterior'])) {
@@ -224,7 +224,7 @@ class DefesasorientadorController extends JController {
 			
 		} else {
 			
-			// se n„o houver erros redireciona para view de confirmaÁ„o			
+			// se n√£o houver erros redireciona para view de confirma√ß√£o			
 			
 			$this->set('iddefesa', $resultado);
 			
@@ -232,7 +232,7 @@ class DefesasorientadorController extends JController {
 			
 			$aluno = $model->getAluno($idAluno);
 			
-			// enviar e-mail apenas se for qualificaÁ„o 1 de doutorado
+			// enviar e-mail apenas se for qualifica√ß√£o 1 de doutorado
 			if ($aluno->curso == 2 && $defesa['tipoDefesa'])
 			$this->enviarEmailExaminador($defesa['examinador'], $defesa['emailexaminador'], $resultado);
 			
@@ -244,7 +244,7 @@ class DefesasorientadorController extends JController {
 			
 			$this->execute('confirmarbanca');
 			
-			// evitar de cadastrar duas vezes por atualizaÁ„o de p·gina
+			// evitar de cadastrar duas vezes por atualiza√ß√£o de p√°gina
 			
 		}
 		
@@ -311,10 +311,10 @@ class DefesasorientadorController extends JController {
     	if($emailExaminador != null){
     			
     		// subject
-    		$subject  = "[IComp/UFAM] Convite de ParticipaÁ„o de Defesa";
+    		$subject  = "[IComp/UFAM] Convite de Participa√ß√£o de Defesa";
     			
     		// message
-    		$message = "A Coordena√ß√£o do Programa de P√≥s-gradua√ß√£o em Inform√°tica PPGI/UFAM tem o prazer de convid√°-lo para examinar a Qualifica√ß√£o de Doutorado:\r\n\n";
+    		$message = "A Coordena√É¬ß√É¬£o do Programa de P√É¬≥s-gradua√É¬ß√É¬£o em Inform√É¬°tica PPGI/UFAM tem o prazer de convid√É¬°-lo para examinar a Qualifica√É¬ß√É¬£o de Doutorado:\r\n\n";
     		$message .= "$titulo\r\n\n";
     		$message .= "CANDIDATO: ".$aluno[0]->nome_aluno."\r\n\n";
     		$message .= "EXAMINADOR(A): \r\n";
@@ -327,7 +327,7 @@ class DefesasorientadorController extends JController {
     			
     		$message .= "\n";
     		$message .= "DATA: ".$data."\r\n\n";
-    		$message .= "Reiteramos o nosso prazer em t√™-lo como participante de um momento t√£o importantes.\r\n\n";
+    		$message .= "Reiteramos o nosso prazer em t√É¬™-lo como participante de um momento t√É¬£o importantes.\r\n\n";
     		$message .= "Atenciosamente,\r\n\n";
     		$message .= "Profa. Eulanda M. dos Santos\r\n"  ;
     		$message .= "Coordenadora do PPGI\r\n";
@@ -340,7 +340,7 @@ class DefesasorientadorController extends JController {
     }
     
     /**
-     * funÁ„o usada para migrar os dados
+     * fun√ß√£o usada para migrar os dados
      * 
      * para migrar os dados colocar como public
      * para bloquear acessos externos colocar como private
@@ -351,7 +351,7 @@ class DefesasorientadorController extends JController {
 
     	$model = $this->getModel('solicitarbanca');
     	
-    	// migraÁ„o defesas de qualificaÁ„o 1 de mestrado
+    	// migra√ß√£o defesas de qualifica√ß√£o 1 de mestrado
     	$sqlmestrado = "select * from #__aluno where curso = 1";
 		$database->setQuery($sqlmestrado);
 		
@@ -397,7 +397,7 @@ class DefesasorientadorController extends JController {
     	}
     	
     	
-    	// migraÁ„o dos dados de dissertaÁ„o
+    	// migra√ß√£o dos dados de disserta√ß√£o
     	
     	foreach ($aluno as $alunomestrado) {
     		
@@ -445,7 +445,7 @@ class DefesasorientadorController extends JController {
     		}
     	}
 
-    	// migraÁ„o defesas de doutorado
+    	// migra√ß√£o defesas de doutorado
     	$sqldoutorado = "select * from #__aluno where curso = 2";
 
     	$database->setQuery($sqldoutorado);
@@ -453,7 +453,7 @@ class DefesasorientadorController extends JController {
     	$aluno = $database->loadObjectList();
     	
     	
-    	//migraÁ„o de qualificaÁ„o 2 de doutorado
+    	//migra√ß√£o de qualifica√ß√£o 2 de doutorado
     	foreach ($aluno as $alunomestrado) {
     	
     	
@@ -498,7 +498,7 @@ class DefesasorientadorController extends JController {
     		}
     	}
     		 
-    		// migraÁ„o dos dados de tese
+    		// migra√ß√£o dos dados de tese
     		 
     		foreach ($aluno as $alunomestrado) {
     	
@@ -544,7 +544,7 @@ class DefesasorientadorController extends JController {
     	
     		}
 			
-    		// migraÁ„o dos dados de qualificaÁ„o 1 de doutorado
+    		// migra√ß√£o dos dados de qualifica√ß√£o 1 de doutorado
     		 
     		foreach ($aluno as $alunomestrado) {
     			 
@@ -559,7 +559,7 @@ class DefesasorientadorController extends JController {
     				 
     				$insertDefesa = "insert into #__defesa (aluno_id, banca_id, resumo, data, tipoDefesa, titulo, conceito, examinador) values
 	    					(" . "$alunomestrado->id, $idBanca, '',
-    			    					str_to_date('$alunomestrado->dataQual1', '%d/%m/%Y'), 'Q2', '$alunomestrado->tituloQual1',
+    			    					str_to_date('$alunomestrado->dataQual1', '%d/%m/%Y'), 'Q1', '$alunomestrado->tituloQual1',
     			    					'$alunomestrado->conceitoQual1', '$alunomestrado->examinadorQual1')";
     				
     				
