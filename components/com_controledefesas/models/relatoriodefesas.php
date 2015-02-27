@@ -46,7 +46,7 @@ class ControledefesasModelRelatorioDefesas extends JModelItem
 		
 		$sql_data_inicial = '';
 		$sql_data_final = '';
-		$sql_orderby = " ORDER BY date_format(d.data,'%d/%m/%Y')";
+		$sql_orderby = " ORDER BY d.data DESC, desc_curso, desc_tipo_defesa";
 		
 		if ($data_inicial != NULL && $data_inicial != false && $data_inicial != '')
 			$sql_data_inicial = " AND d.data >= STR_TO_DATE('".$data_inicial."','%d-%m-%Y')";
@@ -62,6 +62,8 @@ class ControledefesasModelRelatorioDefesas extends JModelItem
     public function getDefesasPorPeriodoProfessor($data_inicial, $data_final, $nome_professor, $id_membro_banca, $id_professor) {
 		$database =& JFactory::getDBO();
 
+		
+		/*
 		// O orientador é o presidente da banca. Não existe registro do presidente na j17_banca_has_membrosbanca.
 		$sqlOrientador = "select a.nome as nome_aluno, 
 							(case a.curso when 1 then 'Mestrado' when 2 then 'Doutorado' when 3 then 'Especial' end) as desc_curso, 
@@ -76,7 +78,7 @@ class ControledefesasModelRelatorioDefesas extends JModelItem
 							from j17_professores p, j17_banca_controledefesas b, j17_defesa d, j17_aluno a 
 							where d.banca_id = b.id and d.aluno_id = a.id and a.orientador = p.id and p.id = $id_professor";
 
-
+*/
 		$sql_standard = "SELECT a.nome as nome_aluno, 
 								(case a.curso when 1 then 'Mestrado' when 2 then 'Doutorado' when 3 then 'Especial' end) as desc_curso, 
 								(case d.tipoDefesa 
@@ -118,18 +120,19 @@ class ControledefesasModelRelatorioDefesas extends JModelItem
 			&& $nome_professor != ''){
 			$sql_id_membro_banca = " AND (mb.id = ".$id_membro_banca." OR upper(d.examinador) LIKE upper('%".$nome_professor."%'))";
 		}
-		
+		/**
 		if (($id_membro_banca == NULL || $id_membro_banca == false || $id_membro_banca == '') 
 			&& $nome_professor != ''){
 			$sql_nome_professor = " AND upper(d.examinador) LIKE upper('%".$nome_professor."%')";
 		}
+		*/
 
-		if ($id_professor != NULL && $id_professor != false && $id_professor != ''){
+		/*if ($id_professor != NULL && $id_professor != false && $id_professor != ''){
 			$sql = "SELECT * FROM (". $sqlOrientador . $sql_data_inicial.$sql_data_final . ' UNION ' . $sql_standard.$sql_data_inicial.$sql_data_final.$sql_id_membro_banca.$sql_nome_professor.") a ORDER BY nome_aluno";
 		}
-		else{
+		else{ */
 			$sql = $sql_standard.$sql_data_inicial.$sql_data_final.$sql_id_membro_banca.$sql_nome_professor.$sql_orderby;
-		}
+	//	}
 
 		$database->setQuery($sql);
 		return $database->loadObjectList();

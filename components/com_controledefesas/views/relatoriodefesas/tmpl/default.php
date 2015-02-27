@@ -61,7 +61,7 @@ if(($this->data_inicial == NULL) AND
         if (nomeProfessor != ''){
             nomeProfessor = removerAcentos(nomeProfessor.toUpperCase().replace("PROF. ", "").replace("PROFA. ", ""));
             idMembroBanca = getIdMembroBanca();
-            idProfessor = getIdProfessor();
+            //idProfessor = getIdProfessor();
 
             if (idMembroBanca == '' && idProfessor == ''){
                 alert("Informe um nome de professor válido.\n\nDicas:\n\t1. Selecione uma opção da lista.\n\t2. Ou verifique a existência dele no cadastro de 'Membros de Banca'.\n\t3. Ou verifique a existência dele no cadastro de 'Professores'.");
@@ -150,7 +150,7 @@ if(($this->data_inicial == NULL) AND
             var nomeProfessor = document.getElementById('professor').value;
 
             if (nomeProfessor != '') {
-                <?php foreach ($this->membrosBanca as $membro ) {
+                <?php foreach ($this->membrosBanca as $membro) {
                     echo "membros.push('" .$membro->nome. "');";
                     echo "ids.push('" . $membro->id . "');";
                 }?>
@@ -170,19 +170,14 @@ if(($this->data_inicial == NULL) AND
             var index = -1;
             var idProfessor = '';
             var nomeProfessor = document.getElementById('professor').value;
-            var nomeProfessorJS;
 
             if (nomeProfessor != '') {
-                <?php foreach ($this->professores as $professor ) {
+                <?php foreach ($this->professores as $professor) {
                     
                     // Remover acentos do nome e mudá-lo para maiúsculo
                     $nome = strtoupper(preg_replace('/[`^~\'"]/', null, iconv( 'UTF-8', 'ASCII//TRANSLIT', $professor->nomeProfessor)));
 
-                    echo "nomeProfessorJS = removerAcentos('" . $professor->nomeProfessor . "');";
-                    echo "listaProfessores.push(nomeProfessorJS);";
-                    
-
-                    //echo "listaProfessores.push('" .$nome. "');";
+                    echo "listaProfessores.push('" .$nome. "');";
                     echo "ids.push('" . $professor->id . "');";
                 }?>
                 
