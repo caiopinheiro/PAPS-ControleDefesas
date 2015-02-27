@@ -442,8 +442,8 @@ class ControledefesasController extends JController {
 			$nomeOrientador = $aluno[0]->nomeProfessor;	
 			$emails[] = $emailOrientador;
 			$emails[] = $emailAluno;
-			$emails[] = "secretariappgi@icomp.ufam.edu.br";
-			//$emails[] = "coordpesquisa@icomp.ufam.edu.br";
+			$emails[] = "secppgi@ufam.edu.br";
+			$emails[] = "coordenadorppgi@icomp.ufam.edu.br";
 			
 			
 			// subject
