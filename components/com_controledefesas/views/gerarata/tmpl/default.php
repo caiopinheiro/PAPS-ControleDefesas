@@ -138,8 +138,14 @@ function gerarAta($Defesa,$Membros,$Aluno){
 		$pdf->MultiCell(0,5,utf8_decode($defesa[0]->numDefesa.'ª ATA DE DEFESA PÚBLICA DE '.$complemento),0, 'C');
 		$pdf->MultiCell(0,5,"",0, 'C');
 		
-		$tag = "Aos ".$data[2]." dias do mês de ".$mes[$data[1]]." do ano de ".$data[0].", às ".$hora.", na ".$local." da Universidade Federal do Amazonas, situada na Av. Rodrigo Otávio, 6.200, Campus Universitário, Setor Norte, Coroado, nesta Capital, ocorreu a sessão pública de defesa de ".$complemento3." intitulada  '".$titulo."' apresentada pelo aluno(a) ".$aluno[0]->nome_aluno." que concluiu todos os pré-requisitos exigidos para a obtenção do título de ".$complemento2." em informática, conforme estabelece o artigo 52 do regimento interno do curso. Os trabalhos foram instalados pelo(a)  ".$presidente.", orientador(a) e presidente da Banca Examinadora, que foi constituída, ainda, por ".$membrosBanca."membros convidados. A Banca Examinadora tendo decidido aceitar a dissertação, passou à arguição pública do candidato. 
-		
+		//$tag = "Aos ".$data[2]." dias do mês de ".$mes[$data[1]]." do ano de ".$data[0].", às ".$hora.", na ".$local." da Universidade Federal do Amazonas, situada na Av. Rodrigo Otávio, 6.200, Campus Universitário, Setor Norte, Coroado, nesta Capital, ocorreu a sessão pública de defesa de ".$complemento3." intitulada  '".$titulo."' apresentada pelo aluno(a) ".$aluno[0]->nome_aluno." que concluiu todos os pré-requisitos exigidos para a obtenção do título de ".$complemento2." em informática, conforme estabelece o artigo 52 do regimento interno do curso. Os trabalhos foram instalados pelo(a)  ".$presidente.", orientador(a) e presidente da Banca Examinadora, que foi constituída, ainda, por ".$membrosBanca."membros convidados. A Banca Examinadora tendo decidido aceitar a dissertação, passou à arguição pública do candidato. 
+		$tag = "Aos ".$data[2]." dias do mês de ".$mes[$data[1]]." do ano de ".$data[0].", às ".$hora.", na ".$local." da Universidade Federal do Amazonas, situada na Av. Rodrigo Otávio, 6.200, Campus Universitário, Setor Norte, Coroado, nesta Capital, ocorreu a sessão pública de defesa de ".$complemento3." intitulada  '".$titulo."' apresentada pelo aluno(a) ".$aluno[0]->nome_aluno." que concluiu todos os pré-requisitos exigidos para a obtenção do título de ".$complemento2." em informática, conforme estabelece o artigo 52 do regimento interno do curso. Os trabalhos foram instalados pelo(a)  ".$presidente.", orientador(a) e presidente da Banca Examinadora, que foi constituída, ainda, por ";
+		foreach ($membrosBanca as $membro) {
+			if($membro->funcao != 'P'){	
+				$tag = $tag. $membro->nome . ',';
+			}
+		}	 
+		$tag = $tag." membros convidados. A Banca Examinadora tendo decidido aceitar a dissertação, passou à arguição pública do candidato. 
 	Encerrados os trabalhos, os examinadores expressaram o parecer abaixo. 
 
 	A comissão considerou a ".$complemento3.":
