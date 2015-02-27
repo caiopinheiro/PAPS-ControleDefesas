@@ -110,7 +110,9 @@ function enviarForm() {
 	var form1 = document.form1;
 
 	//validaForm();
-	
+	var envio = window.confirm('<?php echo  mb_convert_encoding('Deseja enviar a solicitação?', 'UTF-8', 'ISO-8859-1')?>');
+
+	if (envio)
 	form1.submit();
 
 	//validaBanca();
@@ -721,7 +723,6 @@ return total;
         			default: break;
         		}
         		
-        		
         		$selectedNao = '';
         		$selectedSim = '';
         		
@@ -755,11 +756,7 @@ return total;
         	}
         	?>
         	
-      
-        	
         </tbody>
-        
-      
      
 	</table>	
 	
@@ -849,16 +846,17 @@ return total;
 		cols += '<td>' + presidente+ '</td>' ; 		
 		cols += '<td>' + filiacao + '</td>' ; 
 		cols += '<td>' + tipoMembroBanca + '</td>';
-		cols += '<input type="hidden" name="idMembroBanca[]" value="<?php echo $this->presidente->id?>" />';
-		cols += '<input type="hidden" name="tipoMembroBanca[]" value="P" />';
-		cols = cols + '<select name="passagem[]" style="display:none; width:100%">';
-		cols = cols + '<option value="N" ' +  'selected="selected"' + '>' + '</option>';
-		cols = cols + '<option value="S" >Sim</option>';
-		cols = cols + '</select>';
+	
 		
 		cols += '<td>';
+		cols += '<select name="passagem[]" style="display:none; width:100%">';
+		cols += '<option value="N" ' +  'selected="selected"' + '>Não' + '</option>';
+		cols +=  '<option value="S" >Sim</option>';
+		cols += '</select>';
 		cols += '</td>'; 
-		
+		cols += '<input type="hidden" name="idMembroBanca[]" value="<?php echo $this->presidente->id?>" />';
+		cols += '<input type="hidden" name="tipoMembroBanca[]" value="P" />';
+	
 				
 	    newRow.append(cols);
 
