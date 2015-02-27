@@ -116,7 +116,9 @@ class ControledefesasController extends JController {
 	*/	
 		//if($banca[0]->status_banca != NULL){
 			$chave = $aluno[0]->nome_aluno;
-		 
+ 			$data = explode("-", $defesa[0]->data);
+			$data = $data[2] . "/" . $data[1] . "/" .$data[0] ;
+		 	
 			//$pdf = new FPDF('P','cm','A4');
 			$pdf = new PDF();
 			$pdf->Open();
@@ -175,7 +177,7 @@ class ControledefesasController extends JController {
 			
 			$pdf->MultiCell(0,6,"LOCAL: " . utf8_decode($defesa[0]->local),0, 'J');
 			$pdf->MultiCell(0,5,"",0, 'C');
-			$pdf->MultiCell(0,6,"DATA: " . utf8_decode($defesa[0]->data),0, 'J');
+			$pdf->MultiCell(0,6,"DATA: " . utf8_decode($data),0, 'J');
 			$pdf->MultiCell(0,5,"",0, 'C');
 			$pdf->MultiCell(0,6,utf8_decode("HORÁRIO: ") . utf8_decode($defesa[0]->horario),0, 'J');
 			$pdf->MultiCell(0,5,"",0, 'C');
