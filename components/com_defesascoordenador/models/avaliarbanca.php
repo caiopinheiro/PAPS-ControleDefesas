@@ -40,7 +40,7 @@ class DefesasCoordenadorModelAvaliarBanca extends JModelItem
 			where b.id = $idBanca )";
 		*/	
 			
-			$sql = "(SELECT mb.nome, bhmb.funcao, mb.filiacao, mb.email, bhmb.passagem FROM  #__banca_has_membrosbanca AS bhmb JOIN #__membrosbanca AS mb ON mb.id = bhmb.membrosbanca_id WHERE bhmb.banca_id = ".$idBanca . ')';
+			$sql = "(SELECT mb.nome, bhmb.funcao, mb.filiacao, mb.email, bhmb.passagem FROM  #__banca_has_membrosbanca AS bhmb JOIN #__membrosbanca AS mb ON mb.id = bhmb.membrosbanca_id WHERE bhmb.banca_id = ".$idBanca . ' order by bhmb.funcao desc)';
 			
 		//	$sql = $sql1 . 'UNION ' . $sql;
 			
