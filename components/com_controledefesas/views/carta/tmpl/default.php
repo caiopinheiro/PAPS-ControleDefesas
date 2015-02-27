@@ -127,7 +127,7 @@ function imprimirAgradecimento($alunos, $banca, $funcao) {
 	
 	$nome = utf8_decode($alunos[0]->nome);	
 	if ($alunos[0]->tipoDefesa == 'Q1' || $alunos[0]->tipoDefesa == 'Q2') {	
-		$data = explode("/",$alunos[0]->data);
+		$data = explode("-",$alunos[0]->data);
 		$titulo = utf8_decode($alunos[0]->titulo);
 		$hora = $alunos[0]->horario;
 		if ($alunos[0]->curso == 2){
@@ -140,7 +140,7 @@ function imprimirAgradecimento($alunos, $banca, $funcao) {
 		}
 	}
 	else{
-		$data = explode("/",$alunos[0]->data);	
+		$data = explode("-",$alunos[0]->data);	
 		$titulo = utf8_decode($alunos[0]->titulo);
 		$hora = $alunos[0]->horario;
 		if ($alunos[0]->curso == 2){
@@ -174,7 +174,7 @@ function imprimirAgradecimento($alunos, $banca, $funcao) {
         	$nome_membro = $banca[0]->nome;
 	}
 	//$tag = "AGRADECEMOS a participação do(a) ".$banca[0]->nome." como ".$participacao." da banca examinadora referente à apresentação da Defesa de ".$complemento2." do(a) aluno(a), abaixo especificado(a), do curso de ".$complemento." em Informática do Programa de Pós-Graduação em Informática da Universidade Federal do Amazonas - realizada no dia ".$data[0]." de ".$mes[$data[1]]." de ".$data[2]." às ".$hora.".";
-	$tag = "AGRADECEMOS a participação do(a) ".$nome_membro." como ".$participacao." da banca examinadora referente à apresentação da Defesa de ".$complemento2." do(a) aluno(a), abaixo especificado(a), do curso de ".$complemento." em Informática do Programa de Pós-Graduação em Informática da Universidade Federal do Amazonas - realizada no dia ".date('d',(strtotime($data[0])))." de ". $mes[date('m',(strtotime($data[0])))]." de ".date('Y',(strtotime($data[0])))." às ".$hora.".";
+	$tag = "AGRADECEMOS a participação do(a) ".$nome_membro." como ".$participacao." da banca examinadora referente à apresentação da Defesa de ".$complemento2." do(a) aluno(a), abaixo especificado(a), do curso de ".$complemento." em Informática do Programa de Pós-Graduação em Informática da Universidade Federal do Amazonas - realizada no dia ".date('d',(strtotime($data[2])))." de ". $mes[date('m',(strtotime($data[1])))]." de ".date('Y',(strtotime($data[0])))." às ".$hora.".";
 
 	$pdf->SetFont("Helvetica",'', 12);
 	$pdf->MultiCell(0,10,utf8_decode($tag),0, 'J');
@@ -186,7 +186,7 @@ function imprimirAgradecimento($alunos, $banca, $funcao) {
 	$pdf->MultiCell(0,8,"",0, 'C');
 	$pdf->MultiCell(0,8,"",0, 'C');	
 	$pdf->SetFont("Helvetica",'', 10);
-	$pdf->MultiCell(0,5,"Manaus, ".date('d',(strtotime($data[0])))." de ". utf8_decode($mes[date('m',(strtotime($data[0])))])." de ".date('Y',(strtotime($data[0]))),0, 'C');
+	$pdf->MultiCell(0,5,"Manaus, ".date('d',(strtotime($data[2])))." de ". utf8_decode($mes[date('m',(strtotime($data[1])))])." de ".date('Y',(strtotime($data[0]))),0, 'C');
 
 	ob_clean(); // Limpa o buffer de saída
 	//cria o arquivo pdf e exibe no navegador
