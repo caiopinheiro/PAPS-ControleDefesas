@@ -13,7 +13,7 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	 
 	/**
 	 * 
-	 * dados para função de enviar e-mail examinador
+	 * dados para funÃ§Ã£o de enviar e-mail examinador
 	 * 
 	 * @param unknown $idBanca
 	 * @return Ambigous <mixed, NULL, multitype:unknown mixed >
@@ -27,7 +27,7 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 		}
 	
 	/**
-	 * dados para função de enviar email examinador
+	 * dados para funÃ§Ã£o de enviar email examinador
 	 * 
 	 * @param unknown $idBanca
 	 * @return Ambigous <mixed, NULL, multitype:unknown mixed >
@@ -57,7 +57,7 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	}
 
 	/**
-	 * função que retorna a última fase cadastrada (aprovada ou sem conceito)
+	 * funÃ§Ã£o que retorna a Ãºltima fase cadastrada (aprovada ou sem conceito)
 	 * 
 	 * [0] - Fase cadastrada
 	 * [1] - aprovada = true, sem conceito = false
@@ -93,7 +93,7 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 		$fase[0] = 'P';
 	
 		/**
-		 * verifica exame de proeficiência
+		 * verifica exame de proeficiÃªncia
 		 */
 	
 	
@@ -165,8 +165,8 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	
 	/**
 	 * funcao que valida a data
-	 * - data válida 
-	 * - diferença para data corrente de no mínimo 30 dias
+	 * - data vÃ¡lida 
+	 * - diferenÃ§a para data corrente de no mÃ­nimo 30 dias
 	 * 
 	 * @return boolean
 	 */
@@ -192,9 +192,9 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	
 	/**
 	 * 
-	 * funcao que retorna se o arquivo é válido
-	 * - extensão PDF
-	 * - tamanho máximo (10MB)
+	 * funcao que retorna se o arquivo Ã© vÃ¡lido
+	 * - extensÃ£o PDF
+	 * - tamanho mÃ¡ximo (10MB)
 	 * 
 	 * @param file $arquivo
 	 * @return boolean
@@ -217,7 +217,7 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 			$extensao = strtolower(end(explode('.', $arquivo['name'])));
 			$validacao['formato'] = !(!strcmp($extensao, 'pdf'));
 			
-			//tamanho máximo 10mb
+			//tamanho mÃ¡ximo 10mb
 			
 			$maximo = 10 * 1024 * 1024;
 			
@@ -230,9 +230,9 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 
 	/**
 	 * 
-	 * Funcao que retorna o resultado da validação
+	 * Funcao que retorna o resultado da validaÃ§Ã£o
 	 * 
-	 * - array que o resultado de cada um dos critérios da validação
+	 * - array que o resultado de cada um dos critÃ©rios da validaÃ§Ã£o
 	 * 
 	 * @param unknown $defesa
 	 * @return multitype:boolean
@@ -246,7 +246,7 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 		$mensagens['resumo'] = (!strlen($defesa['resumo']) || is_null($defesa['resumo']));
 	 	$mensagens['dataInvalida'] = !$this->validaData($defesa['data']);
 	 	
-	 	// se já deu erro de validação onde a prévia já passou
+	 	// se jÃ¡ deu erro de validaÃ§Ã£o onde a prÃ©via jÃ¡ passou
 	 	if (!$defesa['flagPrevia']) {
 	 	
 	 		$validacaoArquivo = $this->validaArquivo($defesa['previa']);
@@ -267,7 +267,7 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 		 	$dateNow = date_create();
 		 	$dateDefesa = DateTime::createFromFormat('d/m/Y', $defesa['data']);
 		 	$diff = date_diff($dateNow, $dateDefesa);
-		 	// solicitação de banca deve ser feita com no minimo 30 dias de antecedência
+		 	// solicitaÃ§Ã£o de banca deve ser feita com no minimo 30 dias de antecedÃªncia
 		 	$mensagens['dataAnterior'] = !(($diff->days >= 30) && (!$diff->invert));
 		 	 
 	 	} else $mensagens['dataAnterior'] = false;
@@ -334,7 +334,7 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	 	
 	 	
 	 	
-	 	//segundo a regra de negócio, qualificação 1 de doutorado não tem membros de banca
+	 	//segundo a regra de negÃ³cio, qualificaÃ§Ã£o 1 de doutorado nÃ£o tem membros de banca
 	 	if ($aluno->curso == 2 && !strcmp($fase[0], 'Q1')) {
 				 		
 	 		$mensagens['semMembros'] = false;
@@ -367,7 +367,7 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	
 	
 	/**
-	 * move arquivo para pasta temporária do sistema
+	 * move arquivo para pasta temporÃ¡ria do sistema
 	 * 
 	 * @param unknown $arquivo
 	 */
@@ -437,7 +437,7 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	
 	/**
 	 * 
-	 * Função que valida e-mail
+	 * FunÃ§Ã£o que valida e-mail
 	 * 
 	 * @param unknown $email
 	 * @return boolean
@@ -454,14 +454,14 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 			if(!checkdnsrr($dominio[1],'A')){
 				return false;
 			}
-			else{return true;} // Retorno true para indicar que o e-mail é valido
+			else{return true;} // Retorno true para indicar que o e-mail Ã© valido
 		}
 		
 	}
 	
 	/**
 	 * 
-	 *	Função que executa no banco de dados a inserção
+	 *	FunÃ§Ã£o que executa no banco de dados a inserÃ§Ã£o
 	 * 
 	 * @param unknown $defesa
 	 * @return unknown|Ambigous <multitype:boolean, multitype:boolean >
@@ -470,11 +470,11 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	
 		$validacao = $this->validaDefesa($defesa);
 		
-		// usado para operação lógica com array de booleanos
+		// usado para operaÃ§Ã£o lÃ³gica com array de booleanos
 		$resultadoValidacao = false;
 
 		/**
-		 * se existir uma mensagem true, o resultado é true e é confirmado que a validação não foi aceita
+		 * se existir uma mensagem true, o resultado Ã© true e Ã© confirmado que a validaÃ§Ã£o nÃ£o foi aceita
 		 */	
 		
 		foreach ($validacao as $msg) {
@@ -522,7 +522,7 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 			
 			$values = array($defesa['aluno'], $database->quote($defesa['titulo'], true), 
 							$database->quote($defesa['resumo'], true), $database->quote($defesa['tipoDefesa']),
-							$database->quote($defesa['data']), $idBanca, $database->quote($arquivoPrevia), 
+							'str_to_date('.$database->quote($defesa['data']).',"%d/%m/%Y")', $idBanca, $database->quote($arquivoPrevia), 
 							$database->quote($defesa['localDescricao'], true), $database->quote($defesa['localHorario'], true), 
 							$database->quote($defesa['examinador'], true), $database->quote($defesa['emailexaminador'], true));
 				
@@ -554,7 +554,7 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	
 	/**
 	 * 
-	 * Função que retorna um único membro de banca
+	 * FunÃ§Ã£o que retorna um Ãºnico membro de banca
 	 * 
 	 * @param unknown $id
 	 * @return Ambigous <unknown, mixed>
@@ -575,7 +575,7 @@ class DefesasOrientadorModelCadastrarBanca extends JModelItem
 	}
 	
 	/**
-	 * função utilizada para inserir um membro de banca 
+	 * funÃ§Ã£o utilizada para inserir um membro de banca 
 	 * 
 	 * @param unknown $membroBanca
 	 * @param unknown $idBanca
