@@ -46,7 +46,7 @@ class DefesasOrientadorModelListaDefesas extends JModelItem
 			$sql_tipo_defesa = '';
 			$sql_data_defesa = '';
 			$sql_local_defesa = '';
-			$sql_orderby = " ORDER BY ifnull(d.conceito, ''), date_format(d.data,'%d/%m/%Y')";
+			$sql_orderby = " ORDER BY ifnull(d.conceito, ''), DATE_FORMAT(STR_TO_DATE(d.data,'%Y-%m-%d'),'%Y-%m-%d')";
 
 			if($nome_aluno != '')
 				$sql_nome_aluno = " AND upper(a.nome) LIKE upper('%".$nome_aluno.'%\')';
