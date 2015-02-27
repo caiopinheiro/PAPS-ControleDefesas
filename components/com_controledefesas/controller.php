@@ -270,19 +270,17 @@ class ControledefesasController extends JController {
 	
 		$data_inicial = JRequest::getVar('dataInicial', false);
 		$data_final = JRequest::getVar('dataFinal', false);
-		$nome_professor = JRequest::getVar('nomeProfessor', false);
 		$id_membro_banca = JRequest::getVar('idMembroBanca', false);
-		$id_professor = JRequest::getVar('idProfessor', false);
 	
 		$view = $this->getView('relatoriodefesas', 'html');
 		$model = $this->getModel('relatoriodefesas');
 	
 		$view->defesas = NULL;
 	
-		if($nome_professor == NULL || $nome_professor == false || $nome_professor == '')
+		if($id_membro_banca == NULL || $id_membro_banca == false || $id_membro_banca == '')
 			$view->defesas = $model->getDefesasPorPeriodo($data_inicial, $data_final);
 		else
-			$view->defesas = $model->getDefesasPorPeriodoProfessor($data_inicial, $data_final, utf8_decode($nome_professor), $id_membro_banca, $id_professor);
+			$view->defesas = $model->getDefesasPorPeriodoProfessor($data_inicial, $data_final, $id_membro_banca);
 	
 		$defesas = $view->defesas;
 	
@@ -302,7 +300,7 @@ class ControledefesasController extends JController {
 			$pdf->MultiCell(0,5,"",0, 'C');
 	
 	
-			if($nome_professor == NULL || $nome_professor == false || $nome_professor == ''){
+			if($id_membro_banca == NULL || $id_membro_banca == false || $id_membro_banca == ''){
 					
 				$pdf->SetFont("Helvetica",'B', 11);
 
@@ -324,23 +322,27 @@ class ControledefesasController extends JController {
 						$pdf->MultiCell(0,5,utf8_decode("Data Final: ").utf8_decode($aux_data_final),0, 'C');
 					}
 				}
-	
+
+				//$pdf->Rect(10, 58, 190, 6);
+
 				$pdf->MultiCell(0,5,"",0, 'C');
-	
 				$pdf->Cell(75,5,utf8_decode('Nome do Aluno'), 1, 0, 'J', true);
 				$pdf->Cell(30,5,utf8_decode('Curso'), 1, 0, 'J', true);
 				$pdf->Cell(30,5,utf8_decode('Tipo Defesa'), 1, 0, 'J', true);
 				$pdf->Cell(30,5,utf8_decode('Conceito'), 1, 0, 'J', true);
 				$pdf->Cell(25,5,utf8_decode('Data'), 1, 1, 'J', true);
+				$pdf->Ln(2);
 	
-				$pdf->SetFont("Helvetica",'', 8);
-	
+				$y = 81; // valor da coordenada y da primeira linha
 				foreach ($defesas as $defesa) {
+					$pdf->SetFont("Helvetica",'', 9);
 					$pdf->Cell(75,5,utf8_decode($defesa->nome_aluno), 0, 0, 'J');
 					$pdf->Cell(30,5,utf8_decode($defesa->desc_curso), 0, 0, 'J');
 					$pdf->Cell(30,5,utf8_decode($defesa->desc_tipo_defesa), 0, 0, 'J');
 					$pdf->Cell(30,5,utf8_decode($defesa->conceito_defesa), 0, 0, 'J');
 					$pdf->Cell(25,5,utf8_decode($defesa->data_defesa), 0, 1, 'J');
+					$pdf->Line(10,$y,200,$y);
+					$y = $y + 5;
 				}
 				
 				$pdf->SetFont("Helvetica",'B', 9);
@@ -351,7 +353,7 @@ class ControledefesasController extends JController {
 	
 				$pdf->SetFont("Helvetica",'B', 11);
 
-				$pdf->MultiCell(0,5,utf8_decode($nome_professor),0, 'C');
+				$pdf->MultiCell(0,5,utf8_decode($defesas[0]->nome_professor),0, 'C');
 				$pdf->MultiCell(0,5,"",0, 'C');
 					
 				$pdf->Cell(70,5,utf8_decode('Nome do Aluno'), 1, 0, 'J', true);
@@ -360,16 +362,19 @@ class ControledefesasController extends JController {
 				$pdf->Cell(25,5,utf8_decode('Conceito'), 1, 0, 'J', true);
 				$pdf->Cell(20,5,utf8_decode('Data'), 1, 0, 'J', true);
 				$pdf->Cell(29,5,utf8_decode('Função'), 1, 1, 'J', true);
-	
-				$pdf->SetFont("Helvetica",'', 8);
-					
+				$pdf->Ln(2);
+				
+				$y = 81; // valor da coordenada y da primeira linha
 				foreach ($defesas as $defesa) {
+					$pdf->SetFont("Helvetica",'', 9);
 					$pdf->Cell(70,5,utf8_decode($defesa->nome_aluno), 0, 0, 'J');
 					$pdf->Cell(20,5,utf8_decode($defesa->desc_curso), 0, 0, 'J');
 					$pdf->Cell(25,5,utf8_decode($defesa->desc_tipo_defesa), 0, 0, 'J');
 					$pdf->Cell(25,5,utf8_decode($defesa->conceito_defesa), 0, 0, 'J');
 					$pdf->Cell(20,5,utf8_decode($defesa->data_defesa), 0, 0, 'J');
 					$pdf->Cell(29,5,utf8_decode($defesa->funcao_membro), 0, 1, 'J');
+					$pdf->Line(10,$y,200,$y);
+					$y = $y + 5;
 				}
 				
 				$pdf->SetFont("Helvetica",'B', 9);
